@@ -84,7 +84,7 @@ export const siteConfig = {
         title: 'Track Your Mocks Like a Topper',
         subtitle:
             'Master SSC CHSL/CGL Tier 1 & 2 prep with daily insights, performance tracking, and exportable PDFs — all in one place.',
-        cta: { label: 'Start Now', href: '/auth/register' }
+        cta: { label: 'Start Now', href: '/register' }
     },
 
     features: [
@@ -191,7 +191,7 @@ export const siteConfig = {
         subtitle: 'Start logging your mock performance today — analyze what matters and stay ahead of the curve.',
         button: {
             label: 'Start Tracking Now',
-            href: '#showcase'
+            href: '/register'
         }
     },
 

@@ -56,13 +56,13 @@ export default function Navbar() {
 
                     <div className='hidden md:block'>
                         <Button variant={'ghost'} size={'sm'} className='bg-transparent text-white' asChild>
-                            <Link href={'/auth/login'}>Login</Link>
+                            <Link href={'/login'}>Login</Link>
                         </Button>
                         <Button
                             className='rounded-full bg-gradient-to-r from-blue-600 to-emerald-400 text-white hover:from-blue-700 hover:to-emerald-600 dark:from-blue-400 dark:to-emerald-400 dark:hover:from-blue-400 dark:hover:to-emerald-400'
                             size={'sm'}
                             asChild>
-                            <Link href={'/auth/register'}>Get Started</Link>
+                            <Link href={'/register'}>Get Started</Link>
                         </Button>
                     </div>
 
@@ -97,12 +97,12 @@ export default function Navbar() {
                                             </Link>
                                         ))}
                                         <Button variant={'outline'} className='mt-4' asChild>
-                                            <Link href={'/auth/login'}>Login</Link>
+                                            <Link href={'/login'}>Login</Link>
                                         </Button>
                                         <Button
                                             className='mt-2 w-full rounded-full bg-gradient-to-r from-blue-600 to-emerald-400 text-white hover:from-blue-700 hover:to-emerald-600 dark:from-blue-400 dark:to-emerald-400 dark:hover:from-blue-400 dark:hover:to-emerald-400'
                                             asChild>
-                                            <Link href={'/auth/register'}>Get Started</Link>
+                                            <Link href={'/register'}>Get Started</Link>
                                         </Button>
                                     </nav>
                                 </div>
