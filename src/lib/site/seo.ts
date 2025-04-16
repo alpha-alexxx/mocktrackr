@@ -4,7 +4,7 @@ import { siteConfig } from './site-config';
 
 export function getSEOMetadata(): Metadata {
     return {
-        metadataBase: new URL(siteConfig.url),
+        metadataBase: new URL(siteConfig.url!),
         title: {
             default: siteConfig.seo.title,
             template: siteConfig.seo.titleTemplate
@@ -31,7 +31,6 @@ export function getSEOMetadata(): Metadata {
         authors: [{ name: 'MockTrackr Team', url: siteConfig.url }],
         creator: 'MockTrackr',
         publisher: 'MockTrackr',
-        themeColor: '#222222',
         robots: 'index, follow',
         icons: {
             icon: '/favicon.ico',

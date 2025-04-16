@@ -1,8 +1,8 @@
 import EmailVerifiedPage from '@/components/pages/authentication/EmailVerifiedPage';
 
 export const metadata = {
-    title: 'Email Verified',
-    description: 'Your email has been verified successfully'
+    title: 'Verify Email',
+    description: 'Verify Your Email'
 };
 
 export default function Page() {

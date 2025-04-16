@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { useIsClient } from '@/hooks/use-is-client';
 import { siteConfig } from '@/lib/site/site-config';
 import { cn } from '@/lib/utils';
 
@@ -13,16 +14,7 @@ import { motion } from 'framer-motion';
 import { BookOpen, Menu } from 'lucide-react';
 
 export default function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 10);
-        };
-        window.addEventListener('scroll', handleScroll);
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    const isClient = useIsClient();
 
     return (
         <motion.header
@@ -31,7 +23,7 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
             className={cn(
                 'fixed top-0 right-0 left-0 z-50 transition-all duration-300',
-                scrolled ? 'bg-black/30 backdrop-blur-lg' : 'bg-transparent'
+                'bg-black/30 backdrop-blur-lg'
             )}>
             <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex h-16 items-center justify-between'>
@@ -55,7 +47,11 @@ export default function Navbar() {
                     </nav>
 
                     <div className='hidden md:block'>
-                        <Button variant={'ghost'} size={'sm'} className='bg-transparent text-white' asChild>
+                        <Button
+                            variant={'ghost'}
+                            size={'sm'}
+                            className='rounded-full bg-transparent text-white'
+                            asChild>
                             <Link href={'/login'}>Login</Link>
                         </Button>
                         <Button
@@ -100,7 +96,7 @@ export default function Navbar() {
                                             <Link href={'/login'}>Login</Link>
                                         </Button>
                                         <Button
-                                            className='mt-2 w-full rounded-full bg-gradient-to-r from-blue-600 to-emerald-400 text-white hover:from-blue-700 hover:to-emerald-600 dark:from-blue-400 dark:to-emerald-400 dark:hover:from-blue-400 dark:hover:to-emerald-400'
+                                            className='mt-2 w-full bg-gradient-to-r from-blue-600 to-emerald-400 text-white hover:from-blue-700 hover:to-emerald-600 dark:from-blue-400 dark:to-emerald-400 dark:hover:from-blue-400 dark:hover:to-emerald-400'
                                             asChild>
                                             <Link href={'/register'}>Get Started</Link>
                                         </Button>

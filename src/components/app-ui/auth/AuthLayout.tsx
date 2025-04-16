@@ -20,7 +20,10 @@ export function AuthLayout({ children, illustration, className }: AuthLayoutProp
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                className={cn('flex flex-1 items-center justify-center p-6 md:p-10', className)}>
+                className={cn(
+                    'flex flex-1 items-center justify-center bg-white p-6 md:p-10 dark:bg-gray-950',
+                    className
+                )}>
                 <div className='w-full max-w-md'>{children}</div>
             </motion.div>
 
@@ -29,7 +32,7 @@ export function AuthLayout({ children, illustration, className }: AuthLayoutProp
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className='hidden flex-1 items-center justify-center bg-gradient-to-br from-emerald-50 to-blue-50 p-8 md:flex dark:from-emerald-950/30 dark:to-blue-950/30'>
+                className='hidden flex-1 items-center justify-center bg-gradient-to-br from-emerald-50 to-blue-50 p-8 md:flex dark:bg-gray-900 dark:from-emerald-950/50 dark:to-blue-950/50'>
                 <div className='flex w-full max-w-lg items-center justify-center'>{illustration}</div>
             </motion.div>
         </div>

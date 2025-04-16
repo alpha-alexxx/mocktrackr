@@ -3,8 +3,10 @@ export const siteConfig = {
     shortName: 'MockTrackr',
     description:
         'Track your SSC CHSL/CGL mock test performance with real-time analysis, calendar view, and downloadable reports. Built for serious aspirants.',
-    url: 'https://mocktrackr.vercel.app',
-    ogImage: 'https://mocktrackr.vercel.app/og-image.png',
+    url: process.env.NEXT_PUBLIC_APP_URL!,
+    logo: '/images/logo.png',
+    supportEmail: 'support@lethargic.online',
+    ogImage: `${process.env.NEXT_PUBLIC_APP_URL}/og-image.png`,
     keywords: [
         'SSC CGL mock test',
         'SSC CHSL tracker',
@@ -21,18 +23,18 @@ export const siteConfig = {
         titleTemplate: '%s | MockTrackr',
         description:
             'Smartly track, analyze, and refine your SSC CHSL/CGL preparation with a digital mock test diary, calendar view, and score breakdown.',
-        canonical: 'https://mocktrackr.vercel.app',
+        canonical: process.env.NEXT_PUBLIC_APP_URL!,
         openGraph: {
             type: 'website',
             locale: 'en_IN',
-            url: 'https://mocktrackr.vercel.app',
+            url: process.env.NEXT_PUBLIC_APP_URL!,
             site_name: 'MockTrackr',
             title: 'MockTrackr — Daily SSC Mock Test Performance Tracker',
             description:
                 'Track, review and grow your SSC CHSL/CGL scores with tier-wise performance cards and PDF reports.',
             images: [
                 {
-                    url: 'https://mocktrackr.vercel.app/og-image.png',
+                    url: `${process.env.NEXT_PUBLIC_APP_URL!}/og-image.png`,
                     width: 1200,
                     height: 630,
                     alt: 'MockTrackr Preview'
@@ -46,7 +48,7 @@ export const siteConfig = {
             title: 'MockTrackr — SSC CHSL & CGL Mock Test Tracker',
             description:
                 'Log, evaluate and improve your exam strategy with clean daily analytics and structured PDF reports.',
-            image: 'https://mocktrackr.vercel.app/og-image.png'
+            image: `${process.env.NEXT_PUBLIC_APP_URL!}/og-image.png`
         },
         additionalMetaTags: [
             {

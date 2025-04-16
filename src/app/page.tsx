@@ -1,7 +1,11 @@
+'use client';
+
 import { JSX } from 'react';
 
+import Loader from '@/components/app-ui/loader';
 import { About, Cta, Faq, Features, Footer, Hero, HowItWorks, Navbar, Showcase } from '@/components/pages/onboarding';
 import Benefits from '@/components/pages/onboarding/benefits';
+import { useIsClient } from '@/hooks/use-is-client';
 
 /**
  * @component OnboardingPage
@@ -18,6 +22,10 @@ import Benefits from '@/components/pages/onboarding/benefits';
  *
  */
 const OnboardingPage = (): JSX.Element => {
+    const isClient = useIsClient();
+
+    if (!isClient) return <Loader />;
+
     return (
         <div>
             <Navbar />

@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 
 // eslint-disable-next-line import/named
-import { MotionStyle, Transition, motion } from 'motion/react';
+import { MotionStyle, Transition, motion } from 'framer-motion';
 
 interface BorderBeamProps {
     /**

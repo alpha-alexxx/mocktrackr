@@ -18,8 +18,8 @@ export function AuthFooterLinks({ links, className }: AuthFooterLinksProps) {
             <div className='flex flex-wrap justify-center gap-x-2 gap-y-1'>
                 {links.map((link, index) => (
                     <motion.div key={link.href} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        {index > 0 && <span className='text-muted-foreground'>•</span>}
-                        <Link href={link.href} className='text-primary ml-1 underline-offset-4 hover:underline'>
+                        {index > 0 && <span className='text-foreground/40'>•</span>}
+                        <Link href={link.href} className='text-foreground ml-1 underline-offset-4 hover:underline'>
                             {link.label}
                         </Link>
                     </motion.div>

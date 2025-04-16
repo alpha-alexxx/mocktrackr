@@ -36,7 +36,7 @@ export function PasswordInput({
                 id={id}
                 name={name}
                 type={showPassword ? 'text' : 'password'}
-                placeholder={showPassword ? 'Enter Your Password' : '••••••••'}
+                placeholder={showPassword ? placeholder || 'Enter Your Password' : '••••••••'}
                 disabled={disabled}
                 className={cn('pr-10', className)}
                 onChange={onChange}

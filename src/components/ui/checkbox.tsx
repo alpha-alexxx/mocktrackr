@@ -7,7 +7,11 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 
 import { CheckIcon } from 'lucide-react';
 
-function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
+function Checkbox({
+    className,
+    checkColor,
+    ...props
+}: React.ComponentProps<typeof CheckboxPrimitive.Root> & { checkColor?: string }) {
     return (
         <CheckboxPrimitive.Root
             data-slot='checkbox'
@@ -18,8 +22,8 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
             {...props}>
             <CheckboxPrimitive.Indicator
                 data-slot='checkbox-indicator'
-                className='flex items-center justify-center text-current transition-none'>
-                <CheckIcon className='size-3.5' />
+                className={cn('flex items-center justify-center text-current transition-none', checkColor)}>
+                <CheckIcon className='size-4' />
             </CheckboxPrimitive.Indicator>
         </CheckboxPrimitive.Root>
     );
