@@ -2,6 +2,8 @@ import React, { useCallback, useState } from 'react';
 
 import getCroppedImg from '@/lib/get-cropped-img';
 
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 import axios, { type AxiosProgressEvent } from 'axios';
 import Cropper from 'react-easy-crop';
 import type { Area } from 'react-easy-crop';
@@ -88,7 +90,25 @@ const AvatarUploader = ({ children }: { children: React.ReactNode }) => {
         <div className='avatar-uploader rounded border p-4'>
             {error && <p className='mb-2 text-red-500'>{error}</p>}
             {children ? (
-                children
+                <>
+                    {children}
+                    <Label
+                        className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+                        htmlFor='file_input'>
+                        Upload Avatar
+                    </Label>
+                    <Input
+                        className='block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400'
+                        aria-describedby='file_input_help'
+                        id='file_input'
+                        type='file'
+                        accept='image/*'
+                        onChange={onFileChange}
+                    />
+                    <p className='mt-1 text-sm text-gray-500 dark:text-gray-300' id='file_input_help'>
+                        SVG, PNG, JPG or GIF (MAX. 800x400px).
+                    </p>
+                </>
             ) : (
                 <input type='file' accept='image/*' onChange={onFileChange} className='mb-4 block' />
             )}

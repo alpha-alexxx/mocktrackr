@@ -13,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { authClient } from '@/lib/authentication/auth-client';
 
 import { motion } from 'framer-motion';
-import { AlertTriangle, CheckCircle, } from 'lucide-react';
+import { AlertTriangle, CheckCircle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -72,9 +72,9 @@ function EmailVerificationSkeleton() {
             <div className='mx-auto w-full max-w-md space-y-8 rounded-xl bg-white p-6 shadow-lg backdrop-blur-sm dark:bg-gray-950/60'>
                 <div className='flex flex-col items-center justify-center space-y-3 text-center'>
                     <Skeleton className='h-20 w-20 rounded-full' />
-                    <div className='space-y-2 w-full'>
-                        <Skeleton className='h-8 w-48 mx-auto' />
-                        <Skeleton className='h-4 w-64 mx-auto' />
+                    <div className='w-full space-y-2'>
+                        <Skeleton className='mx-auto h-8 w-48' />
+                        <Skeleton className='mx-auto h-4 w-64' />
                     </div>
                     <Skeleton className='h-10 w-full' />
                 </div>

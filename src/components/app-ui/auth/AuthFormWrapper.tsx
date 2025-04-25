@@ -2,14 +2,15 @@
 
 import type { ReactNode } from 'react';
 
+import { useRouter } from 'next/navigation';
+
+import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
 
 import { motion } from 'framer-motion';
-import type { UseFormReturn } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import { ArrowLeftCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import type { UseFormReturn } from 'react-hook-form';
 
 interface AuthFormWrapperProps {
     children: ReactNode;
@@ -32,7 +33,7 @@ export function AuthFormWrapper({
     onSubmit,
     className
 }: AuthFormWrapperProps) {
-    const router = useRouter()
+    const router = useRouter();
 
     return (
         <motion.div
@@ -43,8 +44,8 @@ export function AuthFormWrapper({
                 'w-full space-y-6 rounded-xl bg-white/95 p-6 shadow-lg backdrop-blur-sm dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
                 className
             )}>
-            <div className='space-y-2 w-full text-center'>
-                <div className='w-full flex items-center justify-start'>
+            <div className='w-full space-y-2 text-center'>
+                <div className='flex w-full items-center justify-start'>
                     <Button variant='outline' size='icon' onClick={() => router.back()}>
                         <ArrowLeftCircle className='size-5' />
                     </Button>

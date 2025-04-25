@@ -9,13 +9,18 @@ datasource db {
   url      = "file:./database/dev.db"
   
 }
-
+enum UserRole {
+  ADMIN
+  SUPERADMIN
+  USER
+}
 model User {
   id               String      @id
   name             String
   email            String
   emailVerified    Boolean
   image            String?
+  role             UserRole @default(USER)
   createdAt        DateTime
   updatedAt        DateTime
   twoFactorEnabled Boolean?

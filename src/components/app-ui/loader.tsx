@@ -6,7 +6,7 @@ import { BookOpen } from 'lucide-react';
 
 const Loader: React.FC = () => {
     return (
-        <div className='h-screen w-full flex items-center justify-center'>
+        <div className='flex h-screen w-full items-center justify-center'>
             <div className='loader'>
                 <style>{``}</style>
                 <div style={{ '--i': 1, '--inset': '44%' } as React.CSSProperties} className='box'>

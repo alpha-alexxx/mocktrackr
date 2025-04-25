@@ -11,24 +11,24 @@ import { AuthIllustration } from '@/components/app-ui/auth/AuthIllustration';
 import { AuthLayout } from '@/components/app-ui/auth/AuthLayout';
 import { AuthSocialButtons } from '@/components/app-ui/auth/AuthSocialButtons';
 import { PasswordInput } from '@/components/app-ui/auth/PasswordInput';
+import CloudFlareCaptcha from '@/components/app-ui/captcha';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/authentication/auth-client';
 import { registerSchema } from '@/lib/authentication/zod-schema';
+import useCaptchaToken from '@/stores/captcha_token';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Lock, Mail, UserRound } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import CloudFlareCaptcha from '@/components/app-ui/captacha';
-import useCaptchaToken from '@/stores/captcha_token';
 
 export default function RegisterPage() {
     const [isLoading, setIsLoading] = useState(false);
-    const { captchaToken } = useCaptchaToken();
+    const { captchaToken, setToken } = useCaptchaToken();
     const form = useForm({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -74,6 +74,8 @@ export default function RegisterPage() {
                         id: 'register-toast',
                         description: ctx.error.message || 'Something Went Wrong!'
                     });
+                    // Reset captcha token on registration failure
+                    setToken('');
                 }
             }
         );

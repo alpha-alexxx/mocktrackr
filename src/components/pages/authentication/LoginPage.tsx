@@ -12,6 +12,7 @@ import { AuthIllustration } from '@/components/app-ui/auth/AuthIllustration';
 import { AuthLayout } from '@/components/app-ui/auth/AuthLayout';
 import { AuthSocialButtons } from '@/components/app-ui/auth/AuthSocialButtons';
 import { PasswordInput } from '@/components/app-ui/auth/PasswordInput';
+import CloudFlareCaptcha from '@/components/app-ui/captcha';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -19,18 +20,17 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { authClient } from '@/lib/authentication/auth-client';
 import { loginSchema } from '@/lib/authentication/zod-schema';
+import useCaptchaToken from '@/stores/captcha_token';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Info, Lock, Mail } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import CloudFlareCaptcha from '@/components/app-ui/captacha';
-import useCaptchaToken from '@/stores/captcha_token';
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
-    const { captchaToken } = useCaptchaToken()
+    const { captchaToken, setToken } = useCaptchaToken();
     const router = useRouter();
     const form = useForm({
         resolver: zodResolver(loginSchema),
@@ -69,11 +69,12 @@ export default function LoginPage() {
                     });
                 },
                 onError: (ctx) => {
-                    console.log(ctx);
                     toast.error(ctx.error.name || ctx.error.status + ' | ' + ctx.error.statusText, {
                         id: 'login-toast',
                         description: ctx.error.message || 'Something went wrong!'
                     });
+                    // Reset captcha token on login failure
+                    setToken('');
                 }
             }
         );

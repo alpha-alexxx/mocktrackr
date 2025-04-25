@@ -10,10 +10,10 @@ import { Get2FAEmailTemplate } from '../mail/templates/2fa-otp';
 import { GetResetPasswordEmailTemplate } from '../mail/templates/send-reset-password';
 import { GetVerificationEmailTemplate } from '../mail/templates/send-verification-email';
 import { siteConfig } from '../site/site-config';
-import { betterAuth } from 'better-auth';
+import { Auth, betterAuth } from 'better-auth';
 import { emailHarmony } from 'better-auth-harmony';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { captcha, haveIBeenPwned, openAPI, twoFactor } from 'better-auth/plugins';
+import { captcha, customSession, haveIBeenPwned, openAPI, twoFactor } from 'better-auth/plugins';
 
 const SENT_FROM = process.env.SMTP_FROM || 'no-reply.mocktrackr@lethargic.online';
 
@@ -32,6 +32,11 @@ export const auth = betterAuth({
     account: {
         accountLinking: {
             trustedProviders: ['google', 'mocktrackr']
+        }
+    },
+    user: {
+        deleteUser: {
+            enabled: true
         }
     },
     emailVerification: {
@@ -113,6 +118,7 @@ export const auth = betterAuth({
         max: 40, // max 10 requests per window per user/IP
         secondaryStorage: redis
     },
+
     plugins: [
         haveIBeenPwned({
             customPasswordCompromisedMessage:
@@ -142,7 +148,22 @@ export const auth = betterAuth({
                 }
             }
         }),
+        customSession(async ({ user, session }) => {
+            const dbUser = await db.user.findUnique({
+                where: {
+                    id: user.id
+                }
+            });
 
+            return {
+                user: {
+                    ...user,
+                    twoFactorEnabled: dbUser?.twoFactorEnabled || null,
+                    role: dbUser?.role || 'USER'
+                },
+                session
+            };
+        }),
         openAPI()
     ]
 });

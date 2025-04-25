@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -22,9 +23,6 @@ function OAuthErrorPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
-
-
-
 
     // Optional: custom messages for known error types
     const getFriendlyMessage = (errorCode: string | null) => {
@@ -87,15 +85,15 @@ function OAuthErrorPageSkeleton() {
                 <Skeleton className='mx-auto h-8 w-48' />
 
                 {/* Alert Box */}
-                <div className='border-primary/30 border p-4 shadow-md rounded-lg space-y-2'>
-                    <Skeleton className='h-5 w-5 mx-auto' />
-                    <Skeleton className='h-6 w-48 mx-auto' />
-                    <Skeleton className='h-4 w-64 mx-auto' />
+                <div className='border-primary/30 space-y-2 rounded-lg border p-4 shadow-md'>
+                    <Skeleton className='mx-auto h-5 w-5' />
+                    <Skeleton className='mx-auto h-6 w-48' />
+                    <Skeleton className='mx-auto h-4 w-64' />
                 </div>
 
                 {/* Suggestions */}
                 <div className='space-y-2'>
-                    <Skeleton className='h-4 w-72 mx-auto' />
+                    <Skeleton className='mx-auto h-4 w-72' />
                 </div>
 
                 {/* Actions */}

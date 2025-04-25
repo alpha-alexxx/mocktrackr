@@ -33,14 +33,15 @@ export function ThemeToggle() {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <div className='relative flex h-9 items-center rounded-full border border-slate-400 backdrop-blur-xs bg-slate-100/30 p-1 dark:border-slate-600 dark:bg-slate-800/20'>
+                    <div className='relative flex h-9 items-center rounded-full border border-slate-400 bg-slate-100/30 p-1 backdrop-blur-xs dark:border-slate-600 dark:bg-slate-800/20'>
                         {themes.map((t) => (
                             <button
                                 key={t}
-                                className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full transition-colors ${activeTheme === t
-                                    ? 'text-white'
-                                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
-                                    }`}
+                                className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
+                                    activeTheme === t
+                                        ? 'text-white'
+                                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
+                                }`}
                                 onClick={() => setTheme(t)}
                                 aria-label={`Switch to ${t} theme`}>
                                 <motion.div
@@ -54,7 +55,7 @@ export function ThemeToggle() {
                             </button>
                         ))}
                         <motion.div
-                            className='absolute h-7 w-7 rounded-full shadow-sm bg-primary'
+                            className='bg-primary absolute h-7 w-7 rounded-full shadow-sm'
                             initial={false}
                             animate={{
                                 x: getThemeIndex(activeTheme) * 28 // 28px per button + 4px offset

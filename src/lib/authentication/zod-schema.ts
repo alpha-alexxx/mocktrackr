@@ -57,6 +57,11 @@ export const getAcceptTermsValidation = () =>
             message: 'You must accept the terms and conditions'
         });
 
+// password schema
+export const passwordSchema = z.object({
+    password: getPasswordValidation()
+});
+
 // Login schema
 export const loginSchema = z.object({
     email: getEmailValidation(),
@@ -81,6 +86,26 @@ export const registerSchema = z
 // Forgot password schema
 export const forgotPasswordSchema = z.object({
     email: getEmailValidation()
+});
+
+// Change Password Schema
+export const changePasswordSchema = z
+    .object({
+        currentPassword: getPasswordValidation(),
+        newPassword: getPasswordValidation(),
+        confirmPassword: getConfirmPasswordValidation(),
+        revokeSession: z.boolean().optional()
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: 'Passwords do not match',
+        path: ['confirmPassword']
+    });
+// OTP schema
+export const otpSchema = z.object({
+    otp: z.string({
+        required_error: 'OTP is required',
+        invalid_type_error: 'OTP must be a string'
+    })
 });
 
 // Reset password schema

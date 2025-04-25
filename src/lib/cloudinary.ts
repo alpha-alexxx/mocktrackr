@@ -86,6 +86,7 @@ export const uploadFileToCloudinary = async (
 
         return result;
     } catch (error) {
+        console.log({ error });
         // Consider enhancing this error block with logging mechanisms for production-grade apps.
         throw new Error(`Cloudinary Upload Error: ${(error as Error).message}`);
     }

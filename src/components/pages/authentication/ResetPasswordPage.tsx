@@ -10,12 +10,14 @@ import { AuthFormWrapper } from '@/components/app-ui/auth/AuthFormWrapper';
 import { AuthIllustration } from '@/components/app-ui/auth/AuthIllustration';
 import { AuthLayout } from '@/components/app-ui/auth/AuthLayout';
 import { PasswordInput } from '@/components/app-ui/auth/PasswordInput';
+import CloudFlareCaptcha from '@/components/app-ui/captcha';
 import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Skeleton } from '@/components/ui/skeleton';
-import { resetPasswordSchema } from '@/lib/authentication/zod-schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { authClient } from '@/lib/authentication/auth-client';
+import { resetPasswordSchema } from '@/lib/authentication/zod-schema';
+import useCaptchaToken from '@/stores/captcha_token';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { motion } from 'framer-motion';
 import { AlertTriangle, CheckCircle, Lock } from 'lucide-react';
@@ -23,8 +25,6 @@ import type { LucideIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import CloudFlareCaptcha from '@/components/app-ui/captacha';
-import useCaptchaToken from '@/stores/captcha_token';
 
 interface InfoProps {
     title: string;
@@ -54,7 +54,7 @@ const animationVariants = {
 function ResetPasswordForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [info, setInfo] = useState<InfoProps | null>(null);
-    const { captchaToken } = useCaptchaToken()
+    const { captchaToken } = useCaptchaToken();
     const router = useRouter();
     const params = useSearchParams();
     const token = params.get('token');
@@ -65,7 +65,6 @@ function ResetPasswordForm() {
             confirmPassword: ''
         }
     });
-
 
     useEffect(() => {
         if (!token) {
@@ -81,24 +80,24 @@ function ResetPasswordForm() {
 
             return;
         }
-    }, [token])
+    }, [token]);
     const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
-        const { password, confirmPassword } = values
+        const { password, confirmPassword } = values;
         if (!password || !confirmPassword) {
             toast.error('Incomplete Form Submission', {
-                id: "reset-toast",
+                id: 'reset-toast',
                 description: 'Please fill in all required fields to proceed with password reset.'
-            })
+            });
 
-            return
+            return;
         }
         if (password !== confirmPassword) {
             toast.error('Passwords Do Not Match', {
                 id: 'reset-toast',
-                description: "Please ensure your new password and confirmation password are matching."
-            })
+                description: 'Please ensure your new password and confirmation password are matching.'
+            });
 
-            return
+            return;
         }
         if (!token) {
             toast.error('Invalid or Expired Token', {
@@ -107,15 +106,15 @@ function ResetPasswordForm() {
                 action: {
                     label: 'Forget Password',
                     onClick: () => {
-                        router.push('/forgot-password')
+                        router.push('/forgot-password');
                     }
                 }
-            })
+            });
 
-            return
+            return;
         }
         try {
-            setIsLoading(true)
+            setIsLoading(true);
 
             await authClient.resetPassword({
                 newPassword: password,
@@ -161,13 +160,10 @@ function ResetPasswordForm() {
                         });
                     }
                 }
-            })
+            });
         } finally {
-
-            setIsLoading(false)
+            setIsLoading(false);
         }
-
-
     };
 
     const footerLinks = [{ label: 'Back to Login', href: '/login' }];
@@ -337,7 +333,7 @@ function ResetPasswordSkeleton() {
             </div>
 
             <div className='mt-6'>
-                <Skeleton className='h-4 w-24 mx-auto' />
+                <Skeleton className='mx-auto h-4 w-24' />
             </div>
         </AuthLayout>
     );

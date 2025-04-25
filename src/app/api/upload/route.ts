@@ -1,72 +1,67 @@
-import { NextResponse } from 'next/server';
+// /app/api/upload/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 
 import { uploadFileToCloudinary } from '@/lib/cloudinary';
 
-import { type Fields, type Files, type File as FormidableFile, IncomingForm } from 'formidable';
 import fs from 'fs/promises';
-import { IncomingMessage } from 'http';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
-/**
- * Parses a multipart form using formidable.
- *
- * @param req - Request object from Next.js App Router.
- * @returns A promise that resolves to an object containing fields and files.
- */
+// Ensure this runs in a Node environment so we can use fs, path, etc.
+export const runtime = 'nodejs';
 
-const parseForm = async (req: Request): Promise<{ fields: Fields; files: Files }> => {
-    return new Promise((resolve, reject) => {
-        const form = new IncomingForm({
-            uploadDir: path.join(process.cwd(), 'public/uploads/tmp'),
-            keepExtensions: true,
-            maxFileSize: 5 * 1024 * 1024 // 5 MB
-        });
+export async function POST(req: NextRequest) {
+    console.log('[UploadRoute] Invoked at', new Date().toISOString());
 
-        // Cast the Web API Request to Node's IncomingMessage for Formidable.
-        form.parse(req as unknown as IncomingMessage, (err, fields, files) => {
-            if (err) return reject(err);
-            resolve({ fields, files });
-        });
-    });
-};
-
-export async function POST(req: Request) {
     try {
-        // Parse the incoming form data.
-        const { fields, files } = await parseForm(req);
+        // 1️⃣ Parse multipart form
+        const formData = await req.formData();
+        console.log('[UploadRoute] formData keys:', [...formData.keys()]);
 
-        // Ensure a file is provided; expecting the form field "file".
-        if (!files.file) {
+        // 2️⃣ Get the uploaded file
+        const fileField = formData.get('file');
+        if (!fileField || !(fileField instanceof File)) {
+            console.error('[UploadRoute] No valid "file" field found');
+
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
         }
+        console.log('[UploadRoute] Received file:', fileField.name, fileField.size, 'bytes');
 
-        // Handle the possibility that files.file is an array.
-        const fileData = Array.isArray(files.file) ? files.file[0] : (files.file as FormidableFile);
+        // 3️⃣ Read it into a Buffer
+        const arrayBuffer = await fileField.arrayBuffer();
+        console.log('[UploadRoute] arrayBuffer length:', arrayBuffer.byteLength);
 
-        const filePath = fileData.filepath;
-        if (!filePath) {
-            return NextResponse.json({ error: 'File path not found' }, { status: 400 });
-        }
+        // 4️⃣ Write to a temp file
+        const tempDir = path.join(process.cwd(), 'public', 'uploads', 'tmp');
+        await fs.mkdir(tempDir, { recursive: true });
+        const tempFilename = `${uuidv4()}_${fileField.name}`;
+        const tempFilePath = path.join(tempDir, tempFilename);
+        await fs.writeFile(tempFilePath, Buffer.from(arrayBuffer));
+        console.log('[UploadRoute] Temp file written to', tempFilePath);
 
-        // Optionally extract additional fields (userId, customFileName) from the form.
-        const { userId } = fields;
+        // 5️⃣ Extract other fields (e.g. userId)
+        const userId = formData.get('userId') as string | null;
+        console.log('[UploadRoute] userId:', userId);
 
-        // Upload the file to Cloudinary using our utility.
-        const cloudinaryResult = await uploadFileToCloudinary(filePath, userId as string | undefined);
+        // 6️⃣ Upload to Cloudinary
+        const cloudinaryResult = await uploadFileToCloudinary(tempFilePath, userId || undefined);
+        console.log('[UploadRoute] Cloudinary result:', cloudinaryResult);
 
-        // Delete the temporary file.
-        await fs.unlink(filePath);
+        // 7️⃣ Clean up temp file
+        await fs.unlink(tempFilePath);
+        console.log('[UploadRoute] Temp file deleted');
 
-        // Respond with the Cloudinary upload result.
+        // 8️⃣ Respond with the Cloudinary info
         return NextResponse.json({
             ...cloudinaryResult,
             url: cloudinaryResult.secure_url,
             public_id: cloudinaryResult.public_id,
             resource_type: cloudinaryResult.resource_type
         });
-    } catch (error) {
-        console.error('Upload error:', error);
+    } catch (err) {
+        console.error('[UploadRoute] Error:', err);
+        const message = err instanceof Error ? err.message : 'Unknown error';
 
-        return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

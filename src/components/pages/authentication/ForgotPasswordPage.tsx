@@ -6,7 +6,7 @@ import { AuthFooterLinks } from '@/components/app-ui/auth/AuthFooterLinks';
 import { AuthFormWrapper } from '@/components/app-ui/auth/AuthFormWrapper';
 import { AuthIllustration } from '@/components/app-ui/auth/AuthIllustration';
 import { AuthLayout } from '@/components/app-ui/auth/AuthLayout';
-import CloudFlareCaptcha from '@/components/app-ui/captacha';
+import CloudFlareCaptcha from '@/components/app-ui/captcha';
 import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,7 @@ import { z } from 'zod';
 export default function ForgotPasswordPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [isEmailSent, setIsEmailSent] = useState(false);
-    const { captchaToken } = useCaptchaToken();
+    const { captchaToken, setToken } = useCaptchaToken();
     const form = useForm({
         resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
@@ -60,8 +60,7 @@ export default function ForgotPasswordPage() {
                             description: 'Please wait while we send the reset link to your email.'
                         });
                     },
-                    onSuccess: (ctx) => {
-                        console.log({ resCtx: ctx });
+                    onSuccess: () => {
                         toast.success('Password Reset Request Received', {
                             id: 'forgot-toast',
                             description:
@@ -70,11 +69,12 @@ export default function ForgotPasswordPage() {
                         setIsEmailSent(true);
                     },
                     onError: (ctx: ErrorContext) => {
-                        console.log('ctx', ctx);
                         toast.error(ctx.error.statusText || 'Something Went Wrong', {
                             id: 'forgot-toast',
                             description: ctx.error.message || 'Unable to send reset link. Please try again later.'
                         });
+                        // Reset captcha token on password reset request failure
+                        setToken('');
                     }
                 }
             });
