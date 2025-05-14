@@ -171,8 +171,8 @@ importers:
         specifier: ^12.10.5
         version: 12.10.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       html2canvas-pro:
-        specifier: ^1.5.10
-        version: 1.5.10
+        specifier: ^1.5.11
+        version: 1.5.11
       html2pdf.js:
         specifier: ^0.10.3
         version: 0.10.3
@@ -2936,8 +2936,8 @@ packages:
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
 
-  html2canvas-pro@1.5.10:
-    resolution: {integrity: sha512-CoYkD4+wrdX5j5HfkPu6CxFXWXQbGld3cxcQYiU4JVHfZSe3JeMEgAwBCYd6ROsn2nVETHyMUjXLQLcmCGjRqQ==}
+  html2canvas-pro@1.5.11:
+    resolution: {integrity: sha512-W4pEeKLG8+9a54RDOSiEKq7gRXXDzt0ORMaLXX+l6a3urSKbmnkmyzcRDCtgTOzmHLaZTLG2wiTQMJqKLlSh3w==}
     engines: {node: '>=16.0.0'}
 
   html2canvas@1.4.1:
@@ -7032,7 +7032,7 @@ snapshots:
 
   html-escaper@2.0.2: {}
 
-  html2canvas-pro@1.5.10:
+  html2canvas-pro@1.5.11:
     dependencies:
       css-line-break: 2.1.0
       text-segmentation: 1.0.3
