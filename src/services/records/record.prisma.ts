@@ -1,6 +1,6 @@
 import { prismaEdge } from '@/lib/databases/edge';
 import { prisma } from '@/lib/databases/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/prisma';
 
 import { endOfDay, startOfDay } from 'date-fns';
 

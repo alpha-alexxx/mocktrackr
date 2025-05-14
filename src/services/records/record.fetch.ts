@@ -1,6 +1,6 @@
 import axiosClient from '@/lib/axios-client';
+import { Record } from '@/prisma';
 import { FormData } from '@/stores/form-store';
-import { Record } from '@prisma/client';
 
 import axios from 'axios';
 import { formatISO } from 'date-fns';

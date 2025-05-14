@@ -1,7 +1,8 @@
-import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { auth } from './lib/authentication/auth';
+import { betterFetch } from '@better-fetch/fetch';
+
+import { Session } from './lib/types/auth-types';
 
 /**
  * Routes that do not require authentication.
@@ -51,9 +52,15 @@ const matchesRoute = (path: string, routes: string[]): boolean => {
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     // Retrieve the session using Better Auth's API (this runs in a Node environment).
-    const session = await auth.api.getSession({ headers: await headers() });
-    const isLoggedIn = session && session.user && session.user.id;
+    // const session = await auth.api.getSession({ headers: await headers() });
 
+    const { data: session } = await betterFetch<Session>('/api/auth/get-session', {
+        baseURL: request.nextUrl.origin,
+        headers: {
+            cookie: request.headers.get('cookie') || '' // Forward the cookies from the request
+        }
+    });
+    const isLoggedIn = session && session.user && session.user.id;
     /**__TESTING_PURPOSE__**/
 
     // console.log({ sessionMiddleware: session, isLoggedIn });
@@ -87,7 +94,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     // Next.js 15 middleware runs in the Edge Runtime by default
-    runtime: 'nodejs',
     matcher: [
         // This now matches all app routes EXCEPT static files, _next, AND skips /api/auth except /api
         '/((?!_next|api/auth/|api/auth|favicon.ico|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',

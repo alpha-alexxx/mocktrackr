@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@/prisma';
 
 /**
  * Global variable to store the Prisma client instance.

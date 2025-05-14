@@ -24,6 +24,12 @@
         "paths": {
             "@/*": [
                 "./src/*"
+            ],
+            "@/prisma/*": [
+                "./src/orm/prisma/*"
+            ],
+            "@/prisma": [
+                "./src/orm/prisma/client"
             ]
         },
         "target": "ES2023"

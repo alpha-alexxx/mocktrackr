@@ -1,6 +1,6 @@
+import { PrismaClient } from '@/prisma';
 import { createClient } from '@libsql/client/web';
 import { PrismaLibSQL } from '@prisma/adapter-libsql';
-import { PrismaClient } from '@prisma/client';
 
 /**
  * Global variable for Prisma client to avoid multiple instances in development.

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ExamTier } from '@prisma/client';
+import { ExamTier } from '@/prisma';
 
 import Dexie from 'dexie';
 import type { Table } from 'dexie';

@@ -3,10 +3,10 @@
  * This module integrates Prisma, Redis, and email services for a robust authentication system.
  */
 import { prisma } from '@/lib/databases/prisma';
-import { prismaServerLess } from '@/lib/databases/serverless';
 import { sendMail } from '@/lib/mail/mail';
 import { Redis } from '@upstash/redis';
 
+import { prismaEdge } from '../databases/edge';
 import { Get2FAEmailTemplate } from '../mail/templates/2fa-otp';
 import { GetResetPasswordEmailTemplate } from '../mail/templates/send-reset-password';
 import { GetVerificationEmailTemplate } from '../mail/templates/send-verification-email';
@@ -17,7 +17,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { captcha, customSession, haveIBeenPwned, openAPI, twoFactor } from 'better-auth/plugins';
 
 const SENT_FROM = process.env.SMTP_FROM || 'no-reply.mocktrackr@lethargic.online';
-const db = process.env.NODE_ENV === 'development' ? prisma : prismaServerLess;
+const db = process.env.NODE_ENV === 'development' ? prisma : prismaEdge;
 /**
  * Authentication configuration object.
  */
@@ -25,12 +25,13 @@ const redis = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL!,
     token: process.env.UPSTASH_REDIS_REST_TOKEN!
 });
+const VERCEL_PROD = !!process.env.VERCEL_URL!;
 export const auth = betterAuth({
     appName: siteConfig.name,
     database: prismaAdapter(db, {
         provider: 'sqlite'
     }),
-    trustedOrigins: [process.env.VERCEL_URL!],
+    trustedOrigins: [VERCEL_PROD ? process.env.VERCEL_URL! : process.env.NEXT_PUBLIC_APP_URL!],
     account: {
         accountLinking: {
             trustedProviders: ['google', 'mocktrackr']

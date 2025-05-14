@@ -1,0 +1,136 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../src/orm/prisma/client"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./database/dev.db"
+}
+
+enum UserRole {
+  ADMIN
+  SUPERADMIN
+  USER
+}
+
+enum ExamTier {
+  TIER_1
+  TIER_2
+}
+
+model User {
+  id               String      @id
+  name             String
+  email            String
+  emailVerified    Boolean
+  image            String?
+  role             UserRole    @default(USER)
+  createdAt        DateTime
+  updatedAt        DateTime
+  twoFactorEnabled Boolean?
+  sessions         Session[]
+  accounts         Account[]
+  twofactors       TwoFactor[]
+
+  normalizedEmail String?
+  Records         Record[]
+
+  @@unique([email])
+  @@unique([normalizedEmail])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model TwoFactor {
+  id          String @id
+  secret      String
+  backupCodes String
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("twoFactor")
+}
+
+model Record {
+  id           String    @id @default(cuid())
+  userId       String
+  testName     String
+  testDate     DateTime
+  examName     String
+  examCode     String
+  examTier     ExamTier?
+  testPlatform String
+  testLink     String?
+  percentile   Float?
+  rank         String?
+
+  totalTimeTaken String
+  totalTime      String
+
+  totalQuestions        Int
+  attemptedQuestions    Int
+  totalSkippedQuestions Int
+  totalCorrectQuestions Int
+  totalWrongQuestions   Int
+  totalMarks            Float
+  obtainedMarks         Float
+  totalCorrectMarks     Float
+  totalWrongMarks       Float
+
+  keyPoints String?
+  learnings String?
+
+  sectionWise Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([id])
+}

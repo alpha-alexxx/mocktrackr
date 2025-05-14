@@ -1,5 +1,5 @@
+import { JsonValue } from '@/prisma/client/runtime/library';
 import { Section } from '@/stores/form-store';
-import type { JsonValue } from '@prisma/client/runtime/library';
 
 export const purifySections = (sectionWise: JsonValue) => {
     const sections = isSectionArray(sectionWise) ? (sectionWise as Section[]) : [];
