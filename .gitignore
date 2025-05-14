@@ -15,6 +15,7 @@
 
 # production
 /build
+/src/orm/
 
 # misc
 .DS_Store
