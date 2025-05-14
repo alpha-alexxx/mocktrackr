@@ -90,7 +90,7 @@ export const config = {
     runtime: 'nodejs',
     matcher: [
         // This now matches all app routes EXCEPT static files, _next, AND skips /api/auth except /api
-        '/((?!_next|api/auth|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        '/((?!_next|api/auth/|api/auth|favicon.ico|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
         // Always run for API routes
         '/dashboard/:path*',
         '/profile/:path*',
