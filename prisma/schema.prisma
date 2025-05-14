@@ -1,13 +1,12 @@
 
 generator client {
   provider = "prisma-client-js"
-
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "sqlite"
   url      = "file:./database/dev.db"
-  
 }
 enum UserRole {
   ADMIN

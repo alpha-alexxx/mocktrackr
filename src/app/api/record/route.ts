@@ -2,8 +2,12 @@ import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import { auth } from '@/lib/authentication/auth';
-import { prisma as db } from '@/lib/databases/prisma';
-import { createRecordToDB, fetchRecordsFromDB, updateRecordToDB } from '@/services/records/record.prisma';
+import {
+    createRecordToDB,
+    deleteRecordFromDB,
+    fetchRecordsFromDB,
+    updateRecordToDB
+} from '@/services/records/record.prisma';
 import type { Prisma } from '@prisma/client';
 
 /**
@@ -164,12 +168,7 @@ export async function DELETE(request: Request): Promise<NextResponse> {
             );
         }
 
-        await db.record.delete({
-            where: {
-                id: recordId,
-                userId: session.user.id
-            }
-        });
+        await deleteRecordFromDB(recordId, session.user.id);
 
         return NextResponse.json({ success: true, message: 'Record deleted successfully.' }, { status: 200 });
     } catch (error) {

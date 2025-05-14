@@ -1,14 +1,17 @@
+import { prismaEdge } from '@/lib/databases/edge';
 import { prisma } from '@/lib/databases/prisma';
 import { Prisma } from '@prisma/client';
 
 import { endOfDay, startOfDay } from 'date-fns';
+
+const db = process.env.NODE_ENV === 'development' ? prisma : prismaEdge;
 
 /**
  * Fetch records based on recordId or date. If neither provided, fetch all.
  */
 export async function fetchRecordsFromDB(userId: string, recordId: string | null, date: string | null) {
     if (recordId) {
-        return prisma.record.findFirst({
+        return db.record.findFirst({
             where: { id: recordId, userId },
             include: {
                 user: { select: { name: true } }
@@ -19,7 +22,7 @@ export async function fetchRecordsFromDB(userId: string, recordId: string | null
         const start = startOfDay(new Date(date));
         const end = endOfDay(new Date(date));
 
-        return prisma.record.findMany({
+        return db.record.findMany({
             where: {
                 userId,
                 testDate: { gte: start, lte: end }
@@ -31,7 +34,7 @@ export async function fetchRecordsFromDB(userId: string, recordId: string | null
         });
     }
 
-    return prisma.record.findMany({
+    return db.record.findMany({
         where: { userId },
         include: {
             user: { select: { name: true } }
@@ -45,14 +48,14 @@ export async function fetchRecordsFromDB(userId: string, recordId: string | null
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createRecordToDB(data: any) {
-    return prisma.record.create({ data });
+    return db.record.create({ data });
 }
 
 /**
  * Update a specific test record by record ID and user ID.
  */
 export async function updateRecordToDB(recordId: string, userId: string, data: Partial<Prisma.RecordCreateInput>) {
-    return prisma.record.update({
+    return db.record.update({
         where: { id: recordId, userId },
         data
     });
@@ -62,7 +65,7 @@ export async function updateRecordToDB(recordId: string, userId: string, data: P
  * Delete a test record by ID and user ID.
  */
 export async function deleteRecordFromDB(recordId: string, userId: string) {
-    return prisma.record.delete({
+    return db.record.delete({
         where: { id: recordId, userId }
     });
 }

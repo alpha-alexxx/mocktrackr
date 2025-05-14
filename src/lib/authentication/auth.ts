@@ -2,7 +2,8 @@
  * Authentication configuration using Better Auth with Next.js 15.
  * This module integrates Prisma, Redis, and email services for a robust authentication system.
  */
-import { prisma as db } from '@/lib/databases/prisma';
+import { prisma } from '@/lib/databases/prisma';
+import { prismaServerLess } from '@/lib/databases/serverless';
 import { sendMail } from '@/lib/mail/mail';
 import { Redis } from '@upstash/redis';
 
@@ -16,7 +17,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { captcha, customSession, haveIBeenPwned, openAPI, twoFactor } from 'better-auth/plugins';
 
 const SENT_FROM = process.env.SMTP_FROM || 'no-reply.mocktrackr@lethargic.online';
-
+const db = process.env.NODE_ENV === 'development' ? prisma : prismaServerLess;
 /**
  * Authentication configuration object.
  */
