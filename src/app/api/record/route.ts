@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/lib/authentication/auth';
 import { prisma as db } from '@/lib/databases/prisma';
 import { createRecordToDB, fetchRecordsFromDB, updateRecordToDB } from '@/services/records/record.prisma';
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 /**
  * Handles GET requests to fetch test records based on userId, date, or recordId.
