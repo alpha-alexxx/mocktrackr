@@ -13,7 +13,6 @@ import useCaptchaToken from '@/stores/captcha_token';
 export default function CloudFlareCaptcha() {
     const { captchaToken, setToken } = useCaptchaToken();
     const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_SITE_KEY as string;
-    console.log('siteKey:', siteKey);
     const [key, setKey] = useState(Date.now()); // Forces widget re-render
     const [info, setInfo] = useState<{
         type: 'success' | 'error';
