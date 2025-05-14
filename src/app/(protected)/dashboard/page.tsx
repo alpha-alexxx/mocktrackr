@@ -1,29 +1,17 @@
-'use client';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { useRouter } from 'next/navigation';
+import Dashboard from '@/components/pages/dashboard/dashboard-ui';
+import { auth } from '@/lib/authentication/auth';
 
-import { authClient } from '@/lib/authentication/auth-client';
+export default async function Page() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
 
-export default function DashboardPage() {
-    const { data: session, error, isPending } = authClient.useSession();
-    const router = useRouter();
-    if (isPending) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-    const handleClick = async () => {
-        await authClient.signOut({
-            fetchOptions: {
-                onSuccess: (ctx) => {
-                    router.push('/login');
-                }
-            }
-        });
-    };
+    if (!session) {
+        redirect('/login');
+    }
 
-    return (
-        <div>
-            <h1>Dashboard</h1>
-            <p>Session: {JSON.stringify(session)}</p>
-            <button onClick={handleClick}>Sign out</button>
-        </div>
-    );
+    return <Dashboard user={session.user} />;
 }

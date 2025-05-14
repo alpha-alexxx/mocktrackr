@@ -32,7 +32,7 @@ export function ThemeToggle() {
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger className='z-[999]' asChild>
                     <div className='relative flex h-9 items-center rounded-full border border-slate-400 bg-slate-100/30 p-1 backdrop-blur-xs dark:border-slate-600 dark:bg-slate-800/20'>
                         {themes.map((t) => (
                             <button
@@ -40,7 +40,7 @@ export function ThemeToggle() {
                                 className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
                                     activeTheme === t
                                         ? 'text-white'
-                                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
+                                        : 'dark:text-foreground text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
                                 }`}
                                 onClick={() => setTheme(t)}
                                 aria-label={`Switch to ${t} theme`}>

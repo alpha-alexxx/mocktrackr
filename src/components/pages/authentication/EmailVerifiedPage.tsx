@@ -24,6 +24,7 @@ interface InfoProps {
     icon: LucideIcon;
     btnText: string;
     btnHref: string;
+    type: 'success' | 'error';
 }
 
 const footerLinks = [
@@ -102,23 +103,24 @@ function EmailVerificationContent() {
                     icon: AlertTriangle,
                     color: 'bg-rose-500',
                     btnText: 'Continue to Login',
-                    btnHref: '/login'
+                    btnHref: '/login',
+                    type: 'error'
                 });
                 setIsLoading(false);
 
                 return;
             }
 
-            const { data, error } = await authClient.verifyEmail({
+            await authClient.verifyEmail({
                 query: { token },
                 fetchOptions: {
-                    onRequest: (ctx) => {
+                    onRequest: () => {
                         toast.loading('Verifying email...', {
                             id: 'verify-email',
                             description: 'Please wait while we verify your email.'
                         });
                     },
-                    onSuccess: (ctx) => {
+                    onSuccess: () => {
                         toast.success('Email Verified!', {
                             id: 'verify-email',
                             description: 'Your email was successfully verified.'
@@ -129,7 +131,8 @@ function EmailVerificationContent() {
                             icon: CheckCircle,
                             color: 'bg-emerald-400',
                             btnText: 'Continue to Dashboard',
-                            btnHref: '/dashboard'
+                            btnHref: '/dashboard',
+                            type: 'success'
                         });
                     },
                     onError: (ctx) => {
@@ -143,7 +146,8 @@ function EmailVerificationContent() {
                             icon: AlertTriangle,
                             color: 'bg-rose-500',
                             btnText: 'Try Again',
-                            btnHref: '/login'
+                            btnHref: '/login',
+                            type: 'error'
                         });
                     }
                 }
@@ -175,13 +179,17 @@ function EmailVerificationContent() {
         <AuthLayout
             illustration={
                 <AuthIllustration
-                    src='/illustrations/verified.svg'
+                    src={
+                        info.type === 'success'
+                            ? '/illustrations/email-verified.png'
+                            : '/illustrations/email-verification-failed.png'
+                    }
                     alt='Verification illustration'
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={800}
                 />
             }>
-            <div className='mx-auto w-full max-w-md space-y-8 rounded-xl bg-white p-6 shadow-lg backdrop-blur-sm dark:bg-gray-950/60'>
+            <div className='mx-auto w-full max-w-md space-y-8 rounded-xl border-2 bg-white p-6 shadow-xs backdrop-blur-sm dark:border-white/20 dark:bg-gray-950/60'>
                 <div className='flex flex-col items-center justify-center space-y-3 text-center'>
                     <motion.div
                         variants={animationVariants.icon}
@@ -206,7 +214,7 @@ function EmailVerificationContent() {
                         animate='visible'
                         className='w-full pt-4 text-white'>
                         <Link href={info.btnHref}>
-                            <Button className='w-full'>{info.btnText}</Button>
+                            <Button className='w-full text-white'>{info.btnText}</Button>
                         </Link>
                     </motion.div>
                 </div>

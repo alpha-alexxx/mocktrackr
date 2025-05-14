@@ -2,25 +2,16 @@ import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { auth } from './lib/authentication/auth';
-import { getSessionCookie } from 'better-auth/cookies';
 
 /**
  * Routes that do not require authentication.
  */
-const publicRoutes = [
-    '/',
-    '/login',
-    '/register',
-    '/forgot-password',
-    '/reset-password',
-    '/email-verified',
-    '/api/auth/*'
-];
+const publicRoutes = ['/', '/login', '/register', '/email-verified', '/api/auth/*'];
 
 /**
  * Routes that require a valid session.
  */
-const protectedRoutes = ['/dashboard/*', '/profile/*'];
+const protectedRoutes = ['/dashboard/*', '/profile/*', '/tests/:id', '/performance'];
 
 /**
  * Routes that require admin privileges.
@@ -59,11 +50,14 @@ const matchesRoute = (path: string, routes: string[]): boolean => {
  */
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const cookie = getSessionCookie(request);
     // Retrieve the session using Better Auth's API (this runs in a Node environment).
     const session = await auth.api.getSession({ headers: await headers() });
-    const isLoggedIn = Boolean(session);
-    console.log({ sessionMiddleware: session });
+    const isLoggedIn = session && session.user && session.user.id;
+
+    /**__TESTING_PURPOSE__**/
+
+    // console.log({ sessionMiddleware: session, isLoggedIn });
+
     // 1. If a user is logged in and tries to access any public route, send them to /dashboard.
     if (matchesRoute(pathname, publicRoutes) && isLoggedIn) {
         return NextResponse.redirect(new URL('/dashboard', request.url));

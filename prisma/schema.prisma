@@ -14,6 +14,14 @@ enum UserRole {
   SUPERADMIN
   USER
 }
+
+
+
+enum ExamTier {
+  TIER_1
+  TIER_2
+}
+
 model User {
   id               String      @id
   name             String
@@ -33,6 +41,7 @@ model User {
   @@unique([email])
   @@map("user")
   @@unique([normalizedEmail])
+  Records Record[]
 }
 
 model Session {
@@ -91,3 +100,42 @@ model TwoFactor {
 }
 
 
+model Record {
+  id             String @id @default(cuid())
+  userId         String
+  testName       String
+  testDate       DateTime
+  examName       String
+  examCode       String
+  examTier       ExamTier?
+  testPlatform   String
+  testLink       String?
+  percentile     Float?
+  rank           String?
+
+  totalTimeTaken String
+  totalTime      String  
+  
+  totalQuestions    Int
+  attemptedQuestions Int
+  totalSkippedQuestions Int
+  totalCorrectQuestions Int
+  totalWrongQuestions   Int
+  totalMarks     Float
+  obtainedMarks  Float
+  totalCorrectMarks Float
+  totalWrongMarks   Float
+
+  keyPoints      String?
+  learnings      String?
+  
+  sectionWise    Json
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  
+  @@unique([id])
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+}

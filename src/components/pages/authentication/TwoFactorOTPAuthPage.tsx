@@ -8,16 +8,17 @@ import { AuthFooterLinks } from '@/components/app-ui/auth/AuthFooterLinks';
 import { AuthFormWrapper } from '@/components/app-ui/auth/AuthFormWrapper';
 import { AuthIllustration } from '@/components/app-ui/auth/AuthIllustration';
 import { AuthLayout } from '@/components/app-ui/auth/AuthLayout';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Switch } from '@/components/ui/switch';
 import { authClient } from '@/lib/authentication/auth-client';
-import { siteConfig } from '@/lib/site/site-config';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { Loader2, Smartphone } from 'lucide-react';
+import { Info, Loader2, Smartphone } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -36,21 +37,23 @@ import { z } from 'zod';
  * @returns {JSX.Element} The rendered two-factor authentication page
  */
 const otpSchema = z.object({
-    otp: z.string().min(6, {
-        message: 'Your one-time password must be 6 characters.'
-    })
+    otp: z
+        .string()
+        .length(6, { message: 'OTP must be exactly 6 digits.' })
+        .regex(/^\d+$/, { message: 'OTP must contain only numbers.' }),
+    trustDevice: z.boolean().optional()
 });
 
 export default function TwoFactorOTPAuthPage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
     const [verificationMethod, setVerificationMethod] = useState<'totp' | 'email'>('totp');
 
     const form = useForm<z.infer<typeof otpSchema>>({
         resolver: zodResolver(otpSchema),
         defaultValues: {
-            otp: ''
+            otp: '',
+            trustDevice: false
         }
     });
 
@@ -59,16 +62,15 @@ export default function TwoFactorOTPAuthPage() {
      * @param {string} code - The OTP code to verify
      */
     const handleVerification = async (values: z.infer<typeof otpSchema>) => {
-        const { otp } = values;
+        const { otp: code, trustDevice } = values;
         setIsLoading(true);
-        setError('');
-
         try {
             const verifyFunction =
                 verificationMethod === 'totp' ? authClient.twoFactor.verifyTotp : authClient.twoFactor.verifyOtp;
 
             await verifyFunction({
-                code: otp,
+                code,
+                trustDevice,
                 fetchOptions: {
                     onRequest: () => {
                         toast.loading('Verifying OTP...', {
@@ -87,8 +89,6 @@ export default function TwoFactorOTPAuthPage() {
                             description: ctx.error.message,
                             id: 'two-factor-toast'
                         });
-                        setError(ctx.error.message || 'Failed to verify OTP');
-                        throw new Error(ctx.error.message);
                     }
                 }
             });
@@ -98,7 +98,7 @@ export default function TwoFactorOTPAuthPage() {
     };
 
     const requestOTPOnMail = async () => {
-        const { data, error } = await authClient.twoFactor.sendOtp({
+        await authClient.twoFactor.sendOtp({
             fetchOptions: {
                 onRequest: () => {
                     toast.loading('Sending OTP...', {
@@ -116,8 +116,6 @@ export default function TwoFactorOTPAuthPage() {
                         description: ctx.error.message,
                         id: 'two-factor-toast'
                     });
-                    setError(ctx.error.message || 'Failed to send OTP');
-                    throw new Error(ctx.error.message);
                 }
             }
         });
@@ -128,6 +126,7 @@ export default function TwoFactorOTPAuthPage() {
         if (otp.length === 6) {
             form.handleSubmit(handleVerification)();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.watch('otp')]);
 
     const footerLinks = [{ label: 'Back to Login', href: '/login' }];
@@ -136,10 +135,10 @@ export default function TwoFactorOTPAuthPage() {
         <AuthLayout
             illustration={
                 <AuthIllustration
-                    src='/illustrations/2fa.svg'
+                    src='/illustrations/two-factor.png'
                     alt='Two-factor authentication illustration'
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={800}
                 />
             }>
             <AuthFormWrapper
@@ -156,7 +155,7 @@ export default function TwoFactorOTPAuthPage() {
                         type='button'
                         variant={verificationMethod === 'totp' ? 'default' : 'outline'}
                         onClick={() => setVerificationMethod('totp')}
-                        className='flex-1'>
+                        className={cn('flex-1', verificationMethod === 'totp' ? 'text-white' : 'text-foreground')}>
                         Authenticator App
                     </Button>
                     <Button
@@ -166,15 +165,16 @@ export default function TwoFactorOTPAuthPage() {
                             setVerificationMethod('email');
                             requestOTPOnMail();
                         }}
-                        className='flex-1'>
+                        className={cn('flex-1', verificationMethod === 'email' ? 'text-white' : 'text-foreground')}>
                         Email Code
                     </Button>
                 </div>
+
                 <FormField
                     control={form.control}
                     name='otp'
                     render={({ field }) => (
-                        <FormItem className='flex flex-col items-center justify-center'>
+                        <FormItem className='flex flex-col items-center'>
                             <FormLabel>Verification Code</FormLabel>
                             <FormControl>
                                 <InputOTP
@@ -183,14 +183,14 @@ export default function TwoFactorOTPAuthPage() {
                                     onChange={field.onChange}
                                     disabled={isLoading}
                                     pattern={REGEXP_ONLY_DIGITS}>
-                                    <InputOTPGroup>
-                                        <InputOTPSlot index={0} />
-                                        <InputOTPSlot index={1} />
-                                        <InputOTPSlot index={2} />
-                                        <InputOTPSeparator />
-                                        <InputOTPSlot index={3} />
-                                        <InputOTPSlot index={4} />
-                                        <InputOTPSlot index={5} />
+                                    <InputOTPGroup className='gap-1 rounded-none'>
+                                        {Array.from({ length: 6 }).map((_, index) => (
+                                            <InputOTPSlot
+                                                className='border-foreground/20 rounded-lg border-2 shadow-none'
+                                                index={index}
+                                                key={'slot' + index + index}
+                                            />
+                                        ))}
                                     </InputOTPGroup>
                                 </InputOTP>
                             </FormControl>
@@ -198,14 +198,38 @@ export default function TwoFactorOTPAuthPage() {
                         </FormItem>
                     )}
                 />
-
-                {error && (
-                    <Alert variant='destructive'>
-                        <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                )}
-
-                <Button type='submit' className='w-full text-white' disabled={isLoading}>
+                <FormField
+                    control={form.control}
+                    name='trustDevice'
+                    render={({ field }) => (
+                        <FormItem className='flex flex-row items-center space-y-0 space-x-2'>
+                            <FormControl>
+                                <Switch
+                                    className='data-[state=checked]:dark:bg-blue-600'
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <FormLabel className='flex items-center gap-x-2 text-sm font-normal'>
+                                Mark this device as trusted
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <Info className='size-4' />
+                                    </PopoverTrigger>
+                                    <PopoverContent className='border-foreground/20 border-2 text-sm'>
+                                        You won’t be asked for a verification code again on this device for the next{' '}
+                                        <strong>60 days</strong>.
+                                        <br />
+                                        <span className='text-xs italic'>
+                                            Note: Recommended only on <strong>personal devices</strong>.
+                                        </span>
+                                    </PopoverContent>
+                                </Popover>
+                            </FormLabel>
+                        </FormItem>
+                    )}
+                />
+                <Button type='submit' className='mt-4 w-full text-white' disabled={isLoading}>
                     {isLoading ? (
                         <>
                             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
@@ -220,8 +244,8 @@ export default function TwoFactorOTPAuthPage() {
                 </Button>
 
                 {verificationMethod === 'email' && (
-                    <p className='text-muted-foreground text-center text-sm'>
-                        Didn't receive the code?{' '}
+                    <p className='text-muted-foreground mt-2 text-center text-sm'>
+                        Didn&apos;t receive the code?{' '}
                         <button
                             type='button'
                             onClick={requestOTPOnMail}

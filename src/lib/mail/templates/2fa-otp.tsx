@@ -1,6 +1,6 @@
 import { siteConfig } from '@/lib/site/site-config';
 
-import { User } from 'better-auth';
+import type { User } from 'better-auth';
 
 export const Get2FAEmailTemplate = (user: User, otpCode: string) => {
     const year = new Date().getFullYear();

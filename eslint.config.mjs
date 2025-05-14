@@ -1,5 +1,6 @@
 import pluginJs from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
+import pluginQuery from '@tanstack/eslint-plugin-query'
 
 import eslintConfigPrettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
@@ -26,6 +27,7 @@ export default [
             }
         }
     },
+    ...pluginQuery.configs['flat/recommended'],
     importPlugin.flatConfigs.recommended, // ? https://github.com/import-js/eslint-plugin-import
     pluginJs.configs.recommended, // ? https://github.com/eslint/eslint
     ...tseslint.configs.recommended, // ? https://github.com/typescript-eslint/typescript-eslint

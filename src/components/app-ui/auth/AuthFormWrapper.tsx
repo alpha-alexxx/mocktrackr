@@ -19,7 +19,7 @@ interface AuthFormWrapperProps {
     footer?: ReactNode;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form: UseFormReturn<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-unused-vars
     onSubmit: (values: any) => void;
     className?: string;
 }
@@ -41,7 +41,7 @@ export function AuthFormWrapper({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className={cn(
-                'w-full space-y-6 rounded-xl bg-white/95 p-6 shadow-lg backdrop-blur-sm dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
+                'w-full flex-shrink-0 space-y-6 rounded-xl border bg-white/95 p-6 shadow-xs backdrop-blur-sm dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
                 className
             )}>
             <div className='w-full space-y-2 text-center'>

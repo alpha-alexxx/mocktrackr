@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import handleGoogleAuth from '@/actions/google-login';
 import { AuthFooterLinks } from '@/components/app-ui/auth/AuthFooterLinks';
@@ -23,7 +22,7 @@ import { loginSchema } from '@/lib/authentication/zod-schema';
 import useCaptchaToken from '@/stores/captcha_token';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Info, Lock, Mail } from 'lucide-react';
+import { Info, Loader2, Lock, Mail } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -31,7 +30,6 @@ import { z } from 'zod';
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const { captchaToken, setToken } = useCaptchaToken();
-    const router = useRouter();
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -44,7 +42,7 @@ export default function LoginPage() {
     const onSubmit = async (values: z.infer<typeof loginSchema>) => {
         const { email, password, rememberMe } = values;
         setIsLoading(true);
-        const { data, error } = await authClient.signIn.email(
+        await authClient.signIn.email(
             {
                 email,
                 password,
@@ -56,17 +54,19 @@ export default function LoginPage() {
                 headers: {
                     'x-captcha-response': captchaToken
                 },
-                onRequest: (ctx) => {
+                onRequest: () => {
                     toast.loading('Please wait...', {
                         id: 'login-toast',
                         description: 'We are trying to logging into your account.'
                     });
                 },
-                onSuccess: (ctx) => {
+                onSuccess: () => {
                     toast.success('Logged in!', {
                         id: 'login-toast',
                         description: 'You are successfully logged in.'
                     });
+
+                    return;
                 },
                 onError: (ctx) => {
                     toast.error(ctx.error.name || ctx.error.status + ' | ' + ctx.error.statusText, {
@@ -87,10 +87,10 @@ export default function LoginPage() {
         <AuthLayout
             illustration={
                 <AuthIllustration
-                    src='/illustrations/login.svg'
+                    src='/illustrations/login-account.png'
                     alt='Login illustration - User accessing a secure system'
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={800}
                 />
             }>
             <AuthFormWrapper
@@ -154,7 +154,7 @@ export default function LoginPage() {
                         <FormItem className='flex flex-row items-center space-y-0 space-x-2'>
                             <FormControl>
                                 <Checkbox
-                                    className='data-[state=checked]:dark:bg-blue-600'
+                                    className='dark:border-slate-400 data-[state=checked]:dark:bg-blue-600'
                                     checked={field.value}
                                     onCheckedChange={field.onChange}
                                     checkColor='dark:text-white'
@@ -176,7 +176,14 @@ export default function LoginPage() {
                 />
                 <CloudFlareCaptcha />
                 <Button type='submit' className='w-full text-white' disabled={isLoading || !captchaToken}>
-                    {isLoading ? 'Logging in...' : 'Login'}
+                    {isLoading ? (
+                        <span className='flex flex-row'>
+                            <Loader2 className='mr-2 size-5 animate-spin' />
+                            Logging in...
+                        </span>
+                    ) : (
+                        'Login'
+                    )}
                 </Button>
 
                 <AuthSocialButtons onGoogleClick={handleGoogleAuth} />

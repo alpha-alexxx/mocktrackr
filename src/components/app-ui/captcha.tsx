@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import useCaptchaToken from '@/stores/captcha_token';
 import { Turnstile } from '@marsidev/react-turnstile';
@@ -29,6 +29,7 @@ export default function CloudFlareCaptcha() {
         if (!captchaToken) {
             resetCaptcha();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [captchaToken]);
 
     const resetCaptcha = useCallback(() => {
@@ -55,15 +56,15 @@ export default function CloudFlareCaptcha() {
     if (info && info.type === 'error') {
         return (
             <div className='mt-2 flex w-full flex-col items-center justify-center rounded-md border border-rose-300 bg-rose-50 p-4 dark:bg-rose-800/20'>
-                <h3 className='mb-1 text-base font-semibold text-rose-700'>{info.title}</h3>
-                <p className='text-sm text-rose-600'>{info.message}</p>
+                <h3 className='mb-1 text-base font-semibold text-rose-700 dark:text-rose-300'>{info.title}</h3>
+                <p className='text-sm text-rose-600 dark:text-rose-500'>{info.message}</p>
             </div>
         );
     } else if (info && info.type === 'success') {
         return (
             <div className='mt-2 flex w-full flex-col items-center justify-center rounded-md border border-emerald-300 bg-emerald-50 p-4 dark:bg-emerald-800/20'>
-                <h3 className='mb-1 text-base font-semibold text-emerald-700'>{info.title}</h3>
-                <p className='text-sm text-emerald-600'>{info.message}</p>
+                <h3 className='mb-1 text-base font-semibold text-emerald-700 dark:text-emerald-300'>{info.title}</h3>
+                <p className='text-sm text-emerald-600 dark:text-emerald-500'>{info.message}</p>
             </div>
         );
     }

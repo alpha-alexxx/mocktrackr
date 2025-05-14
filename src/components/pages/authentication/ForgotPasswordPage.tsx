@@ -92,10 +92,10 @@ export default function ForgotPasswordPage() {
         <AuthLayout
             illustration={
                 <AuthIllustration
-                    src='/illustrations/forgot-password.svg'
+                    src='/illustrations/forgot-password.png'
                     alt='Forgot password illustration - Searching for email'
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={800}
                 />
             }>
             {isEmailSent ? (

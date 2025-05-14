@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { PasswordInput } from '@/components/app-ui/auth/PasswordInput';
 import CloudFlareCaptcha from '@/components/app-ui/captcha';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -24,7 +25,7 @@ import useCaptchaToken from '@/stores/captcha_token';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, ArrowLeft, CheckCircle, KeyRound, Loader, Mail } from 'lucide-react';
+import { AlertCircle, CheckCircle, InfoIcon, KeyRound, Loader, Mail } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -264,20 +265,45 @@ export default function ChangePassword() {
     );
 
     return (
-        <Card>
-            <CardHeader className='pb-3'>
+        <Card className='flex flex-col items-start justify-between gap-4'>
+            <CardHeader className='w-full pb-3'>
                 <div className='flex items-center gap-2'>
                     <KeyRound className='text-muted-foreground h-5 w-5' />
                     <CardTitle>Password</CardTitle>
                 </div>
                 <CardDescription>Change your password or reset it if you've forgotten it.</CardDescription>
             </CardHeader>
-            <CardContent>
-                <p className='text-muted-foreground text-sm'>
-                    Last changed: <span className='text-foreground font-medium'>3 months ago</span>
-                </p>
+            <CardContent className=''>
+                <Alert className='border border-sky-600 bg-sky-50 dark:border-sky-500 dark:bg-sky-600/20'>
+                    <AlertDescription className='text-foreground'>
+                        {/* Change Password */}
+                        <div>
+                            <h3 className='mb-1 flex items-center gap-2 text-sm font-semibold'>
+                                <InfoIcon className='size-4 text-sky-600' />
+                                Change Password
+                            </h3>
+                            <p className='text-xs'>
+                                Click “Change Password” → enter current password → type &amp; confirm new password →
+                                save changes.
+                            </p>
+                        </div>
+
+                        {/* Password Reset */}
+                        <div>
+                            <h3 className='mb-1 flex items-center gap-2 text-sm font-semibold'>
+                                <InfoIcon className='size-4 text-sky-600' />
+                                Reset Password
+                            </h3>
+                            <p className='text-xs'>
+                                Click “Reset Password” → submit email → check inbox (or spam) → click link → enter &amp;
+                                confirm new password → submit.
+                            </p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
             </CardContent>
-            <CardFooter className='flex w-full flex-col items-center justify-end gap-4'>
+
+            <CardFooter className='flex w-full flex-col items-center justify-end gap-2'>
                 {/* Change Password Dialog */}
                 <Dialog
                     open={openChange}
@@ -289,7 +315,7 @@ export default function ChangePassword() {
                         setOpenChange(open);
                     }}>
                     <DialogTrigger asChild>
-                        <Button variant='outline' className='w-full'>
+                        <Button variant='default' className='w-full text-white'>
                             Change Password
                         </Button>
                     </DialogTrigger>

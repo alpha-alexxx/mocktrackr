@@ -1,0 +1,255 @@
+{
+    "exams": {
+        "MTS": {
+            "hasTier": false,
+            "sessions": [
+                {
+                    "name": "Session 1",
+                    "durationMinutes": 45,
+                    "isQualifying": true,
+                    "subjects": [
+                        {
+                            "name": "Mathematics",
+                            "questions": 20,
+                            "marks": 60
+                        },
+                        {
+                            "name": "General Intelligence",
+                            "questions": 20,
+                            "marks": 60
+                        }
+                    ]
+                },
+                {
+                    "name": "Session 2",
+                    "durationMinutes": 45,
+                    "isQualifying": false,
+                    "subjects": [
+                        {
+                            "name": "General Knowledge",
+                            "questions": 25,
+                            "marks": 75
+                        },
+                        {
+                            "name": "English Language",
+                            "questions": 25,
+                            "marks": 75
+                        }
+                    ]
+                }
+            ]
+        },
+        "CGL": {
+            "hasTier": true,
+            "tier1": {
+                "durationMinutes": 60,
+                "totalQuestions": 100,
+                "totalMarks": 200,
+                "subjects": [
+                    {
+                        "name": "Mathematics",
+                        "questions": 25,
+                        "marks": 50
+                    },
+                    {
+                        "name": "General Intelligence",
+                        "questions": 25,
+                        "marks": 50
+                    },
+                    {
+                        "name": "General Knowledge",
+                        "questions": 25,
+                        "marks": 50
+                    },
+                    {
+                        "name": "English Language",
+                        "questions": 25,
+                        "marks": 50
+                    }
+                ]
+            },
+            "tier2": {
+                "paper1": {
+                    "durationMinutes": 135,
+                    "totalMarks": 390,
+                    "sections": [
+                        {
+                            "name": "Section I",
+                            "subjects": [
+                                {
+                                    "name": "Mathematical Abilities",
+                                    "questions": 30,
+                                    "marks": 90
+                                },
+                                {
+                                    "name": "Reasoning & General Intelligence",
+                                    "questions": 30,
+                                    "marks": 90
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Section II",
+                            "subjects": [
+                                {
+                                    "name": "English Language & Comprehension",
+                                    "questions": 45,
+                                    "marks": 135
+                                },
+                                {
+                                    "name": "General Awareness",
+                                    "questions": 25,
+                                    "marks": 75
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Section III",
+                            "subjects": [
+                                {
+                                    "name": "Computer Knowledge Module",
+                                    "questions": 20,
+                                    "marks": 60,
+                                    "qualifying": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "paper2": {
+                    "for": "JSO",
+                    "name": "Statistics",
+                    "questions": 100,
+                    "marks": 200,
+                    "durationMinutes": 120
+                },
+                "paper3": {
+                    "for": "AAO",
+                    "name": "Finance & Economics",
+                    "questions": 100,
+                    "marks": 200,
+                    "durationMinutes": 120
+                }
+            }
+        },
+        "CHSL": {
+            "hasTier": true,
+            "tier1": {
+                "durationMinutes": 60,
+                "totalQuestions": 100,
+                "totalMarks": 200,
+                "subjects": [
+                    {
+                        "name": "Mathematics",
+                        "questions": 25,
+                        "marks": 50
+                    },
+                    {
+                        "name": "General Intelligence",
+                        "questions": 25,
+                        "marks": 50
+                    },
+                    {
+                        "name": "General Knowledge",
+                        "questions": 25,
+                        "marks": 50
+                    },
+                    {
+                        "name": "English Language",
+                        "questions": 25,
+                        "marks": 50
+                    }
+                ]
+            },
+            "tier2": {
+                "durationMinutes": 135,
+                "totalMarks": 360,
+                "sections": [
+                    {
+                        "name": "Section I",
+                        "subjects": [
+                            {
+                                "name": "Mathematical Abilities",
+                                "questions": 30,
+                                "marks": 90
+                            },
+                            {
+                                "name": "Reasoning and General Intelligence",
+                                "questions": 30,
+                                "marks": 90
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Section II",
+                        "subjects": [
+                            {
+                                "name": "English Language & Comprehension",
+                                "questions": 40,
+                                "marks": 120
+                            },
+                            {
+                                "name": "General Awareness",
+                                "questions": 20,
+                                "marks": 60
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Section III",
+                        "subjects": [
+                            {
+                                "name": "Computer Knowledge Module",
+                                "questions": 15,
+                                "marks": 45,
+                                "qualifying": true
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "CPO": {
+            "hasTier": true,
+            "tier1": {
+                "durationMinutes": 120,
+                "totalQuestions": 200,
+                "totalMarks": 200,
+                "subjects": [
+                    {
+                        "name": "Mathematics",
+                        "questions": 50,
+                        "marks": 50
+                    },
+                    {
+                        "name": "General Intelligence",
+                        "questions": 50,
+                        "marks": 50
+                    },
+                    {
+                        "name": "General Knowledge",
+                        "questions": 50,
+                        "marks": 50
+                    },
+                    {
+                        "name": "English Language",
+                        "questions": 50,
+                        "marks": 50
+                    }
+                ]
+            },
+            "tier2": {
+                "durationMinutes": 120,
+                "totalQuestions": 200,
+                "totalMarks": 200,
+                "subjects": [
+                    {
+                        "name": "English Language",
+                        "questions": 200,
+                        "marks": 200
+                    }
+                ]
+            }
+        }
+    }
+}

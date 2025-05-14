@@ -10,7 +10,7 @@ import { Get2FAEmailTemplate } from '../mail/templates/2fa-otp';
 import { GetResetPasswordEmailTemplate } from '../mail/templates/send-reset-password';
 import { GetVerificationEmailTemplate } from '../mail/templates/send-verification-email';
 import { siteConfig } from '../site/site-config';
-import { Auth, betterAuth } from 'better-auth';
+import { betterAuth } from 'better-auth';
 import { emailHarmony } from 'better-auth-harmony';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { captcha, customSession, haveIBeenPwned, openAPI, twoFactor } from 'better-auth/plugins';
@@ -50,7 +50,7 @@ export const auth = betterAuth({
          * @param {string} params.token - The verification token.
          * @param {string} params.url - The verification URL.
          */
-        sendVerificationEmail: async ({ user, token, url }) => {
+        sendVerificationEmail: async ({ user, token }) => {
             const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}&callbackURL=/verify-email`;
             const emailHtml = GetVerificationEmailTemplate(user, verificationUrl);
             await sendMail({
@@ -74,7 +74,7 @@ export const auth = betterAuth({
          * @param {Object} params.user - The user object.
          * @param {string} params.url - The reset password URL.
          */
-        sendResetPassword: async ({ user, url, token }) => {
+        sendResetPassword: async ({ user, token }) => {
             const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}&callbackURL=/login`;
             const emailHtml = GetResetPasswordEmailTemplate(user, verificationUrl);
             await sendMail({
@@ -167,11 +167,3 @@ export const auth = betterAuth({
         openAPI()
     ]
 });
-
-/**
- * TODO:
- * - Implement logging for all email sending operations for better traceability.
- * - Enhance error handling for Redis operations to include retries.
- * - Consider adding rate limiting for sensitive operations like password resets.
- * - Write unit tests for all authentication flows.
- */
