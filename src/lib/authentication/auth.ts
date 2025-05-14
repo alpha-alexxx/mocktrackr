@@ -29,6 +29,7 @@ export const auth = betterAuth({
     database: prismaAdapter(db, {
         provider: 'sqlite'
     }),
+    trustedOrigins: [process.env.VERCEL_URL!],
     account: {
         accountLinking: {
             trustedProviders: ['google', 'mocktrackr']
