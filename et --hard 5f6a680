@@ -1,0 +1,39 @@
+[33mc77740f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m5f6a680[m HEAD@{1}: commit: Merge testing branch as a single commit
+[33mc77740f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{2}: checkout: moving from main to main
+[33mc77740f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{3}: checkout: moving from temp-experiment to main
+[33meac9ca5[m[33m ([m[1;31morigin/temp-experiment[m[33m, [m[1;32mtemp-experiment[m[33m)[m HEAD@{4}: commit: refactor(auth): replace prismaServerless with prismaEdge for consistency
+[33mfee3079[m HEAD@{5}: commit (merge): Merge branch 'temp-experiment' of https://github.com/alpha-alexxx/mocktrackr into temp-experiment
+[33m04bb3c4[m HEAD@{6}: commit: refactor: update database config and enable turbopack for dev script
+[33m2957961[m HEAD@{7}: commit: refactor(database): remove conditional prisma client assignment
+[33mf0ce607[m HEAD@{8}: reset: moving to HEAD~
+[33m1e26dd0[m HEAD@{9}: checkout: moving from main to temp-experiment
+[33mc77740f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{10}: checkout: moving from temp-experiment to main
+[33m1e26dd0[m HEAD@{11}: reset: moving to HEAD~1
+[33m56820a9[m HEAD@{12}: pull --tags origin temp-experiment: Fast-forward
+[33m1e26dd0[m HEAD@{13}: commit: refactor: remove conditional database selection and use prismaEdge consistently
+[33mf0ce607[m HEAD@{14}: commit: chore: update .gitignore and package.json for orm and build process
+[33m52ca72f[m HEAD@{15}: commit: chore: update eslint config to ignore ./src/orm directory
+[33madc43fe[m HEAD@{16}: commit: build: exclude ./src/orm directory from TypeScript compilation
+[33m9259311[m HEAD@{17}: commit: refactor(prisma): relocate Prisma client files and update import paths
+[33m46b10e8[m HEAD@{18}: commit: build: add ignore-loader and update webpack config
+[33m4790cdb[m HEAD@{19}: revert: Revert "refactor(next.config.ts): enhance webpack config and improve comments"
+[33m7982953[m HEAD@{20}: commit: refactor(next.config.ts): enhance webpack config and improve comments
+[33md9cd1f9[m HEAD@{21}: reset: moving to HEAD~1
+[33m7b28da7[m HEAD@{22}: commit: refactor(databases): simplify PrismaLibSQL adapter initialization
+[33md9cd1f9[m HEAD@{23}: commit: chore: remove prisma migrate deploy from vercel-build script
+[33m635be79[m HEAD@{24}: commit: feat(database): integrate LibSQL for serverless and edge environments
+[33mf08da00[m HEAD@{25}: commit: feat(auth): add trustedOrigins to auth configuration
+[33m904aac4[m HEAD@{26}: commit: refactor(auth-client): remove unused baseURL configuration
+[33mc33736b[m HEAD@{27}: commit: fix(middleware): update matcher regex to exclude favicon.ico and refine api/auth paths
+[33m259f12b[m HEAD@{28}: commit: refactor(auth-client): remove fallback URL and unused console log
+[33m147ccf8[m HEAD@{29}: commit: refactor(captcha): improve captcha widget feedback and reset logic
+[33m129cc70[m HEAD@{30}: commit: build: add vercel-build script for deployment
+[33m664466c[m HEAD@{31}: commit: refactor: remove unused render-purified-html component
+[33m21478dd[m HEAD@{32}: commit: refactor(api): use type-only import for Prisma client
+[33mac4f1fb[m HEAD@{33}: commit: Temp: messing around, delete me later
+[33mc77740f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{34}: checkout: moving from main to temp-experiment
+[33mc77740f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{35}: commit: feat(profile): add user profile page with edit functionality and two-factor authentication
+[33maac11ce[m HEAD@{36}: commit: feat(auth): implement authentication and email verification flows
+[33m35c5cfe[m HEAD@{37}: commit: feat(auth): add authentication pages and components
+[33mc2997d4[m HEAD@{38}: commit (initial): feat: initialize project with Next.js 15, shadcn/ui, and essential configurations
