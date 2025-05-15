@@ -1,10 +1,9 @@
 import { prismaEdge } from '@/lib/databases/edge';
-import { prisma } from '@/lib/databases/prisma';
 import { Prisma } from '@/prisma';
 
 import { endOfDay, startOfDay } from 'date-fns';
 
-const db = process.env.NODE_ENV === 'development' ? prisma : prismaEdge;
+const db = prismaEdge;
 
 /**
  * Fetch records based on recordId or date. If neither provided, fetch all.
