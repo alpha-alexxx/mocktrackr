@@ -27,7 +27,7 @@ const libsql = createClient({
  */
 const config = {
     url: process.env.TURSO_DATABASE_URL!, // The URL needed by Prisma to connect to the database.
-    client: libsql // The actual LibSQL client that will be used to manage the database connection.
+    authToken: process.env.TURSO_AUTH_TOKEN
 };
 
 /**
