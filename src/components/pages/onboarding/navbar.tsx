@@ -1,12 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useIsClient } from '@/hooks/use-is-client';
 import { siteConfig } from '@/lib/site/site-config';
 import { cn } from '@/lib/utils';
 
@@ -14,8 +11,6 @@ import { motion } from 'framer-motion';
 import { BookOpen, Menu } from 'lucide-react';
 
 export default function Navbar() {
-    const isClient = useIsClient();
-
     return (
         <motion.header
             initial={{ y: -100 }}

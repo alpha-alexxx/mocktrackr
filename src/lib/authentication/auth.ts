@@ -2,21 +2,21 @@
  * Authentication configuration using Better Auth with Next.js 15.
  * This module integrates Prisma, Redis, and email services for a robust authentication system.
  */
-import { prisma as db } from '@/lib/databases/prisma';
 import { sendMail } from '@/lib/mail/mail';
 import { Redis } from '@upstash/redis';
 
+import { prismaEdge } from '../databases/edge';
 import { Get2FAEmailTemplate } from '../mail/templates/2fa-otp';
 import { GetResetPasswordEmailTemplate } from '../mail/templates/send-reset-password';
 import { GetVerificationEmailTemplate } from '../mail/templates/send-verification-email';
 import { siteConfig } from '../site/site-config';
-import { Auth, betterAuth } from 'better-auth';
+import { betterAuth } from 'better-auth';
 import { emailHarmony } from 'better-auth-harmony';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { captcha, customSession, haveIBeenPwned, openAPI, twoFactor } from 'better-auth/plugins';
 
 const SENT_FROM = process.env.SMTP_FROM || 'no-reply.mocktrackr@lethargic.online';
-
+const db = prismaEdge;
 /**
  * Authentication configuration object.
  */
@@ -24,11 +24,13 @@ const redis = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL!,
     token: process.env.UPSTASH_REDIS_REST_TOKEN!
 });
+const VERCEL_PROD = !!process.env.VERCEL_URL!;
 export const auth = betterAuth({
     appName: siteConfig.name,
     database: prismaAdapter(db, {
         provider: 'sqlite'
     }),
+    trustedOrigins: [VERCEL_PROD ? process.env.VERCEL_URL! : process.env.NEXT_PUBLIC_APP_URL!],
     account: {
         accountLinking: {
             trustedProviders: ['google', 'mocktrackr']
@@ -50,7 +52,7 @@ export const auth = betterAuth({
          * @param {string} params.token - The verification token.
          * @param {string} params.url - The verification URL.
          */
-        sendVerificationEmail: async ({ user, token, url }) => {
+        sendVerificationEmail: async ({ user, token }) => {
             const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}&callbackURL=/verify-email`;
             const emailHtml = GetVerificationEmailTemplate(user, verificationUrl);
             await sendMail({
@@ -74,7 +76,7 @@ export const auth = betterAuth({
          * @param {Object} params.user - The user object.
          * @param {string} params.url - The reset password URL.
          */
-        sendResetPassword: async ({ user, url, token }) => {
+        sendResetPassword: async ({ user, token }) => {
             const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}&callbackURL=/login`;
             const emailHtml = GetResetPasswordEmailTemplate(user, verificationUrl);
             await sendMail({
@@ -167,11 +169,3 @@ export const auth = betterAuth({
         openAPI()
     ]
 });
-
-/**
- * TODO:
- * - Implement logging for all email sending operations for better traceability.
- * - Enhance error handling for Redis operations to include retries.
- * - Consider adding rate limiting for sensitive operations like password resets.
- * - Write unit tests for all authentication flows.
- */

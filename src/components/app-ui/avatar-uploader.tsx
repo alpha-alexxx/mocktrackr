@@ -76,7 +76,6 @@ const AvatarUploader = ({ children }: { children: React.ReactNode }) => {
         } catch (err: unknown) {
             // Use type-guard to extract error message
             if (err instanceof Error) {
-                console.error(err);
                 setError(err.message || 'Upload failed');
             } else {
                 setError('Upload failed');

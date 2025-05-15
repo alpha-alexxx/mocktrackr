@@ -15,6 +15,7 @@
 
 # production
 /build
+/src/orm/
 
 # misc
 .DS_Store
@@ -37,3 +38,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+#local Files
+# designs/

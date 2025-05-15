@@ -31,4 +31,9 @@
     ],
     "eslint.format.enable": true,
     "npm.packageManager": "npm",
+    "cSpell.words": [
+        "chsl",
+        "libsql",
+        "sonner"
+    ],
 }

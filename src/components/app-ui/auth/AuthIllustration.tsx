@@ -69,7 +69,7 @@ export function AuthIllustration({ src, alt, width = 400, height = 400, animate 
                     alt={alt}
                     width={width}
                     height={height}
-                    className='h-auto w-full'
+                    className='mx-auto h-[450px] w-fit rounded-xl object-cover'
                     priority
                     onLoad={() => setIsLoaded(true)}
                 />

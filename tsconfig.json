@@ -24,6 +24,12 @@
         "paths": {
             "@/*": [
                 "./src/*"
+            ],
+            "@/prisma/*": [
+                "./src/orm/prisma/*"
+            ],
+            "@/prisma": [
+                "./src/orm/prisma/client"
             ]
         },
         "target": "ES2023"
@@ -35,6 +41,7 @@
         ".next/types/**/*.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "./src/orm"
     ]
 }

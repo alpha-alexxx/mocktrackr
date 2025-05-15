@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { PasswordInput } from '@/components/app-ui/auth/PasswordInput';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,14 +16,15 @@ import {
     DialogTrigger
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { authClient } from '@/lib/authentication/auth-client';
-import { ExtendedUser } from '@/lib/authentication/auth-types';
 import { otpSchema, passwordSchema } from '@/lib/authentication/zod-schema';
 import { siteConfig } from '@/lib/site/site-config';
+import { ExtendedUser } from '@/lib/types/auth-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { AlertCircle, CheckCircle, Loader, Shield } from 'lucide-react';
+import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { AlertCircle, CheckCircle, Loader2, Shield } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import QRCode from 'react-qr-code';
 import { toast } from 'sonner';
@@ -30,10 +32,10 @@ import { z } from 'zod';
 
 export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
     const [isLoading, setIsLoading] = useState(false);
-    const [is2FAEnabled, _] = useState(!!user.twoFactorEnabled);
+    const [ispwdDialog, setpwdDialog] = useState<boolean>(false);
+    const [is2FAEnabled, setIs2FAEnabled] = useState(!!user.twoFactorEnabled);
     const [is2FAURI, setIs2FAURI] = useState<string | null>(null);
     const [isQRDialogActive, setIsQRDialogActive] = useState<boolean>(false);
-
     const form = useForm<z.infer<typeof passwordSchema>>({
         resolver: zodResolver(passwordSchema),
         defaultValues: {
@@ -57,53 +59,64 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                 issuer: siteConfig.name,
                 fetchOptions: {
                     onRequest: () => {
-                        toast.loading('Enabling 2FA...', {
+                        toast.loading('Enabling Two Factor Authentication...', {
                             id: 'enable-2fa-toast',
-                            description: 'We are requesting our server to enable 2FA for you.'
+                            description: 'We are requesting our server to enable Two Factor Authentication for you.'
                         });
                     },
                     onSuccess: () => {
-                        toast.success('2FA Enabled Successfully', {
+                        toast.success('Two Factor Authentication Enabled Successfully', {
                             id: 'enable-2fa-toast',
-                            description: 'You have successfully enabled 2FA for your account.'
+                            description: 'You have successfully enabled Two Factor Authentication for your account.'
                         });
                     },
                     onError: (ctx) => {
-                        toast.error(ctx.error.name || ctx.error.statusText || 'Failed to enable 2FA', {
-                            id: 'enable-2fa-toast',
-                            description:
-                                ctx.error.message || 'An error occurred while enabling 2FA. Please try again later.'
-                        });
+                        toast.error(
+                            ctx.error.name || ctx.error.statusText || 'Failed to enable Two Factor Authentication',
+                            {
+                                id: 'enable-2fa-toast',
+                                description:
+                                    ctx.error.message ||
+                                    'An error occurred while enabling Two Factor Authentication. Please try again later.'
+                            }
+                        );
                     }
                 }
             });
             if (data) {
                 setIs2FAURI(data.totpURI);
                 setIsQRDialogActive(true);
+                setpwdDialog(false);
             }
         } else {
-            const { data } = await authClient.twoFactor.disable({
+            await authClient.twoFactor.disable({
                 password,
                 fetchOptions: {
                     onRequest: () => {
-                        toast.loading('Disabling 2FA...', {
+                        toast.loading('Disabling Two Factor Authentication...', {
                             id: 'disable-2fa-toast',
-                            description: 'We are requesting our server to disable 2FA for you.'
+                            description: 'We are requesting our server to disable  Two Factor Authentication for you.'
                         });
                     },
                     onSuccess: () => {
-                        toast.success('2FA Disabled Successfully', {
+                        toast.success('Two Factor Authentication Disabled Successfully', {
                             id: 'disable-2fa-toast',
-                            description: 'You have successfully disabled 2FA for your account.'
+                            description: 'You have successfully disabled Two Factor Authentication for your account.'
                         });
-                        window.location.reload();
+                        setIs2FAEnabled(false);
+                        setIs2FAURI(null);
+                        setpwdDialog(false);
                     },
                     onError: (ctx) => {
-                        toast.error(ctx.error.name || ctx.error.statusText || 'Failed to disable 2FA', {
-                            id: 'disable-2fa-toast',
-                            description:
-                                ctx.error.message || 'An error occurred while disabling 2FA. Please try again later.'
-                        });
+                        toast.error(
+                            ctx.error.name || ctx.error.statusText || 'Failed to disable  Two Factor Authentication',
+                            {
+                                id: 'disable-2fa-toast',
+                                description:
+                                    ctx.error.message ||
+                                    'An error occurred while disabling Two Factor Authentication. Please try again later.'
+                            }
+                        );
                     }
                 }
             });
@@ -111,13 +124,13 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
         setIsLoading(false);
     }
 
-    async function handleOTPverification(values: z.infer<typeof otpSchema>) {
+    async function handleOTPVerification(values: z.infer<typeof otpSchema>) {
         const { otp } = values;
         if (!otp) {
             return toast.error('OTP is required');
         }
         setIsLoading(true);
-        const { data } = await authClient.twoFactor.verifyTotp({
+        await authClient.twoFactor.verifyTotp({
             code: otp,
             fetchOptions: {
                 onRequest: () => {
@@ -131,7 +144,9 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                         id: 'verify-otp-toast',
                         description: 'You have successfully verified your OTP.'
                     });
-                    window.location.reload();
+                    setIs2FAEnabled(true);
+                    setIs2FAURI(null);
+                    setpwdDialog(false);
                 },
                 onError: (ctx) => {
                     toast.error(ctx.error.name || ctx.error.statusText || 'Failed to verify OTP', {
@@ -144,6 +159,15 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
         });
         setIsLoading(false);
     }
+
+    useEffect(() => {
+        const otp = formOTP.getValues('otp');
+        if (otp.length === 6) {
+            formOTP.handleSubmit(handleOTPVerification)();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formOTP.watch('otp')]);
+
     if (!user) {
         return null;
     }
@@ -187,10 +211,14 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                     </div>
                 </div>
             </CardContent>
-            <CardFooter>
-                <Dialog>
+            <CardFooter className='flex flex-col gap-2'>
+                <Dialog open={ispwdDialog} onOpenChange={setpwdDialog}>
                     <DialogTrigger asChild>
-                        <Button variant='outline' className='w-full' disabled={isLoading}>
+                        <Button
+                            variant={is2FAEnabled ? 'destructive' : 'default'}
+                            className='w-full text-white'
+                            disabled={isLoading || !!is2FAURI}
+                            onClick={() => setpwdDialog(true)}>
                             {is2FAEnabled ? 'Disable' : 'Set Up'} Two-Factor Authentication
                         </Button>
                     </DialogTrigger>
@@ -200,7 +228,7 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                             <DialogDescription>
                                 To proceed with this action, please enter your account password. This step ensures that
                                 only you can manage your Two-Factor Authentication settings.
-                                <span className='text-foreground block border-l-4 border-gray-500 bg-gray-50 p-3 text-sm italic dark:bg-gray-900'>
+                                <span className='text-foreground border-primary bg-primary/10 dark:bg-primary/30 block border-l-4 p-3 text-sm italic'>
                                     For your security, we need to verify it&#39;s really you.
                                 </span>
                             </DialogDescription>
@@ -214,10 +242,13 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input placeholder='Enter Your Password' {...field} />
+                                                <PasswordInput
+                                                    id='password'
+                                                    placeholder='Enter Your Password'
+                                                    {...field}
+                                                />
                                             </FormControl>
                                             <FormDescription>
-                                                {' '}
                                                 This is your account password used for signing in. We require it to
                                                 verify your identity before continuing.
                                             </FormDescription>
@@ -227,7 +258,7 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                                 />
                                 <DialogFooter>
                                     <Button type='submit' className='text-white' disabled={isLoading}>
-                                        {isLoading && <Loader className='size-5' />}
+                                        {isLoading && <Loader2 className='size-5 animate-spin' />}
                                         Submit
                                     </Button>
                                 </DialogFooter>
@@ -235,57 +266,83 @@ export default function TwoFactorAuthSection({ user }: { user: ExtendedUser }) {
                         </Form>
                     </DialogContent>
                 </Dialog>
-            </CardFooter>
 
-            {is2FAURI && (
-                <Dialog open={isQRDialogActive} onOpenChange={setIsQRDialogActive}>
-                    <DialogTrigger asChild>
-                        <Button variant='outline' className='w-full' disabled={isLoading}>
-                            View QR Code
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Two-Factor Authentication QR Code</DialogTitle>
-                            <DialogDescription>
-                                Scan this QR code with your authenticator app to set up Two-Factor Authentication.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <QRCode className='mx-auto' value={is2FAURI} />
-                        <Form {...formOTP}>
-                            <form onSubmit={formOTP.handleSubmit(handleOTPverification)} className='space-y-8'>
-                                <FormField
-                                    control={formOTP.control}
-                                    name='otp'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>OTP</FormLabel>
-                                            <FormControl>
-                                                <div className='flex items-center justify-between gap-2'>
-                                                    <Input
-                                                        placeholder='Enter Your TOTP from authenticator app'
-                                                        {...field}
-                                                    />
-                                                    <Button
-                                                        type='submit'
-                                                        size={'sm'}
-                                                        className='text-white'
-                                                        disabled={isLoading}>
-                                                        {isLoading && <Loader className='size-5' />}
-                                                        Submit
-                                                    </Button>
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </form>
-                        </Form>
-                    </DialogContent>
-                    <DialogFooter></DialogFooter>
-                </Dialog>
-            )}
+                {is2FAURI && (
+                    <Dialog open={isQRDialogActive} onOpenChange={setIsQRDialogActive}>
+                        <DialogTrigger asChild>
+                            {!is2FAEnabled && (
+                                <Button variant='outline' className='w-full' disabled={isLoading}>
+                                    View QR Code
+                                </Button>
+                            )}
+                        </DialogTrigger>
+                        <DialogContent className='max-w-sm rounded-2xl p-6 shadow-lg md:max-w-xl'>
+                            <DialogHeader>
+                                <DialogTitle className='mb-2 text-center text-xl font-bold'>
+                                    Two-Factor Authentication Setup
+                                </DialogTitle>
+                                <DialogDescription className='mb-2 text-center text-slate-500 dark:text-slate-200'>
+                                    Scan this QR code with your authenticator app to enable Two-Factor Authentication
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className='flex flex-col gap-4 md:flex-row'>
+                                <div className='mb-2 flex flex-1 justify-center'>
+                                    <QRCode
+                                        className='rounded-lg border-2 p-2.5 shadow-sm dark:invert-100'
+                                        value={is2FAURI}
+                                    />
+                                </div>
+                                <Form {...formOTP}>
+                                    <form
+                                        onSubmit={formOTP.handleSubmit(handleOTPVerification)}
+                                        className='flex flex-col items-center justify-center space-y-4'>
+                                        <FormField
+                                            control={formOTP.control}
+                                            name='otp'
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className='mb-1 text-sm font-medium text-slate-500 dark:text-slate-200'>
+                                                        Enter the 6-digit OTP
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <div className='mx-auto flex items-center gap-2'>
+                                                            <InputOTP
+                                                                maxLength={6}
+                                                                value={field.value}
+                                                                onChange={field.onChange}
+                                                                disabled={isLoading}
+                                                                pattern={REGEXP_ONLY_DIGITS}
+                                                                className='mx-auto'>
+                                                                <InputOTPGroup className='gap-1 rounded-none'>
+                                                                    {Array.from({ length: 6 }).map((_, index) => (
+                                                                        <InputOTPSlot
+                                                                            className='border-foreground/20 rounded-lg border-2 shadow-none'
+                                                                            index={index}
+                                                                            key={'slot' + index + index}
+                                                                        />
+                                                                    ))}
+                                                                </InputOTPGroup>
+                                                            </InputOTP>
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage className='mt-1 text-sm text-red-500' />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <Button
+                                            type='submit'
+                                            size='sm'
+                                            className='w-full bg-blue-600 text-white transition-colors hover:bg-blue-700'
+                                            disabled={isLoading}>
+                                            {isLoading ? <Loader2 className='size-5 animate-spin' /> : 'Submit'}
+                                        </Button>
+                                    </form>
+                                </Form>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                )}
+            </CardFooter>
         </Card>
     );
 }

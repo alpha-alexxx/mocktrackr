@@ -10,9 +10,7 @@ const withBundleAnalyzer = initializeBundleAnalyzer({
 // https://nextjs.org/docs/pages/api-reference/next-config-js
 const nextConfig: NextConfig = {
     output: 'standalone',
-    experimental: {
-        nodeMiddleware: true
-    }
+    serverExternalPackages: ['@prisma/adapter-libsql']
 };
 
 export default withBundleAnalyzer(nextConfig);

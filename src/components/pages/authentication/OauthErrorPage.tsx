@@ -35,6 +35,8 @@ function OAuthErrorPageContent() {
                 return 'There’s a misconfiguration with the OAuth provider. Contact the admin.';
             case 'Verification':
                 return 'The verification link is expired or invalid. Please try again.';
+            case 'RecordNotFound':
+                return "The Requested record can't be found";
             default:
                 return 'Something went wrong during authentication. Please try again or contact support.';
         }

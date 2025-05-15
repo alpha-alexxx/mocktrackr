@@ -9,15 +9,6 @@ type MailOptions = {
     text?: string;
 };
 
-type SMTPConfig = {
-    host: string;
-    port: number;
-    secure: boolean; // true for port 465, false for 587
-    auth: {
-        user: string;
-        pass: string;
-    };
-};
 /**
  * Setup for SMTP
  */

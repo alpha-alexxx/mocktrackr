@@ -14,6 +14,7 @@ import CloudFlareCaptcha from '@/components/app-ui/captcha';
 import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useSession } from '@/hooks/use-auth-query';
 import { authClient } from '@/lib/authentication/auth-client';
 import { resetPasswordSchema } from '@/lib/authentication/zod-schema';
 import useCaptchaToken from '@/stores/captcha_token';
@@ -35,8 +36,6 @@ interface InfoProps {
     btnHref: string;
 }
 
-const footerLinks = [{ label: 'Back to Login', href: '/login' }];
-
 const animationVariants = {
     icon: {
         hidden: { scale: 0, opacity: 0 },
@@ -52,6 +51,7 @@ const animationVariants = {
     }
 };
 function ResetPasswordForm() {
+    const { data: session } = useSession();
     const [isLoading, setIsLoading] = useState(false);
     const [info, setInfo] = useState<InfoProps | null>(null);
     const { captchaToken } = useCaptchaToken();
@@ -141,8 +141,8 @@ function ResetPasswordForm() {
                             message: 'Your password has been updated. You can now login with your new password.',
                             icon: CheckCircle,
                             color: 'bg-emerald-400',
-                            btnText: 'Continue to Login',
-                            btnHref: '/login'
+                            btnText: session && session.user ? 'Continue to dashboard' : 'Continue to login',
+                            btnHref: session && session.user ? '/dashboard' : '/login'
                         });
                     },
                     onError: (ctx) => {
@@ -166,7 +166,12 @@ function ResetPasswordForm() {
         }
     };
 
-    const footerLinks = [{ label: 'Back to Login', href: '/login' }];
+    const footerLinks = [
+        {
+            label: session && session.user ? 'Back to Dashboard' : 'Back to login',
+            href: session && session.user ? '/dashboard' : '/login'
+        }
+    ];
 
     if (isLoading && !info) {
         return (
@@ -189,7 +194,7 @@ function ResetPasswordForm() {
             <AuthLayout
                 illustration={
                     <AuthIllustration
-                        src='/illustrations/reset-password.svg'
+                        src='/illustrations/reset-password.png'
                         alt='Reset password illustration'
                         width={500}
                         height={500}
@@ -235,10 +240,10 @@ function ResetPasswordForm() {
         <AuthLayout
             illustration={
                 <AuthIllustration
-                    src='/illustrations/reset-password.svg'
+                    src='/illustrations/reset-password.png'
                     alt='Reset password illustration - Updating security'
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={800}
                 />
             }>
             <AuthFormWrapper
@@ -278,7 +283,7 @@ function ResetPasswordForm() {
                                 <div className='relative'>
                                     <Lock className='text-foreground absolute top-2.5 left-3 h-4 w-4' />
                                     <PasswordInput
-                                        id='password'
+                                        id='confirmPassword'
                                         placeholder='Confirm your password'
                                         className='border-foreground/30 border-2 pl-10'
                                         {...field}

@@ -1,0 +1,51 @@
+{
+    "headers": [
+        "Topic",
+        "✅",
+        "❌",
+        "⚪",
+        "Why? Reason"
+    ],
+    "rows": [
+        {
+            "id": "row1",
+            "cells": [
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": "row2",
+            "cells": [
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                },
+                {
+                    "value": ""
+                }
+            ]
+        }
+    ]
+}

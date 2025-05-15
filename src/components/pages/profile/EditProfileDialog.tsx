@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -16,13 +15,13 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/authentication/auth-client';
-import { ExtendedUser } from '@/lib/authentication/auth-types';
 import getCroppedImg from '@/lib/get-cropped-img';
+import { ExtendedUser } from '@/lib/types/auth-types';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import axios, { type AxiosProgressEvent } from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, CheckCircle, Loader, Upload, X } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader, Upload } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import type { Area } from 'react-easy-crop';
 import { useForm } from 'react-hook-form';
@@ -214,9 +213,6 @@ export function EditProfileDialog({ children, user }: EditProfileDialogProps) {
     const onSubmit = async (values: z.infer<typeof editProfileSchema>) => {
         setIsLoading(true);
         try {
-            // TODO: Implement profile update logic here
-            // 1. Avatar already uploaded and URL set in form
-            // 2. Update the user's name and avatar URL
             await authClient.updateUser({
                 name: values.name,
                 image: values.avatar,

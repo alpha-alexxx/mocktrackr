@@ -1,6 +1,6 @@
 import { siteConfig } from '@/lib/site/site-config';
 
-import { User } from 'better-auth';
+import type { User } from 'better-auth';
 
 export const GetVerificationEmailTemplate = (user: User, url: string) => {
     const year = new Date().getFullYear();

@@ -43,7 +43,7 @@ export default function RegisterPage() {
     const onSubmit = async (values: z.infer<typeof registerSchema>) => {
         const { name, email, password } = values;
         setIsLoading(true);
-        const { data, error } = await authClient.signUp.email(
+        await authClient.signUp.email(
             {
                 email, // user email address
                 password, // user password -> min 8 characters by default
@@ -55,7 +55,6 @@ export default function RegisterPage() {
                     'x-captcha-response': captchaToken
                 },
                 onRequest: () => {
-                    // TODO: Verify that user exist or not.
                     toast.loading('Creating account...', {
                         id: 'register-toast',
                         description: 'We are creating your account. Please wait...'
@@ -88,10 +87,10 @@ export default function RegisterPage() {
         <AuthLayout
             illustration={
                 <AuthIllustration
-                    src='/illustrations/register.svg'
+                    src='/illustrations/register-account.png'
                     alt='Register illustration - Joining a community'
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={800}
                 />
             }>
             <AuthFormWrapper

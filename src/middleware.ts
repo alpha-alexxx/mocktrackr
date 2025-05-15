@@ -1,26 +1,18 @@
-import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { auth } from './lib/authentication/auth';
-import { getSessionCookie } from 'better-auth/cookies';
+import { betterFetch } from '@better-fetch/fetch';
+
+import { Session } from './lib/types/auth-types';
 
 /**
  * Routes that do not require authentication.
  */
-const publicRoutes = [
-    '/',
-    '/login',
-    '/register',
-    '/forgot-password',
-    '/reset-password',
-    '/email-verified',
-    '/api/auth/*'
-];
+const publicRoutes = ['/', '/login', '/register', '/email-verified', '/api/auth/*'];
 
 /**
  * Routes that require a valid session.
  */
-const protectedRoutes = ['/dashboard/*', '/profile/*'];
+const protectedRoutes = ['/dashboard/*', '/profile/*', '/tests/:id', '/performance'];
 
 /**
  * Routes that require admin privileges.
@@ -59,11 +51,20 @@ const matchesRoute = (path: string, routes: string[]): boolean => {
  */
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    const cookie = getSessionCookie(request);
     // Retrieve the session using Better Auth's API (this runs in a Node environment).
-    const session = await auth.api.getSession({ headers: await headers() });
-    const isLoggedIn = Boolean(session);
-    console.log({ sessionMiddleware: session });
+    // const session = await auth.api.getSession({ headers: await headers() });
+
+    const { data: session } = await betterFetch<Session>('/api/auth/get-session', {
+        baseURL: request.nextUrl.origin,
+        headers: {
+            cookie: request.headers.get('cookie') || '' // Forward the cookies from the request
+        }
+    });
+    const isLoggedIn = session && session.user && session.user.id;
+    /**__TESTING_PURPOSE__**/
+
+    // console.log({ sessionMiddleware: session, isLoggedIn });
+
     // 1. If a user is logged in and tries to access any public route, send them to /dashboard.
     if (matchesRoute(pathname, publicRoutes) && isLoggedIn) {
         return NextResponse.redirect(new URL('/dashboard', request.url));
@@ -93,10 +94,9 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     // Next.js 15 middleware runs in the Edge Runtime by default
-    runtime: 'nodejs',
     matcher: [
         // This now matches all app routes EXCEPT static files, _next, AND skips /api/auth except /api
-        '/((?!_next|api/auth|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        '/((?!_next|api/auth/|api/auth|favicon.ico|.*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
         // Always run for API routes
         '/dashboard/:path*',
         '/profile/:path*',

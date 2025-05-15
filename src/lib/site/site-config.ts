@@ -4,7 +4,7 @@ export const siteConfig = {
     description:
         'Track your SSC CHSL/CGL mock test performance with real-time analysis, calendar view, and downloadable reports. Built for serious aspirants.',
     url: process.env.NEXT_PUBLIC_APP_URL!,
-    logo: '/images/logo.png',
+    logo: '/images/logo_main.png',
     supportEmail: 'support@lethargic.online',
     ogImage: `${process.env.NEXT_PUBLIC_APP_URL}/og-image.png`,
     keywords: [
