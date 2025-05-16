@@ -17,6 +17,7 @@
 /build
 
 /src/orm/*
+/prisma/database/*
 !/src/orm/.gitkeep
 # misc
 .DS_Store
