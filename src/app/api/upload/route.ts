@@ -7,7 +7,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-// Ensure this runs in a Node environment so we can use fs, path, etc.
+// Ensure this runs in a Node environment
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
@@ -23,26 +23,27 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
         }
 
-        // 3️⃣ Read it into a Buffer
+        // 3️⃣ Convert file to buffer
         const arrayBuffer = await fileField.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
 
-        // 4️⃣ Write to a temp file
-        const tempDir = path.join(process.cwd(), 'public', 'uploads', 'tmp');
+        // 4️⃣ Write to /tmp (Vercel allows writing here)
+        const tempDir = '/tmp/uploads';
         await fs.mkdir(tempDir, { recursive: true });
         const tempFilename = `${uuidv4()}_${fileField.name}`;
         const tempFilePath = path.join(tempDir, tempFilename);
-        await fs.writeFile(tempFilePath, Buffer.from(arrayBuffer));
+        await fs.writeFile(tempFilePath, buffer);
 
-        // 5️⃣ Extract other fields (e.g. userId)
+        // 5️⃣ Optional metadata (e.g. userId)
         const userId = formData.get('userId') as string | null;
 
         // 6️⃣ Upload to Cloudinary
         const cloudinaryResult = await uploadFileToCloudinary(tempFilePath, userId || undefined);
 
-        // 7️⃣ Clean up temp file
+        // 7️⃣ Delete temp file
         await fs.unlink(tempFilePath);
 
-        // 8️⃣ Respond with the Cloudinary info
+        // 8️⃣ Return Cloudinary result
         return NextResponse.json({
             ...cloudinaryResult,
             url: cloudinaryResult.secure_url,
