@@ -17,6 +17,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/c
 import { authClient } from '@/lib/authentication/auth-client';
 
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function NavUser({
     user
@@ -29,6 +30,16 @@ export function NavUser({
 }) {
     const { isMobile } = useSidebar();
     const router = useRouter();
+
+    if (!user) {
+        return <div className='flex flex-row items-center justify-center w-full h-full'>
+            <Skeleton className='size-12' />
+            <div className='flex flex-row items-center justify-center'>
+                <Skeleton className='h-8 w-full' />
+                <Skeleton className='h-4 w-full' />
+            </div>
+        </div>
+    }
 
     return (
         <SidebarMenu>

@@ -15,8 +15,9 @@
 
 # production
 /build
-/src/orm/
 
+/src/orm/*
+!/src/orm/.gitkeep
 # misc
 .DS_Store
 *.pem

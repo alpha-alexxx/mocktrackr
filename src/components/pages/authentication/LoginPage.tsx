@@ -92,7 +92,9 @@ export default function LoginPage() {
                     width={600}
                     height={800}
                 />
-            }>
+            }
+            className='relative'
+        >
             <AuthFormWrapper
                 title='Welcome back'
                 description='Enter your credentials to access your account'
@@ -188,7 +190,6 @@ export default function LoginPage() {
 
                 <AuthSocialButtons onGoogleClick={handleGoogleAuth} />
             </AuthFormWrapper>
-
             <AuthFooterLinks links={footerLinks} className='mt-6' />
         </AuthLayout>
     );

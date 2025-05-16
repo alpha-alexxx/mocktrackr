@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ArrowLeftCircle } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
+import { siteConfig } from '@/lib/site/site-config';
+import Image from 'next/image';
 
 interface AuthFormWrapperProps {
     children: ReactNode;
@@ -41,15 +43,20 @@ export function AuthFormWrapper({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className={cn(
-                'w-full flex-shrink-0 space-y-6 rounded-xl border bg-white/95 p-6 shadow-xs backdrop-blur-sm dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
+                'w-full flex-shrink-0 space-y-6 rounded-xl border-none md:border bg-white/95 p-2 md:p-6 shadow-none md:shadow-xs backdrop-blur-sm dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
                 className
             )}>
             <div className='w-full space-y-2 text-center'>
-                <div className='flex w-full items-center justify-start'>
-                    <Button variant='outline' size='icon' onClick={() => router.back()}>
+                <div className='flex w-full items-center justify-center'>
+                    <Button variant='outline' size='icon' className='absolute left-0' onClick={() => router.back()}>
                         <ArrowLeftCircle className='size-5' />
                     </Button>
+                    <div className='flex items-center justify-center gap-2'>
+                        <Image src={siteConfig.logo || './images/logo-main.png'} alt={siteConfig.name} width={50} height={50} className='rounded-md size-8' />
+                        <span className='font-bold font-[Poppins] text-md'>{siteConfig.name}</span>
+                    </div>
                 </div>
+
                 <h1 className='text-2xl font-bold tracking-tight dark:text-gray-100'>{title}</h1>
                 <p className='text-muted-foreground text-sm dark:text-gray-300'>{description}</p>
             </div>
