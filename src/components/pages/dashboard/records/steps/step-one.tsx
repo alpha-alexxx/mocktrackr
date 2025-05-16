@@ -96,7 +96,7 @@ export default function StepOne() {
 
     return (
         <Form {...form}>
-            <form className='space-y-6'>
+            <form className='space-y-6' onSubmit={(e) => e.preventDefault()}>
                 <h2 className='mb-6 text-2xl font-bold'>Step 1: Test Details</h2>
 
                 <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-2'>

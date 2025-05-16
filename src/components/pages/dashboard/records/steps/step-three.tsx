@@ -254,22 +254,23 @@ export default function StepThree() {
     };
 
     // Utility function to convert between string and TableData format
-    const defaultTableData = useMemo(
+    const defaultTableData = useMemo<TableData>(
         () => ({
-            headers: ['Topic', '✅', '❌', '⚪', 'Why? Reason'],
+            headers: ['Topic', 'Attempt Type', 'Reason'],
             rows: [
                 {
                     id: generateId(),
-                    cells: [{ value: '' }, { value: '' }, { value: '' }, { value: '' }, { value: '' }]
-                },
-                {
-                    id: generateId(),
-                    cells: [{ value: '' }, { value: '' }, { value: '' }, { value: '' }, { value: '' }]
+                    cells: [
+                        { type: 'input', value: '' },
+                        { type: 'select', value: '' },
+                        { type: 'textarea', value: '' }
+                    ]
                 }
             ]
         }),
         []
     );
+
 
     // Cache the last parsed string and result to prevent unnecessary re-parsing
     const tableDataCache = useRef<{ str: string; data: TableData }>({ str: '', data: defaultTableData });
@@ -294,16 +295,24 @@ export default function StepThree() {
                 return parsed;
             } catch (e) {
                 // If parsing fails, create a new table with the string as content
-                const newData = {
-                    headers: ['Topic', '✅', '❌', '⚪', 'Why? Reason'],
+                const newData: TableData = {
+                    headers: ['Topic', 'Attempt Type', 'Reason'],
                     rows: [
                         {
                             id: generateId(),
-                            cells: [{ value: str }, { value: '' }, { value: '' }, { value: '' }, { value: '' }]
+                            cells: [
+                                { type: 'input', value: '' },
+                                { type: 'select', value: '' },
+                                { type: 'textarea', value: '' }
+                            ]
                         },
                         {
                             id: generateId(),
-                            cells: [{ value: '' }, { value: '' }, { value: '' }, { value: '' }, { value: '' }]
+                            cells: [
+                                { type: 'input', value: '' },
+                                { type: 'select', value: '' },
+                                { type: 'textarea', value: '' }
+                            ]
                         }
                     ]
                 };
@@ -331,10 +340,13 @@ export default function StepThree() {
             const currentValue = form.getValues(`sections.${index}.keyPoints`);
             const newValue = JSON.stringify(value);
 
-            // Only update if the value has actually changed
-            if (currentValue !== newValue) {
-                form.setValue(`sections.${index}.keyPoints`, newValue, { shouldDirty: true });
-            }
+            debounce(() => {
+
+                // Only update if the value has actually changed
+                if (currentValue !== newValue) {
+                    form.setValue(`sections.${index}.keyPoints`, newValue, { shouldDirty: true });
+                }
+            }, 1000)
         },
         [form]
     );
@@ -559,6 +571,7 @@ export default function StepThree() {
                                                                 value={stringToTableData(
                                                                     form.watch(`sections.${index}.keyPoints`) || ''
                                                                 )}
+
                                                                 onChange={(value) => handleTableChange(index, value)}
                                                             />
                                                         </div>

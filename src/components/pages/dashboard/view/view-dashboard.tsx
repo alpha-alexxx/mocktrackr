@@ -40,8 +40,17 @@ export function ViewDashboard({ user, recordId }: { user: ExtendedUser; recordId
                 type: 'error'
             });
         }
+        if (isError) {
+            setInfo({
+                icon: XCircle,
+                title: 'Error',
+                description: 'An error occurred while fetching the record.',
+                type: 'error'
+            });
+        }
+        console.log(record)
         setSections((record && purifySections(record.sectionWise)) || []);
-    }, [record]);
+    }, [record, isError]);
     if (isLoading) {
         return (
             <div className='flex h-full w-full items-center justify-center'>

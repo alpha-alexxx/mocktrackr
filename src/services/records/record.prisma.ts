@@ -1,9 +1,9 @@
-import { prismaEdge } from '@/lib/databases/edge';
+import { prismaServerLess } from '@/lib/databases/serverless';
 import { Prisma } from '@/prisma';
 
 import { endOfDay, startOfDay } from 'date-fns';
 
-const db = prismaEdge;
+const db = prismaServerLess;
 
 /**
  * Fetch records based on recordId or date. If neither provided, fetch all.

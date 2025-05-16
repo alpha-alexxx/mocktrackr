@@ -11,6 +11,8 @@ import { Section } from '@/stores/form-store';
 import { SectionPieChart } from './charts/section-pie-chart';
 import InsightDisplay from './insight-display';
 import { AlertCircle, AlignJustify, Check, Clock, LayoutGrid, Lightbulb, X } from 'lucide-react';
+import { TableEditor } from '@/components/app-ui/table-editor';
+import TableViewer from '../table-viewer';
 
 export function SectionPerformance({ sections }: { sections: Section[] }) {
     return (
@@ -147,7 +149,7 @@ export function SectionPerformance({ sections }: { sections: Section[] }) {
                                                             <AlertCircle className='mr-1 h-4 w-4 text-amber-500' />
                                                             What Went Wrong:
                                                         </h4>
-                                                        <InsightDisplay content={section.keyPoints} />
+                                                        <TableViewer data={JSON.parse(section.keyPoints)} />
                                                     </div>
                                                 )}
 
