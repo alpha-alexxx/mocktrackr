@@ -35,7 +35,12 @@ export function getSectionSubjects(examCode: string, examTier?: string) {
         // For exams without tiers, check if they have sections
         if (exam.sections) {
             // Flatten all subjects from all sections
-            return exam.sections.flatMap((section) => section.subjects);
+            return exam.sections.flatMap((section) =>
+                section.subjects.map((subject) => ({
+                    ...subject,
+                    isQualifying: section.isQualifying
+                }))
+            );
         }
 
         return [];
@@ -52,9 +57,17 @@ export function getSectionSubjects(examCode: string, examTier?: string) {
         // For Tier 2, check if it has sections or subjects
         if (exam.tier2.sections) {
             // Flatten all subjects from all sections
-            return exam.tier2.sections.flatMap((section) => section.subjects);
+            return exam.tier2.sections.flatMap((section) =>
+                section.subjects.map((subject) => ({
+                    ...subject,
+                    isQualifying: section.isQualifying
+                }))
+            );
         } else if (exam.tier2.subjects) {
-            return exam.tier2.subjects;
+            return exam.tier2.subjects.map((subject) => ({
+                ...subject,
+                isQualifying: true
+            }));
         }
 
         return [];

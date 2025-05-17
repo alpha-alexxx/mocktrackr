@@ -163,7 +163,7 @@ export const exam_config = [
                     isQualifying: true,
                     subjects: [
                         {
-                            name: 'Computer Knowledge Module',
+                            name: 'Computer Knowledge',
                             totalQuestions: 20,
                             totalMarks: 60
                         }
@@ -260,7 +260,7 @@ export const exam_config = [
                     isQualifying: true,
                     subjects: [
                         {
-                            name: 'Computer Knowledge Module',
+                            name: 'Computer Knowledge',
                             totalQuestions: 15,
                             totalMarks: 45
                         }

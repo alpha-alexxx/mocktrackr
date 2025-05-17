@@ -130,17 +130,17 @@ export default function SessionListSection({ allSessions }: SessionListSectionPr
 
     return (
         <Card>
-            <CardHeader className='flex flex-col items-center justify-between lg:flex-row'>
-                <div>
+            <CardHeader className='flex flex-col items-center justify-between  w-full lg:flex-row'>
+                <div className="flex-1">
                     <CardTitle>Active Sessions</CardTitle>
                     <CardDescription>Devices currently logged into your account.</CardDescription>
                 </div>
 
-                <div className='flex gap-2'>
-                    <Button size='sm' variant='secondary' onClick={() => handleTerminateMultiple('other')}>
+                <div className='flex flex-col items-center justify-center w-full md:w-fit gap-2'>
+                    <Button size='sm' variant='secondary' className='w-full' onClick={() => handleTerminateMultiple('other')}>
                         Terminate other sessions
                     </Button>
-                    <Button size='sm' variant='destructive' onClick={() => handleTerminateMultiple('all')}>
+                    <Button size='sm' variant='destructive' className='w-full' onClick={() => handleTerminateMultiple('all')}>
                         Terminate all sessions
                     </Button>
                 </div>

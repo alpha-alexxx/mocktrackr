@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 import { motion } from 'framer-motion';
 import { BookOpen, Menu } from 'lucide-react';
+import Logo from '@/components/app-ui/logo';
 
 export default function Navbar() {
     return (
@@ -23,7 +24,7 @@ export default function Navbar() {
             <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex h-16 items-center justify-between'>
                     <Link href='/' className='flex items-center space-x-2 text-xl font-bold'>
-                        <BookOpen className='h-6 w-6 text-emerald-600' />
+                        <Logo className='size-6' />
                         <span className='bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-text text-transparent'>
                             {siteConfig.name}
                         </span>
@@ -71,7 +72,7 @@ export default function Navbar() {
                                 className='border-l border-white/10 bg-gray-900/95 p-0 backdrop-blur-lg'>
                                 <SheetHeader className='border-b border-white/10 p-4'>
                                     <SheetTitle className='flex items-center space-x-2 text-white'>
-                                        <BookOpen className='h-6 w-6 text-emerald-600' />
+                                        <Logo className="size-6" />
                                         <span className='bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-text text-transparent'>
                                             {siteConfig.name}
                                         </span>

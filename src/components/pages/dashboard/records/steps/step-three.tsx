@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { type TableData, TableEditor } from '@/components/app-ui/table-editor';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import Editor from '@/components/ui/editor';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -84,7 +84,6 @@ export default function StepThree() {
         if (formData.examCode) {
             const subjectsList = getSectionSubjects(formData.examCode, formData.examTier);
             setSubjects(subjectsList);
-
             // Only initialize sections if they don't exist
             if (!formData.sectionWise || formData.sectionWise.length === 0) {
                 const initialSections = subjectsList.map((subject) => ({
@@ -105,7 +104,7 @@ export default function StepThree() {
                 updateFormData({ sectionWise: initialSections });
             }
         }
-    }, [formData, updateFormData]);
+    }, [formData.examCode, formData.examTier]);
 
     // Create form with memoized default values
     const defaultValues = useMemo(
@@ -373,19 +372,20 @@ export default function StepThree() {
                             <AccordionItem key={value} value={value}>
                                 <AccordionTrigger className='cursor-pointer'>
                                     <div className='flex w-full flex-row items-center justify-between font-semibold'>
-                                        {subject.name}
-
-                                        {subject.isQualifying && (
-                                            <Badge variant='outline' className='border-cyan-500 bg-cyan-600/20'>
-                                                Qualifying
-                                            </Badge>
-                                        )}
+                                        <div className='flex flex-col md:flex-row gap-1 items-center justify-center'>
+                                            {subject.name}
+                                            {subject.isQualifying && (
+                                                <Badge variant='outline' className="">
+                                                    Qualifying
+                                                </Badge>
+                                            )}
+                                        </div>
                                         <div className='space-x-2'>
                                             <Badge variant='outline' className='border-cyan-500 bg-cyan-600/20'>
-                                                {subject.totalQuestions} Questions
+                                                {subject.totalQuestions} Q
                                             </Badge>
                                             <Badge variant='secondary' className='border-rose-500 bg-rose-600/20'>
-                                                {subject.totalMarks} Marks
+                                                {subject.totalMarks} M
                                             </Badge>
                                         </div>
                                     </div>
@@ -398,11 +398,8 @@ export default function StepThree() {
                                             exit={{ height: 0, opacity: 0 }}
                                             transition={{ duration: 0.3 }}>
                                             <AccordionContent>
-                                                <Card>
-                                                    <CardHeader>
-                                                        <CardTitle>{subject.name}</CardTitle>
-                                                    </CardHeader>
-                                                    <CardContent>
+                                                <Card className='p-0 md:p-2 shadow-none md:shadow-xs border-none md:border'>
+                                                    <CardContent className='p-0'>
                                                         <div className='mb-6 grid grid-cols-1 gap-6 md:grid-cols-3'>
                                                             <FormField
                                                                 control={form.control}
@@ -581,6 +578,7 @@ export default function StepThree() {
                                                                 <Lightbulb className='size-5 text-emerald-600 dark:text-emerald-400' />
                                                                 Rules To Remember
                                                             </FormLabel>
+
                                                             <Editor
                                                                 key={`sections.${index}.sectionLearnings`}
                                                                 placeholder='Note down your learnings here...'

@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeftCircle } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
 import { siteConfig } from '@/lib/site/site-config';
-import Image from 'next/image';
+import Logo from '../logo';
 
 interface AuthFormWrapperProps {
     children: ReactNode;
@@ -52,7 +52,7 @@ export function AuthFormWrapper({
                         <ArrowLeftCircle className='size-5' />
                     </Button>
                     <div className='flex items-center justify-center gap-2'>
-                        <Image src={siteConfig.logo || './images/logo-main.png'} alt={siteConfig.name} width={50} height={50} className='rounded-md size-8' />
+                        <Logo />
                         <span className='font-bold font-[Poppins] text-md'>{siteConfig.name}</span>
                     </div>
                 </div>

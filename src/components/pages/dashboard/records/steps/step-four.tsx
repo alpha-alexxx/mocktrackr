@@ -52,8 +52,8 @@ export default function StepFour() {
             <form className='space-y-6'>
                 <h2 className='mb-6 text-2xl font-bold'>Step 4: Overall Insights</h2>
 
-                <Card className='mb-6'>
-                    <CardContent className='pt-6'>
+                <Card className='p-2 md:p-4 border-none md:border shadow-none md:shadow-xs w-full mb-6'>
+                    <CardContent className='p-0'>
                         <FormField
                             control={form.control}
                             name='keyPoints'
@@ -64,9 +64,7 @@ export default function StepFour() {
                                         What Went Wrong:
                                     </FormLabel>
                                     <FormControl>
-                                        <div className='mt-2'>
-                                            <Editor value={field.value || ''} onChange={field.onChange} />
-                                        </div>
+                                        <Editor value={field.value || ''} onChange={field.onChange} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -75,8 +73,8 @@ export default function StepFour() {
                     </CardContent>
                 </Card>
 
-                <Card>
-                    <CardContent className='pt-6'>
+                <Card className='p-2 md:p-4 border-none md:border shadow-none md:shadow-xs w-full mb-6'>
+                    <CardContent className='p-0'>
                         <FormField
                             control={form.control}
                             name='learnings'
@@ -87,9 +85,7 @@ export default function StepFour() {
                                         Rules To Remember
                                     </FormLabel>
                                     <FormControl>
-                                        <div className='mt-2'>
-                                            <Editor value={field.value || ''} onChange={field.onChange} />
-                                        </div>
+                                        <Editor value={field.value || ''} onChange={field.onChange} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

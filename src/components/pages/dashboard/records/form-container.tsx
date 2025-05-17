@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client';
 
 import { useCallback, useMemo } from 'react';
@@ -18,7 +18,7 @@ import StepOne from './steps/step-one';
 import StepThree from './steps/step-three';
 import StepTwo from './steps/step-two';
 import { AxiosError } from 'axios';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2, UndoIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -146,14 +146,15 @@ export default function FormContainer({
     }, [currentStep]);
 
     return (
-        <div className='mx-auto max-w-5xl shadow-xs dark:border-white/20'>
+        <div className='mx-auto w-full shadow-xs dark:border-white/20'>
             <StepIndicator currentStep={currentStep} />
             <div className='mt-8 mb-8'>{StepComponent}</div>
 
-            <div className='mt-8 flex justify-between border-t pt-6'>
-                <div>
+            <div className='mt-8 flex flex-col-reverse gap-4 md:flex-row items-center justify-center md:justify-between border-t pt-6'>
+                <div className='flex flex-row gap2'>
                     {callType === 'create' && (
                         <Button variant='destructive' onClick={handleReset} disabled={isSubmitting} className='mr-2'>
+                            <UndoIcon />
                             Reset
                         </Button>
                     )}
@@ -163,16 +164,22 @@ export default function FormContainer({
                     </Button>
                 </div>
 
-                <div>
+                <div className='flex flex-row gap2'>
                     {currentStep > 1 && (
                         <Button variant='outline' onClick={handlePrevious} disabled={isSubmitting} className='mr-2'>
-                            Previous
+                            <ArrowLeft />
+                            <span className='hidden md:inline-block'>
+                                Previous
+                            </span>
                         </Button>
                     )}
 
                     {currentStep < 4 ? (
                         <Button className='text-white' type='submit' onClick={handleNext} disabled={isSubmitting}>
-                            Next
+                            <span className='hidden md:inline-block'>
+                                Next
+                            </span>
+                            <ArrowRight />
                         </Button>
                     ) : (
                         <Button

@@ -346,10 +346,10 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
     const handleContext = (e: MouseEvent) => e.preventDefault();
 
     return (
-        <Card>
-            <CardHeader className='flex items-center justify-between'>
-                <CardTitle className='sr-only'>{title}</CardTitle>
-                <div className='flex gap-2'>
+        <Card className='p-4 md:p-6'>
+            <CardHeader className='flex p-0 w-full flex-col-reverse md:flex-row items-center justify-between'>
+                <CardTitle className='sr-only hidden'>{title}</CardTitle>
+                <div className='flex gap-2 flex-1'>
                     <Button
                         variant='outline'
                         type='button'
@@ -359,7 +359,7 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                             dispatch({ type: 'ADD_ROW' });
                         }}
                         aria-label='Add Row'>
-                        <Plus className='mr-2 h-4 w-4' /> Add Row
+                        <Plus className='mr-2 h-4 w-4' /> Row
                     </Button>
                     <Button
                         variant='outline'
@@ -370,10 +370,10 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                             dispatch({ type: 'ADD_COLUMN' });
                         }}
                         aria-label='Add Column'>
-                        <Plus className='mr-2 h-4 w-4' /> Add Column
+                        <Plus className='mr-2 h-4 w-4' />Column
                     </Button>
                 </div>
-                <div className='flex gap-2'>
+                <div className='hidden md:flex gap-2 w-fit'>
                     <Button
                         size='icon'
                         variant='outline'
@@ -401,12 +401,12 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                 </div>
             </CardHeader>
 
-            <CardContent className='overflow-x-auto'>
+            <CardContent className='overflow-x-auto px-0'>
                 <table className='w-full border-collapse'>
                     <thead>
                         <tr>
                             {state.current.headers.map((h, i) => (
-                                <th key={i} className='border bg-gray-100 p-2'>
+                                <th key={i} className='border bg-slate-100 dark:bg-slate-800 p-2'>
                                     <div className='flex items-center gap-1'>
                                         <Input
                                             ref={(el) => {
@@ -439,7 +439,7 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                                     </div>
                                 </th>
                             ))}
-                            <th className='w-8 border bg-gray-100 p-2' />
+                            <th className='w-8 border bg-slate-100 dark:bg-slate-800 p-2' />
                         </tr>
                     </thead>
 

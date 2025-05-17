@@ -230,7 +230,6 @@ export function SimpleEditor({ initialContent, onChange, placeholder }: SimpleEd
                 // Set a new timeout to delay the update
                 timeoutId = setTimeout(() => {
                     const json = editor.getJSON();
-                    console.log(json);
                     onChange(JSON.stringify(json));
                 }, 250); // 250ms debounce delay - adjust as needed for balance between responsiveness and performance
             };

@@ -1,0 +1,5 @@
+
+1. Fix the upload of avatar issue of files related!
+[UploadError]
+2. Just i want to extend the support for compress the image to 100 kb before uploading it to the cloudinary and after uploading to the temp folder.
+3. 

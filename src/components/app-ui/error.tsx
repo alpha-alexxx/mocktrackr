@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '../ui/button';
 import { AlertTriangle, BookOpen } from 'lucide-react';
+import Logo from './logo';
 
 interface ErrorTypes {
     cause?: unknown;
@@ -22,7 +23,7 @@ export default function ErrorComponent({ error }: { error: ErrorTypes | null }) 
         <div className='bg-background flex min-h-screen flex-col items-center justify-center p-4'>
             <div className='flex max-w-md flex-col items-center space-y-6 text-center'>
                 <div className='flex items-center space-x-2'>
-                    <BookOpen className='text-primary h-10 w-10' />
+                    <Logo className='size-10' />
                     <h1 className='text-2xl font-bold tracking-tight'>MockTrackr</h1>
                 </div>
 

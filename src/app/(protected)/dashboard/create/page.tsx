@@ -11,6 +11,7 @@ import { formatTime } from '@/lib/utils';
 import { useFormStore } from '@/stores/form-store';
 
 import { ArrowLeft, Award, Clock, ListChecks } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function CreatePage() {
     const selectedExam = useExamConfig();
@@ -40,10 +41,16 @@ export default function CreatePage() {
                     </div>
                 </div>
                 {!isClient ? (
-                    <div>Loading...</div>
+                    <div className='flex flex-col'>
+                        <div className='flex flex-row justify-between items-center'>
+                            <Skeleton className='h-2 w-full' />
+                            <Skeleton className='w-6 h-2' />
+                        </div>
+                        <Skeleton className='h-1 w-full' />
+                    </div>
                 ) : (
                     selectedExam && (
-                        <div className='flex h-fit w-fit flex-1 flex-col items-center justify-center gap-2 rounded-lg border p-1 shadow-sm'>
+                        <div className='flex w-full h-fit md:w-fit flex-1 flex-col items-center justify-center gap-2 rounded-lg border p-1 shadow-sm'>
                             <div>
                                 <div className='flex items-center justify-center gap-2 text-sm font-medium'>
                                     <span>{selectedExam.examName}</span>

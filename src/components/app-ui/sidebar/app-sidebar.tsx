@@ -20,6 +20,7 @@ import { siteConfig } from '@/lib/site/site-config';
 import { NavPrimary } from './nav-primary';
 import { NavUser } from './nav-user';
 import { BarChartBig, BookOpen, ClipboardList, LayoutDashboard, Loader2 } from 'lucide-react';
+import Logo from '../logo';
 
 // This is sample data.
 const data = {
@@ -68,7 +69,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                 <SidebarMenuButton size='lg' asChild>
                                     <a href='#'>
                                         <div className='bg-sidebar-foreground flex aspect-square size-8 items-center justify-center rounded-lg text-white dark:text-black'>
-                                            <BookOpen className='size-4' />
+                                            <Logo className='size-4' />
                                         </div>
                                         <div className='grid flex-1 text-left text-sm leading-tight'>
                                             <span className='truncate font-semibold'>{siteConfig.name}</span>

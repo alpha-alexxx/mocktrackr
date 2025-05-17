@@ -6,6 +6,7 @@ import { siteConfig } from '@/lib/site/site-config';
 
 import { motion } from 'framer-motion';
 import { BookOpen, Github, Linkedin } from 'lucide-react';
+import Logo from '@/components/app-ui/logo';
 
 export default function Footer() {
     return (
@@ -21,7 +22,7 @@ export default function Footer() {
                     <div className='grid gap-8 md:grid-cols-4'>
                         <div className='space-y-4'>
                             <Link href='/' className='flex items-center space-x-2 text-xl font-bold'>
-                                <BookOpen className='h-6 w-6 text-emerald-600' />
+                                <Logo className='size-4' />
                                 <span className='bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-text text-transparent'>
                                     {siteConfig.name}
                                 </span>
