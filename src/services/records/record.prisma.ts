@@ -9,33 +9,15 @@ const db = process.env.NODE_ENV === 'development' ? prisma : prismaEdge;
 /**
  * Fetch records based on recordId or date. If neither provided, fetch all.
  */
-export async function fetchRecordsFromDB(userId: string, recordId: string | null, date: string | null) {
-    if (recordId) {
-        return db.record.findFirst({
-            where: { id: recordId, userId },
-            include: {
-                user: { select: { name: true } }
-            }
-        });
-    }
-    if (date) {
-        const start = startOfDay(new Date(date));
-        const end = endOfDay(new Date(date));
-
-        return db.record.findMany({
-            where: {
-                userId,
-                testDate: { gte: start, lte: end }
-            },
-            include: {
-                user: { select: { name: true } }
-            },
-            orderBy: { createdAt: 'desc' }
-        });
-    }
+export async function fetchRecordsFromDB(userId: string, date: string) {
+    const start = startOfDay(new Date(date));
+    const end = endOfDay(new Date(date));
 
     return db.record.findMany({
-        where: { userId },
+        where: {
+            userId,
+            testDate: { gte: start, lte: end }
+        },
         include: {
             user: { select: { name: true } }
         },

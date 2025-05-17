@@ -23,7 +23,6 @@ export async function GET(request: Request): Promise<NextResponse> {
 
         const userId = params.get('userId');
         const date = params.get('date');
-        const recordId = params.get('recordId');
         const session = await auth.api.getSession({ headers: await headers() });
 
         if (!session) {
@@ -32,7 +31,12 @@ export async function GET(request: Request): Promise<NextResponse> {
                 { status: 401 }
             );
         }
-
+        if (!date) {
+            return NextResponse.json(
+                { success: false, message: 'Date is required to perform this action.' },
+                { status: 400 }
+            );
+        }
         if (!userId) {
             return NextResponse.json(
                 { success: false, message: 'User ID is required to perform this action.' },
@@ -47,9 +51,13 @@ export async function GET(request: Request): Promise<NextResponse> {
             );
         }
 
-        const records = await fetchRecordsFromDB(userId, recordId, date);
+        const records = await fetchRecordsFromDB(userId, date);
+
         if (!records) {
-            return NextResponse.json({ success: true, records: null, message: 'No records found' }, { status: 200 });
+            return NextResponse.json(
+                { success: true, records: null, message: 'No records found on this date' },
+                { status: 200 }
+            );
         }
 
         return NextResponse.json({ success: true, records, message: 'Records fetched successfully!' }, { status: 200 });

@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 import { Poppins } from 'next/font/google';
 
@@ -41,6 +43,8 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
                         <Toaster richColors closeButton />
                     </QueryProvider>
                 </ThemeProvider>
+                <SpeedInsights />
+                <Analytics />
             </body>
         </html>
     );

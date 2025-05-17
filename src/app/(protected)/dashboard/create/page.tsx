@@ -12,6 +12,8 @@ import { useFormStore } from '@/stores/form-store';
 
 import { ArrowLeft, Award, Clock, ListChecks } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Suspense } from 'react';
+import Loader from '@/components/app-ui/loader';
 
 export default function CreatePage() {
     const selectedExam = useExamConfig();
@@ -60,13 +62,13 @@ export default function CreatePage() {
                                 </div>
                             </div>
                             <div className='flex flex-row items-center justify-between gap-2 font-medium'>
-                                <span className='flex flex-row items-center justify-center gap-2 text-base'>
+                                <span className='flex flex-row items-center justify-center gap-2 text-xs md:text-base'>
                                     <Award className='size-5' /> {selectedExam.totalMarks} Marks
                                 </span>
-                                <span className='flex flex-row items-center justify-center gap-2 text-base'>
+                                <span className='flex flex-row items-center justify-center gap-2 text-xs md:text-base'>
                                     <Clock className='size-4' /> {formatTime(selectedExam.durationMinutes)}
                                 </span>
-                                <span className='flex flex-row items-center justify-center gap-2 text-base'>
+                                <span className='flex flex-row items-center justify-center gap-2 text-xs md:text-base'>
                                     <ListChecks className='size-4' /> {selectedExam.totalQuestions} Questions
                                 </span>
                             </div>
@@ -74,7 +76,9 @@ export default function CreatePage() {
                     )
                 )}
             </header>
-            <FormContainer callType='create' />
+            <Suspense fallback={<Loader />}>
+                <FormContainer callType='create' />
+            </Suspense>
         </div>
     );
 }

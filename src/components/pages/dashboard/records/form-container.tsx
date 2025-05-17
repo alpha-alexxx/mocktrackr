@@ -48,8 +48,8 @@ export default function FormContainer({
                 description: 'Your test record has been saved successfully.'
             });
             invalidateRecords(userId!, date);
-            resetForm();
             router.push(callbackURL);
+            resetForm();
             setDate(formData.testDate as Date);
         },
         onError: (error: AxiosError) => {
@@ -83,8 +83,8 @@ export default function FormContainer({
 
     const handleReset = useCallback(() => {
         if (confirm('Are you sure you want to cancel? All unsaved data will be lost.')) {
-            resetForm();
             router.refresh();
+            resetForm();
         }
     }, [resetForm, router]);
 

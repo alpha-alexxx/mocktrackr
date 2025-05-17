@@ -93,7 +93,14 @@
       background-position: 0% 0%;
     }
   }
-}
+
+  --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite
+;
+  @keyframes ripple {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);}
+  50% {
+    transform: translate(-50%, -50%) scale(0.9);}}}
 
 :root {
   --radius: 0.75rem;
@@ -174,7 +181,6 @@
   }
 }
 
-
 .ql-editor {
   max-height: 200px;
   /* adjust as needed */
@@ -215,7 +221,6 @@
   animation: accordion-up 0.2s ease-out;
 }
 
-
 /* Basic editor styles */
 .tiptap {
   :first-child {
@@ -242,7 +247,6 @@
         margin-bottom: 0;
       }
     }
-
 
     col:nth-child(2) {
       min-width: fit-content;

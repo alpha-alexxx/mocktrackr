@@ -36,10 +36,16 @@ export default function CalendarDropDown({ children }: { children: React.ReactNo
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-            <DropdownMenuContent sideOffset={10} className='mr-4'>
+            <DropdownMenuContent>
                 <DropdownMenuLabel>Choose Date to Jump on</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <Calendar selected={date} onSelect={handleSelect} mode='single' />
+                <Calendar
+                    selected={date}
+                    showWeekNumber
+                    showOutsideDays
+                    onSelect={handleSelect}
+                    mode='single'
+                />
             </DropdownMenuContent>
         </DropdownMenu>
     );

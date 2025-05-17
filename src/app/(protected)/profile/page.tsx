@@ -12,7 +12,7 @@ import TwoFactorAuthSection from '@/components/pages/profile/TwoFactorAuthSectio
 import UserHeaderSection from '@/components/pages/profile/UserHeaderSection';
 import { useSession, useSessions } from '@/hooks/use-auth-query';
 
-import { Book } from 'lucide-react';
+import Loader from '@/components/app-ui/loader';
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -25,7 +25,7 @@ export default function ProfilePage() {
     }, [session, sessionLoading, router]);
 
     if (sessionLoading || sessionsLoading) {
-        return <Loading />;
+        return <Loader />;
     }
     if (sessionError) {
         return <ErrorComponent error={sessionError} />;
@@ -43,7 +43,7 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className='flex flex-col items-center justify-center p-4'>
+        <div className='flex flex-col items-center justify-center'>
             <div className='space-y-4'>
                 <UserHeaderSection user={session.user} />
                 <SessionListSection allSessions={allSessions} />
@@ -52,32 +52,6 @@ export default function ProfilePage() {
                     <ChangePasswordSection />
                 </div>
                 <DangerZone />
-            </div>
-        </div>
-    );
-}
-
-function Loading() {
-    return (
-        <div className='bg-background flex size-full flex-col items-center justify-center'>
-            <div className='flex flex-col items-center space-y-4'>
-                <div className='relative'>
-                    <Book className='text-primary h-16 w-16 animate-pulse' />
-                    <span className='sr-only'>MockTrackr</span>
-                </div>
-                <h1 className='text-2xl font-bold tracking-tight'>MockTrackr</h1>
-                <div className='flex items-center space-x-2'>
-                    <div
-                        className='bg-primary h-2 w-2 animate-bounce rounded-full'
-                        style={{ animationDelay: '0ms' }}></div>
-                    <div
-                        className='bg-primary h-2 w-2 animate-bounce rounded-full'
-                        style={{ animationDelay: '150ms' }}></div>
-                    <div
-                        className='bg-primary h-2 w-2 animate-bounce rounded-full'
-                        style={{ animationDelay: '300ms' }}></div>
-                </div>
-                <p className='text-muted-foreground'>Loading resources...</p>
             </div>
         </div>
     );
