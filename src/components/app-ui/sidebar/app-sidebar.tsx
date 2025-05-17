@@ -17,10 +17,10 @@ import {
 import { useSession } from '@/hooks/use-auth-query';
 import { siteConfig } from '@/lib/site/site-config';
 
+import Logo from '../logo';
 import { NavPrimary } from './nav-primary';
 import { NavUser } from './nav-user';
 import { BarChartBig, BookOpen, ClipboardList, LayoutDashboard, Loader2 } from 'lucide-react';
-import Logo from '../logo';
 
 // This is sample data.
 const data = {

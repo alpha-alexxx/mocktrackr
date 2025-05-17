@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 
 // components/TableEditor.tsx
 'use client';
@@ -7,22 +7,18 @@ import { type KeyboardEvent, type MouseEvent, useEffect, useMemo, useReducer, us
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
 import { Textarea } from '../ui/textarea';
 import { Plus, Redo2, Trash2, Undo2 } from 'lucide-react';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// components/TableEditor.tsx
 
 /* eslint-disable no-unused-vars */
-
 
 export type CellType = 'input' | 'textarea' | 'select';
 
@@ -47,9 +43,9 @@ type Action =
     | { type: 'DELETE_COLUMN'; payload: number }
     | { type: 'UPDATE_HEADER'; payload: { index: number; value: string } }
     | {
-        type: 'UPDATE_CELL';
-        payload: { rowIndex: number; cellIndex: number; value: string };
-    }
+          type: 'UPDATE_CELL';
+          payload: { rowIndex: number; cellIndex: number; value: string };
+      }
     | { type: 'UNDO' }
     | { type: 'REDO' };
 
@@ -77,7 +73,13 @@ function tableReducer(state: State, action: Action): State {
             };
 
             return {
-                current: { ...current, rows: [...current.rows, { ...newRow, cells: newRow.cells.map(cell => ({ ...cell, type: cell.type as CellType })) }] },
+                current: {
+                    ...current,
+                    rows: [
+                        ...current.rows,
+                        { ...newRow, cells: newRow.cells.map((cell) => ({ ...cell, type: cell.type as CellType })) }
+                    ]
+                },
                 history: [...history, current],
                 future: []
             };
@@ -89,7 +91,10 @@ function tableReducer(state: State, action: Action): State {
             return {
                 current: {
                     headers: [...current.headers, `Column ${idx}`],
-                    rows: current.rows.map((r) => ({ ...r, cells: [...r.cells, { type: 'input' as CellType, value: '' }] }))
+                    rows: current.rows.map((r) => ({
+                        ...r,
+                        cells: [...r.cells, { type: 'input' as CellType, value: '' }]
+                    }))
                 },
                 history: [...history, current],
                 future: []
@@ -130,11 +135,11 @@ function tableReducer(state: State, action: Action): State {
                         ri !== action.payload.rowIndex
                             ? r
                             : {
-                                ...r,
-                                cells: r.cells.map((c, ci) =>
-                                    ci !== action.payload.cellIndex ? c : { ...c, value: action.payload.value }
-                                )
-                            }
+                                  ...r,
+                                  cells: r.cells.map((c, ci) =>
+                                      ci !== action.payload.cellIndex ? c : { ...c, value: action.payload.value }
+                                  )
+                              }
                     )
                 },
                 history: [...history, current],
@@ -213,8 +218,6 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
         }
     }, [value]);
 
-
-
     // Whenever state.current changes, emit to parent
     // Use a ref to track if the change was from internal state updates
     const isInternalUpdate = useRef(false);
@@ -225,7 +228,6 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
         }
         isInternalUpdate.current = false;
     }, [state.current]);
-
 
     // Refs for navigation
     const headerRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -258,87 +260,87 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
             if (rowIndex === undefined || cellIndex === undefined) return;
 
             switch (e.key) {
-                case "ArrowUp":
-                    if (isHeader) return
+                case 'ArrowUp':
+                    if (isHeader) return;
                     if (rowIndex > 0) {
-                        cellRefs.current[rowIndex - 1][cellIndex]?.focus()
+                        cellRefs.current[rowIndex - 1][cellIndex]?.focus();
                     } else {
-                        headerRefs.current[cellIndex]?.focus()
+                        headerRefs.current[cellIndex]?.focus();
                     }
-                    break
+                    break;
 
-                case "ArrowDown":
+                case 'ArrowDown':
                     if (isHeader) {
                         if (state.current.rows.length > 0) {
-                            cellRefs.current[0][cellIndex]?.focus()
+                            cellRefs.current[0][cellIndex]?.focus();
                         }
                     } else if (rowIndex < state.current.rows.length - 1) {
-                        cellRefs.current[rowIndex + 1][cellIndex]?.focus()
+                        cellRefs.current[rowIndex + 1][cellIndex]?.focus();
                     }
-                    break
+                    break;
 
-                case "ArrowLeft":
+                case 'ArrowLeft':
                     if (cellIndex > 0) {
                         if (isHeader) {
-                            headerRefs.current[cellIndex - 1]?.focus()
+                            headerRefs.current[cellIndex - 1]?.focus();
                         } else {
-                            cellRefs.current[rowIndex][cellIndex - 1]?.focus()
+                            cellRefs.current[rowIndex][cellIndex - 1]?.focus();
                         }
                     }
-                    break
+                    break;
 
-                case "ArrowRight":
+                case 'ArrowRight':
                     if (cellIndex < state.current.headers.length - 1) {
                         if (isHeader) {
-                            headerRefs.current[cellIndex + 1]?.focus()
+                            headerRefs.current[cellIndex + 1]?.focus();
                         } else {
-                            cellRefs.current[rowIndex][cellIndex + 1]?.focus()
+                            cellRefs.current[rowIndex][cellIndex + 1]?.focus();
                         }
                     }
-                    break
+                    break;
 
-                case "Tab":
+                case 'Tab':
                     if (!e.shiftKey) {
                         if (isHeader) {
                             if (cellIndex < state.current.headers.length - 1) {
-                                headerRefs.current[cellIndex + 1]?.focus()
+                                headerRefs.current[cellIndex + 1]?.focus();
                             } else if (state.current.rows.length > 0) {
-                                cellRefs.current[0][0]?.focus()
+                                cellRefs.current[0][0]?.focus();
                             }
                         } else {
                             if (cellIndex < state.current.headers.length - 1) {
-                                cellRefs.current[rowIndex][cellIndex + 1]?.focus()
+                                cellRefs.current[rowIndex][cellIndex + 1]?.focus();
                             } else if (rowIndex < state.current.rows.length - 1) {
-                                cellRefs.current[rowIndex + 1][0]?.focus()
+                                cellRefs.current[rowIndex + 1][0]?.focus();
                             }
                         }
                     }
-                    break
+                    break;
             }
         }
 
         // Keyboard shortcuts
         if (e.ctrlKey) {
             switch (e.key) {
-                case "n":
-                    e.preventDefault()
-                    dispatch({ type: "ADD_ROW" })
-                    break
+                case 'n':
+                    e.preventDefault();
+                    dispatch({ type: 'ADD_ROW' });
+                    break;
 
-                case "m":
-                    e.preventDefault()
-                    dispatch({ type: "ADD_COLUMN" })
-                    break
+                case 'm':
+                    e.preventDefault();
+                    dispatch({ type: 'ADD_COLUMN' });
+                    break;
 
-                case "z":
-                    e.preventDefault()
-                    dispatch({ type: "UNDO" })
-                    break
+                case 'z':
+                    e.preventDefault();
+                    dispatch({ type: 'UNDO' });
+                    break;
 
-                case "y":
-                    e.preventDefault()
-                    dispatch({ type: "REDO" })
-                    break
+                case 'y':
+                    e.preventDefault();
+                    dispatch({ type: 'REDO' });
+                    break;
             }
         }
     };
@@ -347,9 +349,9 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
 
     return (
         <Card className='p-4 md:p-6'>
-            <CardHeader className='flex p-0 w-full flex-col-reverse md:flex-row items-center justify-between'>
+            <CardHeader className='flex w-full flex-col-reverse items-center justify-between p-0 md:flex-row'>
                 <CardTitle className='sr-only hidden'>{title}</CardTitle>
-                <div className='flex gap-2 flex-1'>
+                <div className='flex flex-1 gap-2'>
                     <Button
                         variant='outline'
                         type='button'
@@ -370,10 +372,11 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                             dispatch({ type: 'ADD_COLUMN' });
                         }}
                         aria-label='Add Column'>
-                        <Plus className='mr-2 h-4 w-4' />Column
+                        <Plus className='mr-2 h-4 w-4' />
+                        Column
                     </Button>
                 </div>
-                <div className='hidden md:flex gap-2 w-fit'>
+                <div className='hidden w-fit gap-2 md:flex'>
                     <Button
                         size='icon'
                         variant='outline'
@@ -406,7 +409,7 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                     <thead>
                         <tr>
                             {state.current.headers.map((h, i) => (
-                                <th key={i} className='border bg-slate-100 dark:bg-slate-800 p-2'>
+                                <th key={i} className='border bg-slate-100 p-2 dark:bg-slate-800'>
                                     <div className='flex items-center gap-1'>
                                         <Input
                                             ref={(el) => {
@@ -439,7 +442,7 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                                     </div>
                                 </th>
                             ))}
-                            <th className='w-8 border bg-slate-100 dark:bg-slate-800 p-2' />
+                            <th className='w-8 border bg-slate-100 p-2 dark:bg-slate-800' />
                         </tr>
                     </thead>
 
@@ -447,7 +450,7 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                         {state.current.rows.map((row, ri) => (
                             <tr key={row.id}>
                                 {row.cells.map((cell, ci) => (
-                                    <td key={ci} className="border p-1" onContextMenu={handleContext}>
+                                    <td key={ci} className='border p-1' onContextMenu={handleContext}>
                                         {(() => {
                                             const commonProps = {
                                                 ref: (el: any) => {
@@ -455,26 +458,35 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                                                     cellRefs.current[ri][ci] = el;
                                                 },
                                                 value: cell.value,
-                                                onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+                                                onChange: (
+                                                    e: React.ChangeEvent<
+                                                        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+                                                    >
+                                                ) => {
                                                     isInternalUpdate.current = true;
                                                     dispatch({
                                                         type: 'UPDATE_CELL',
                                                         payload: { rowIndex: ri, cellIndex: ci, value: e.target.value }
                                                     });
                                                 },
-                                                onKeyDown: (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-                                                    handleKeyDown(e, ri, ci),
+                                                onKeyDown: (
+                                                    e: KeyboardEvent<
+                                                        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+                                                    >
+                                                ) => handleKeyDown(e, ri, ci),
                                                 className: 'min-w-[100px] text-sm',
                                                 'aria-label': `Row ${ri + 1}, Col ${ci + 1}`
                                             };
 
                                             switch (cell.type) {
                                                 case 'textarea':
-                                                    return <Textarea
-                                                        {...commonProps}
-                                                        className={cn(commonProps.className, 'resize-none')}
-                                                        maxLength={100}
-                                                    />;
+                                                    return (
+                                                        <Textarea
+                                                            {...commonProps}
+                                                            className={cn(commonProps.className, 'resize-none')}
+                                                            maxLength={100}
+                                                        />
+                                                    );
                                                 case 'select':
                                                     return (
                                                         <Select
@@ -485,20 +497,20 @@ export function TableEditor({ value, onChange, title = 'Table Editor' }: TableEd
                                                                     type: 'UPDATE_CELL',
                                                                     payload: { rowIndex: ri, cellIndex: ci, value: val }
                                                                 });
-                                                            }}
-                                                        >
-                                                            <SelectTrigger className="w-full">
-                                                                <SelectValue placeholder="Choose" />
+                                                            }}>
+                                                            <SelectTrigger className='w-full'>
+                                                                <SelectValue placeholder='Choose' />
                                                             </SelectTrigger>
-                                                            <SelectContent className="w-full">
+                                                            <SelectContent className='w-full'>
                                                                 {selectOptions.map((opt) => (
                                                                     <SelectItem
                                                                         key={opt.value}
                                                                         value={opt.value}
                                                                         className={cn(
-                                                                            opt.value === cell.value ? 'bg-primary text-primary-foreground' : ''
-                                                                        )}
-                                                                    >
+                                                                            opt.value === cell.value
+                                                                                ? 'bg-primary text-primary-foreground'
+                                                                                : ''
+                                                                        )}>
                                                                         {opt.label}
                                                                     </SelectItem>
                                                                 ))}

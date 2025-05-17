@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Turnstile } from '@marsidev/react-turnstile';
+
 import useCaptchaToken from '@/stores/captcha_token';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 /**
  * CloudFlareCaptcha renders the Cloudflare Turnstile captcha widget
@@ -39,7 +40,7 @@ export default function CloudFlareCaptcha() {
             setInfo({
                 type: 'error',
                 title: 'Captcha Configuration Error',
-                message: 'Captcha could not be loaded. Please reload or contact support.',
+                message: 'Captcha could not be loaded. Please reload or contact support.'
             });
         }
 
@@ -58,30 +59,22 @@ export default function CloudFlareCaptcha() {
 
     // Render feedback messages (success or error)
     if (info) {
-        const baseClasses =
-            'mt-2 flex w-full flex-col items-center justify-center rounded-md border p-4 text-center';
+        const baseClasses = 'mt-2 flex w-full flex-col items-center justify-center rounded-md border p-4 text-center';
         const styles =
             info.type === 'success'
                 ? 'border-emerald-300 bg-emerald-50 dark:bg-emerald-800/20 text-emerald-700 dark:text-emerald-300'
                 : 'border-rose-300 bg-rose-50 dark:bg-rose-800/20 text-rose-700 dark:text-rose-300';
 
         return (
-            <div
-                role="alert"
-                aria-live="assertive"
-                className={`${baseClasses} ${styles}`}
-            >
-                <h3 className="mb-1 text-base font-semibold">{info.title}</h3>
-                <p className="text-sm">
-                    {info.message}
-                </p>
+            <div role='alert' aria-live='assertive' className={`${baseClasses} ${styles}`}>
+                <h3 className='mb-1 text-base font-semibold'>{info.title}</h3>
+                <p className='text-sm'>{info.message}</p>
 
                 {/* Optional Reset Button */}
                 {info.type === 'error' && (
                     <button
                         onClick={resetCaptcha}
-                        className="mt-3 text-sm text-blue-600 hover:underline dark:text-blue-400"
-                    >
+                        className='mt-3 text-sm text-blue-600 hover:underline dark:text-blue-400'>
                         Try Again
                     </button>
                 )}
@@ -90,7 +83,7 @@ export default function CloudFlareCaptcha() {
     }
 
     return (
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className='flex w-full flex-col items-center justify-center'>
             <Turnstile
                 key={key}
                 siteKey={siteKey}
@@ -100,7 +93,7 @@ export default function CloudFlareCaptcha() {
                         setInfo({
                             type: 'success',
                             title: 'Captcha Verified',
-                            message: 'You have successfully completed the captcha.',
+                            message: 'You have successfully completed the captcha.'
                         });
                     }
                 }}
@@ -108,7 +101,7 @@ export default function CloudFlareCaptcha() {
                     setInfo({
                         type: 'error',
                         title: 'Captcha Error',
-                        message: 'Captcha failed to load or verify. Please try again.',
+                        message: 'Captcha failed to load or verify. Please try again.'
                     });
                     resetCaptcha();
                 }}
@@ -116,7 +109,7 @@ export default function CloudFlareCaptcha() {
                     setInfo({
                         type: 'error',
                         title: 'Captcha Expired',
-                        message: 'Your verification expired. Please complete it again.',
+                        message: 'Your verification expired. Please complete it again.'
                     });
                     resetCaptcha();
                 }}

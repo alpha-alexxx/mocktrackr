@@ -294,8 +294,8 @@ export function SimpleEditor({ initialContent, onChange, placeholder }: SimpleEd
                         zIndex: 10,
                         ...(isMobile
                             ? {
-                                bottom: `calc(100% - ${windowSize.height - rect.y}px)`
-                            }
+                                  bottom: `calc(100% - ${windowSize.height - rect.y}px)`
+                              }
                             : {})
                     }}>
                     {mobileView === 'main' ? (

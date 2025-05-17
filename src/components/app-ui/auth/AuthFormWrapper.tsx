@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { siteConfig } from '@/lib/site/site-config';
 import { cn } from '@/lib/utils';
 
+import Logo from '../logo';
 import { motion } from 'framer-motion';
 import { ArrowLeftCircle } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
-import { siteConfig } from '@/lib/site/site-config';
-import Logo from '../logo';
 
 interface AuthFormWrapperProps {
     children: ReactNode;
@@ -43,7 +43,7 @@ export function AuthFormWrapper({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className={cn(
-                'w-full flex-shrink-0 space-y-6 rounded-xl border-none md:border bg-white/95 p-2 md:p-6 shadow-none md:shadow-xs backdrop-blur-sm dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
+                'w-full flex-shrink-0 space-y-6 rounded-xl border-none bg-white/95 p-2 shadow-none backdrop-blur-sm md:border md:p-6 md:shadow-xs dark:bg-gray-950/80 dark:ring-1 dark:shadow-gray-950/20 dark:ring-gray-800/50',
                 className
             )}>
             <div className='w-full space-y-2 text-center'>
@@ -53,7 +53,7 @@ export function AuthFormWrapper({
                     </Button>
                     <div className='flex items-center justify-center gap-2'>
                         <Logo />
-                        <span className='font-bold font-[Poppins] text-md'>{siteConfig.name}</span>
+                        <span className='text-md font-[Poppins] font-bold'>{siteConfig.name}</span>
                     </div>
                 </div>
 

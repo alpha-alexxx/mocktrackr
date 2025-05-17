@@ -5,14 +5,13 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import ErrorComponent from '@/components/app-ui/error';
+import Loader from '@/components/app-ui/loader';
 import ChangePasswordSection from '@/components/pages/profile/ChangePasswordSection';
 import { DangerZone } from '@/components/pages/profile/DangerZoneSection';
 import SessionListSection from '@/components/pages/profile/SessionListSection';
 import TwoFactorAuthSection from '@/components/pages/profile/TwoFactorAuthSection';
 import UserHeaderSection from '@/components/pages/profile/UserHeaderSection';
 import { useSession, useSessions } from '@/hooks/use-auth-query';
-
-import Loader from '@/components/app-ui/loader';
 
 export default function ProfilePage() {
     const router = useRouter();

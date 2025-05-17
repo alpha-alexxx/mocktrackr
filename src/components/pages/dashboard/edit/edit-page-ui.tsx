@@ -5,6 +5,7 @@ import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Loading from '@/app/(protected)/dashboard/edit/[id]/loading';
+import Loader from '@/components/app-ui/loader';
 import FormContainer from '@/components/pages/dashboard/records/form-container';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,6 @@ import useDatePicker from '@/stores/date_picker';
 import { useFormStore } from '@/stores/form-store';
 
 import { ArrowLeft, Award, Clock, ListChecks } from 'lucide-react';
-import Loader from '@/components/app-ui/loader';
 
 export default function EditPageUI({ recordId, userId }: { recordId: string; userId: string }) {
     const { formData, updateFormData, resetForm } = useFormStore();
@@ -118,7 +118,6 @@ export default function EditPageUI({ recordId, userId }: { recordId: string; use
             <Suspense fallback={<Loader />}>
                 <FormContainer callType='update' recordId={record.id} userId={userId} />
             </Suspense>
-
         </div>
     );
 }

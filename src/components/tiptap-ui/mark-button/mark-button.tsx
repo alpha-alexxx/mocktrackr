@@ -19,9 +19,11 @@ import { useTiptapEditor } from '@/hooks/use-tiptap-editor';
 import { isMarkInSchema } from '@/lib/tiptap-utils';
 import { type Editor, isNodeSelection } from '@tiptap/react';
 
-/* eslint-disable import/named */
+ 
 
-/* eslint-disable import/named */
+ 
+
+ 
 
 export type Mark = 'bold' | 'italic' | 'strike' | 'code' | 'underline' | 'superscript' | 'subscript';
 

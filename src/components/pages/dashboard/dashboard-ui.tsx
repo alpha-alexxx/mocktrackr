@@ -96,14 +96,14 @@ export default function Dashboard({ user }: { user: User }) {
     return (
         <div className='container mx-auto max-w-7xl px-4 py-6'>
             {/* Header Section */}
-            <div className='mb-6 flex flex-col flex-1 justify-between gap-4 md:flex-row md:items-center'>
+            <div className='mb-6 flex flex-1 flex-col justify-between gap-4 md:flex-row md:items-center'>
                 <div>
                     <h1 className='text-3xl font-bold'>👋 Welcome, {user.name}!</h1>
                     <p className='mt-1 text-gray-500'>{format(date, 'PPP', { locale: enIN })}</p>
                 </div>
                 <div className='flex items-center justify-center gap-2'>
                     <Button
-                        className='group/record relative flex-1 md:flex-none cursor-pointer gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:from-blue-700 hover:to-indigo-700'
+                        className='group/record relative flex-1 cursor-pointer gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:from-blue-700 hover:to-indigo-700 md:flex-none'
                         size='lg'
                         asChild>
                         <Link href='/dashboard/create'>

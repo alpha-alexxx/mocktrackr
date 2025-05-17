@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '../ui/button';
-import { AlertTriangle, BookOpen } from 'lucide-react';
 import Logo from './logo';
+import { AlertTriangle, BookOpen } from 'lucide-react';
 
 interface ErrorTypes {
     cause?: unknown;

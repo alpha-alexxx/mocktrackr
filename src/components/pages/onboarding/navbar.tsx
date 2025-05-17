@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Logo from '@/components/app-ui/logo';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { siteConfig } from '@/lib/site/site-config';
@@ -9,7 +10,6 @@ import { cn } from '@/lib/utils';
 
 import { motion } from 'framer-motion';
 import { BookOpen, Menu } from 'lucide-react';
-import Logo from '@/components/app-ui/logo';
 
 export default function Navbar() {
     return (
@@ -72,7 +72,7 @@ export default function Navbar() {
                                 className='border-l border-white/10 bg-gray-900/95 p-0 backdrop-blur-lg'>
                                 <SheetHeader className='border-b border-white/10 p-4'>
                                     <SheetTitle className='flex items-center space-x-2 text-white'>
-                                        <Logo className="size-6" />
+                                        <Logo className='size-6' />
                                         <span className='bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-text text-transparent'>
                                             {siteConfig.name}
                                         </span>

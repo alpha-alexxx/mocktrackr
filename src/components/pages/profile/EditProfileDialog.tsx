@@ -29,7 +29,19 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const ACCEPTED_IMAGE_TYPES = [
+    'image/jpeg',    // .jpeg
+    'image/jpg',     // .jpg (technically same as jpeg)
+    'image/png',     // .png
+    'image/webp',    // .webp
+    'image/gif',     // .gif
+    'image/bmp',     // .bmp
+    'image/tiff',    // .tif, .tiff
+    'image/svg+xml', // .svg
+    'image/heif',    // .heif
+    'image/heic',    // .heic
+    'image/avif'     // .avif
+];
 
 const editProfileSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -200,8 +212,8 @@ export function EditProfileDialog({ children, user }: EditProfileDialogProps) {
                 axios.isAxiosError(err) && err.response?.data?.message
                     ? err.response.data.message
                     : err instanceof Error
-                      ? err.message
-                      : 'Upload failed';
+                        ? err.message
+                        : 'Upload failed';
 
             setAvatarError(errorMessage);
             toast.error('Upload failed', { description: errorMessage });

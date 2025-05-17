@@ -93,8 +93,7 @@ export default function LoginPage() {
                     height={800}
                 />
             }
-            className='relative'
-        >
+            className='relative'>
             <AuthFormWrapper
                 title='Welcome back'
                 description='Enter your credentials to access your account'

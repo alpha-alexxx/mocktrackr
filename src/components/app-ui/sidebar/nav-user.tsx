@@ -14,10 +14,10 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
 import { authClient } from '@/lib/authentication/auth-client';
 
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export function NavUser({
     user
@@ -32,13 +32,15 @@ export function NavUser({
     const router = useRouter();
 
     if (!user) {
-        return <div className='flex flex-row items-center justify-center w-full h-full'>
-            <Skeleton className='size-12' />
-            <div className='flex flex-row items-center justify-center'>
-                <Skeleton className='h-8 w-full' />
-                <Skeleton className='h-4 w-full' />
+        return (
+            <div className='flex h-full w-full flex-row items-center justify-center'>
+                <Skeleton className='size-12' />
+                <div className='flex flex-row items-center justify-center'>
+                    <Skeleton className='h-8 w-full' />
+                    <Skeleton className='h-4 w-full' />
+                </div>
             </div>
-        </div>
+        );
     }
 
     return (
@@ -50,10 +52,9 @@ export function NavUser({
                             size='lg'
                             className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
                             <Avatar className='h-8 w-8 rounded-lg'>
-                                {user && user.image &&
-
+                                {user && user.image && (
                                     <AvatarImage src={user?.image || './images/logo_main.png'} alt={user.name} />
-                                }
+                                )}
 
                                 <AvatarFallback className='rounded-lg'>
                                     {user.name.charAt(0).toUpperCase()}

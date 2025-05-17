@@ -1,5 +1,6 @@
 'use client';
 
+import { TableEditor } from '@/components/app-ui/table-editor';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -8,11 +9,10 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Section } from '@/stores/form-store';
 
+import TableViewer from '../table-viewer';
 import { SectionPieChart } from './charts/section-pie-chart';
 import InsightDisplay from './insight-display';
 import { AlertCircle, AlignJustify, Check, Clock, LayoutGrid, Lightbulb, X } from 'lucide-react';
-import { TableEditor } from '@/components/app-ui/table-editor';
-import TableViewer from '../table-viewer';
 
 export function SectionPerformance({ sections }: { sections: Section[] }) {
     return (

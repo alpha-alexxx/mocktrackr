@@ -39,13 +39,7 @@ export default function CalendarDropDown({ children }: { children: React.ReactNo
             <DropdownMenuContent>
                 <DropdownMenuLabel>Choose Date to Jump on</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <Calendar
-                    selected={date}
-                    showWeekNumber
-                    showOutsideDays
-                    onSelect={handleSelect}
-                    mode='single'
-                />
+                <Calendar selected={date} showWeekNumber showOutsideDays onSelect={handleSelect} mode='single' />
             </DropdownMenuContent>
         </DropdownMenu>
     );

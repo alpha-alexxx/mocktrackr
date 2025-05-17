@@ -270,7 +270,6 @@ export default function StepThree() {
         []
     );
 
-
     // Cache the last parsed string and result to prevent unnecessary re-parsing
     const tableDataCache = useRef<{ str: string; data: TableData }>({ str: '', data: defaultTableData });
 
@@ -340,12 +339,11 @@ export default function StepThree() {
             const newValue = JSON.stringify(value);
 
             debounce(() => {
-
                 // Only update if the value has actually changed
                 if (currentValue !== newValue) {
                     form.setValue(`sections.${index}.keyPoints`, newValue, { shouldDirty: true });
                 }
-            }, 1000)
+            }, 1000);
         },
         [form]
     );
@@ -372,10 +370,10 @@ export default function StepThree() {
                             <AccordionItem key={value} value={value}>
                                 <AccordionTrigger className='cursor-pointer'>
                                     <div className='flex w-full flex-row items-center justify-between font-semibold'>
-                                        <div className='flex flex-col md:flex-row gap-1 items-center justify-center'>
+                                        <div className='flex flex-col items-center justify-center gap-1 md:flex-row'>
                                             {subject.name}
                                             {subject.isQualifying && (
-                                                <Badge variant='outline' className="">
+                                                <Badge variant='outline' className=''>
                                                     Qualifying
                                                 </Badge>
                                             )}
@@ -398,7 +396,7 @@ export default function StepThree() {
                                             exit={{ height: 0, opacity: 0 }}
                                             transition={{ duration: 0.3 }}>
                                             <AccordionContent>
-                                                <Card className='p-0 md:p-2 shadow-none md:shadow-xs border-none md:border'>
+                                                <Card className='border-none p-0 shadow-none md:border md:p-2 md:shadow-xs'>
                                                     <CardContent className='p-0'>
                                                         <div className='mb-6 grid grid-cols-1 gap-6 md:grid-cols-3'>
                                                             <FormField
@@ -568,7 +566,6 @@ export default function StepThree() {
                                                                 value={stringToTableData(
                                                                     form.watch(`sections.${index}.keyPoints`) || ''
                                                                 )}
-
                                                                 onChange={(value) => handleTableChange(index, value)}
                                                             />
                                                         </div>

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useCallback, useMemo } from 'react';
@@ -150,8 +149,8 @@ export default function FormContainer({
             <StepIndicator currentStep={currentStep} />
             <div className='mt-8 mb-8'>{StepComponent}</div>
 
-            <div className='mt-8 flex flex-col-reverse gap-4 md:flex-row items-center justify-center md:justify-between border-t pt-6'>
-                <div className='flex flex-row gap2'>
+            <div className='mt-8 flex flex-col-reverse items-center justify-center gap-4 border-t pt-6 md:flex-row md:justify-between'>
+                <div className='gap2 flex flex-row'>
                     {callType === 'create' && (
                         <Button variant='destructive' onClick={handleReset} disabled={isSubmitting} className='mr-2'>
                             <UndoIcon />
@@ -164,21 +163,17 @@ export default function FormContainer({
                     </Button>
                 </div>
 
-                <div className='flex flex-row gap2'>
+                <div className='gap2 flex flex-row'>
                     {currentStep > 1 && (
                         <Button variant='outline' onClick={handlePrevious} disabled={isSubmitting} className='mr-2'>
                             <ArrowLeft />
-                            <span className='hidden md:inline-block'>
-                                Previous
-                            </span>
+                            <span className='hidden md:inline-block'>Previous</span>
                         </Button>
                     )}
 
                     {currentStep < 4 ? (
                         <Button className='text-white' type='submit' onClick={handleNext} disabled={isSubmitting}>
-                            <span className='hidden md:inline-block'>
-                                Next
-                            </span>
+                            <span className='hidden md:inline-block'>Next</span>
                             <ArrowRight />
                         </Button>
                     ) : (

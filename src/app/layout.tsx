@@ -1,6 +1,4 @@
 import type { ReactNode } from 'react';
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
 
 import { Poppins } from 'next/font/google';
 
@@ -16,6 +14,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { getSEOMetadata } from '@/lib/site/seo';
 import { QueryProvider } from '@/providers/query-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = getSEOMetadata();
 

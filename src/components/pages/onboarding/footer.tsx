@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 
+import Logo from '@/components/app-ui/logo';
 import { siteConfig } from '@/lib/site/site-config';
 
 import { motion } from 'framer-motion';
 import { BookOpen, Github, Linkedin } from 'lucide-react';
-import Logo from '@/components/app-ui/logo';
 
 export default function Footer() {
     return (

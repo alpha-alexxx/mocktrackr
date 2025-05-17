@@ -10,10 +10,10 @@ import { formatTime } from '@/lib/utils';
 import { purifySections } from '@/services/records/purify-sections';
 import { RecordItem } from '@/services/records/record.fetch';
 
+import TableViewer from '../table-viewer';
 import InsightDisplay from '../view/insight-display';
 import { format } from 'date-fns';
 import { BookOpen, Loader2 } from 'lucide-react';
-import TableViewer from '../table-viewer';
 
 export default function PDFDialog({ record, children }: { children: React.ReactNode; record: RecordItem }) {
     const [loading, setLoading] = useState(false);
@@ -220,9 +220,7 @@ const PDFContent = forwardRef<HTMLDivElement, { record: RecordItem }>(({ record 
                             {section.keyPoints && (
                                 <div className='mt-2 flex w-full flex-col items-start justify-center gap-2'>
                                     <h4 className='text-lg font-semibold'>What Went Wrong: </h4>
-                                    <TableViewer
-                                        data={JSON.parse(section.keyPoints)}
-                                    />
+                                    <TableViewer data={JSON.parse(section.keyPoints)} />
                                 </div>
                             )}
                         </section>

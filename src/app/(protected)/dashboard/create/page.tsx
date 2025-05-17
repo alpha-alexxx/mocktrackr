@@ -1,19 +1,20 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import { useRouter } from 'next/navigation';
 
+import Loader from '@/components/app-ui/loader';
 import FormContainer from '@/components/pages/dashboard/records/form-container';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useExamConfig } from '@/hooks/use-exam-config';
 import { useIsClient } from '@/hooks/use-is-client';
 import { formatTime } from '@/lib/utils';
 import { useFormStore } from '@/stores/form-store';
 
 import { ArrowLeft, Award, Clock, ListChecks } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Suspense } from 'react';
-import Loader from '@/components/app-ui/loader';
 
 export default function CreatePage() {
     const selectedExam = useExamConfig();
@@ -44,15 +45,15 @@ export default function CreatePage() {
                 </div>
                 {!isClient ? (
                     <div className='flex flex-col'>
-                        <div className='flex flex-row justify-between items-center'>
+                        <div className='flex flex-row items-center justify-between'>
                             <Skeleton className='h-2 w-full' />
-                            <Skeleton className='w-6 h-2' />
+                            <Skeleton className='h-2 w-6' />
                         </div>
                         <Skeleton className='h-1 w-full' />
                     </div>
                 ) : (
                     selectedExam && (
-                        <div className='flex w-full h-fit md:w-fit flex-1 flex-col items-center justify-center gap-2 rounded-lg border p-1 shadow-sm'>
+                        <div className='flex h-fit w-full flex-1 flex-col items-center justify-center gap-2 rounded-lg border p-1 shadow-sm md:w-fit'>
                             <div>
                                 <div className='flex items-center justify-center gap-2 text-sm font-medium'>
                                     <span>{selectedExam.examName}</span>
