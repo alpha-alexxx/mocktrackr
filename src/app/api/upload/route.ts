@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { uploadFileToCloudinary } from '@/lib/cloudinary';
+import { optimizeImage } from '@/lib/image-optimize';
 
 import fs from 'fs/promises';
 import os from 'os';
@@ -52,12 +53,17 @@ export async function POST(req: NextRequest) {
         const arrayBuffer = await fileField.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
+        const optimizedBuffer = await optimizeImage(buffer, {
+            requiredSizeKB: 100,
+            mimeType: fileField.type as 'image/jpeg' | 'image/webp',
+            minHeight: 300
+        });
         // 4️⃣ Write to /tmp (Vercel allows writing here)
         const tempDir = getTempDirectory();
         await fs.mkdir(tempDir, { recursive: true });
         const tempFilename = `${uuidv4()}_${fileField.name}`;
         const tempFilePath = path.join(tempDir, tempFilename);
-        await fs.writeFile(tempFilePath, buffer);
+        await fs.writeFile(tempFilePath, optimizedBuffer);
 
         // 5️⃣ Optional metadata (e.g. userId)
         const userId = formData.get('userId') as string | null;

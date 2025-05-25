@@ -17,8 +17,8 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/c
 import { Skeleton } from '@/components/ui/skeleton';
 import { authClient } from '@/lib/authentication/auth-client';
 
-import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 import { ThemeToggle } from '../theme-switch';
+import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 
 export function NavUser({
     user

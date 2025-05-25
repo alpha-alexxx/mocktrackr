@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useInvalidateQueries } from '@/hooks/use-invalidate';
 import { authClient } from '@/lib/authentication/auth-client';
 import getCroppedImg from '@/lib/get-cropped-img';
 import { ExtendedUser } from '@/lib/types/auth-types';
@@ -30,17 +31,17 @@ import { z } from 'zod';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = [
-    'image/jpeg',    // .jpeg
-    'image/jpg',     // .jpg (technically same as jpeg)
-    'image/png',     // .png
-    'image/webp',    // .webp
-    'image/gif',     // .gif
-    'image/bmp',     // .bmp
-    'image/tiff',    // .tif, .tiff
+    'image/jpeg', // .jpeg
+    'image/jpg', // .jpg (technically same as jpeg)
+    'image/png', // .png
+    'image/webp', // .webp
+    'image/gif', // .gif
+    'image/bmp', // .bmp
+    'image/tiff', // .tif, .tiff
     'image/svg+xml', // .svg
-    'image/heif',    // .heif
-    'image/heic',    // .heic
-    'image/avif'     // .avif
+    'image/heif', // .heif
+    'image/heic', // .heic
+    'image/avif' // .avif
 ];
 
 const editProfileSchema = z.object({
@@ -83,7 +84,7 @@ export function EditProfileDialog({ children, user }: EditProfileDialogProps) {
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [info, setInfo] = useState<InfoType | null>(null);
-
+    const { invalidateUserSession } = useInvalidateQueries();
     // Avatar state
     const [avatarUrl, setAvatarUrl] = useState<string | null>(user?.image || null);
 
@@ -212,8 +213,8 @@ export function EditProfileDialog({ children, user }: EditProfileDialogProps) {
                 axios.isAxiosError(err) && err.response?.data?.message
                     ? err.response.data.message
                     : err instanceof Error
-                        ? err.message
-                        : 'Upload failed';
+                      ? err.message
+                      : 'Upload failed';
 
             setAvatarError(errorMessage);
             toast.error('Upload failed', { description: errorMessage });
@@ -234,11 +235,13 @@ export function EditProfileDialog({ children, user }: EditProfileDialogProps) {
                             id: 'edit-profile-toast',
                             description: 'Please wait! We are updating your profile'
                         });
+
+                        invalidateUserSession();
                     },
                     onSuccess: () => {
+                        toast.dismiss('edit-profile-toast');
                         toast.success('Profile Updated', {
                             id: 'edit-profile-toast',
-
                             description: 'Your profile has been updated successfully.'
                         });
                         setInfo({

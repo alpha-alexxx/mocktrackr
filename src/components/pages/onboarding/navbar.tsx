@@ -9,7 +9,7 @@ import { siteConfig } from '@/lib/site/site-config';
 import { cn } from '@/lib/utils';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 export default function Navbar() {
     return (

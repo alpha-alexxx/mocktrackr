@@ -1,7 +1,9 @@
 'use client';
 
 import * as React from 'react';
+
 import { useTheme } from 'next-themes';
+
 import { motion } from 'framer-motion';
 import { Monitor, Moon, Sun } from 'lucide-react';
 
@@ -36,9 +38,21 @@ export function ThemeToggle() {
                         className='flex items-center justify-center gap-2 text-xs'
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 10 }}>
-                        {t === 'light' && <><Sun className='h-4 w-4' /> Light</>}
-                        {t === 'dark' && <><Moon className='h-4 w-4' /> Dark</>}
-                        {t === 'system' && <><Monitor className='h-4 w-4' /> System</>}
+                        {t === 'light' && (
+                            <>
+                                <Sun className='h-4 w-4' /> Light
+                            </>
+                        )}
+                        {t === 'dark' && (
+                            <>
+                                <Moon className='h-4 w-4' /> Dark
+                            </>
+                        )}
+                        {t === 'system' && (
+                            <>
+                                <Monitor className='h-4 w-4' /> System
+                            </>
+                        )}
                     </motion.div>
                 </button>
             ))}

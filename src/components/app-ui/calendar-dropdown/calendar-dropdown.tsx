@@ -17,7 +17,13 @@ type DayWithDot = {
     hasData: boolean;
 };
 
-export default function CalendarDropDown({ children, daysWithData = [] }: { children: React.ReactNode; daysWithData?: DayWithDot[] }) {
+export default function CalendarDropDown({
+    children,
+    daysWithData = []
+}: {
+    children: React.ReactNode;
+    daysWithData?: DayWithDot[];
+}) {
     const { date, setDate } = useDatePicker();
 
     const handleSelect = (selectedDate: Date | undefined) => {
@@ -39,7 +45,7 @@ export default function CalendarDropDown({ children, daysWithData = [] }: { chil
     };
 
     const modifiers = {
-        withData: daysWithData.map(day => day.date)
+        withData: daysWithData.map((day) => day.date)
     };
 
     const modifiersStyles = {

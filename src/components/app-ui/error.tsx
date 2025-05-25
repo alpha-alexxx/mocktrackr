@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '../ui/button';
 import Logo from './logo';
-import { AlertTriangle, BookOpen } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface ErrorTypes {
     cause?: unknown;

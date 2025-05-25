@@ -1,6 +1,5 @@
 'use client';
 
-import { TableEditor } from '@/components/app-ui/table-editor';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

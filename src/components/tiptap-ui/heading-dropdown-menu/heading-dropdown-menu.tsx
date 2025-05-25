@@ -28,11 +28,7 @@ import { useTiptapEditor } from '@/hooks/use-tiptap-editor';
 import { isNodeInSchema } from '@/lib/tiptap-utils';
 import { type Editor, isNodeSelection } from '@tiptap/react';
 
- 
-
- 
-
- 
+/* eslint-disable import/named */
 
 export interface HeadingDropdownMenuProps extends Omit<ButtonProps, 'type'> {
     editor?: Editor | null;

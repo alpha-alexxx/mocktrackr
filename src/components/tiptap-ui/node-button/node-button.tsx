@@ -14,11 +14,6 @@ import { useTiptapEditor } from '@/hooks/use-tiptap-editor';
 import { isNodeInSchema } from '@/lib/tiptap-utils';
 import { type Editor, isNodeSelection } from '@tiptap/react';
 
- 
-
- 
-
- 
 
 export type NodeType = 'codeBlock' | 'blockquote';
 

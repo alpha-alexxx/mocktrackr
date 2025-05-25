@@ -6,7 +6,7 @@ export function useInvalidateQueries() {
     return {
         invalidateRecords: (userId: string, date: Date) =>
             queryClient.invalidateQueries({ queryKey: ['records', userId, date] }),
-        invalidateUserProfile: (userId: string) => queryClient.invalidateQueries({ queryKey: ['userProfile', userId] }),
+        invalidateUserSession: () => queryClient.invalidateQueries({ queryKey: ['session'] }),
         invalidateSessions: () => {
             queryClient.invalidateQueries({ queryKey: ['sessions'] });
         },

@@ -20,7 +20,7 @@ import { siteConfig } from '@/lib/site/site-config';
 import Logo from '../logo';
 import { NavPrimary } from './nav-primary';
 import { NavUser } from './nav-user';
-import { BarChartBig, BookOpen, ClipboardList, LayoutDashboard, Loader2 } from 'lucide-react';
+import { BarChartBig, ClipboardList, LayoutDashboard, Loader2 } from 'lucide-react';
 
 // This is sample data.
 const data = {

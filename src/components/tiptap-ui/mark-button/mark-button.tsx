@@ -19,11 +19,6 @@ import { useTiptapEditor } from '@/hooks/use-tiptap-editor';
 import { isMarkInSchema } from '@/lib/tiptap-utils';
 import { type Editor, isNodeSelection } from '@tiptap/react';
 
- 
-
- 
-
- 
 
 export type Mark = 'bold' | 'italic' | 'strike' | 'code' | 'underline' | 'superscript' | 'subscript';
 

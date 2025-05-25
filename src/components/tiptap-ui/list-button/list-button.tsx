@@ -14,13 +14,6 @@ import { useTiptapEditor } from '@/hooks/use-tiptap-editor';
 // --- Lib ---
 import { isNodeInSchema } from '@/lib/tiptap-utils';
 import { type Editor, isNodeSelection } from '@tiptap/react';
-
- 
-
- 
-
- 
-
 export type ListType = 'bulletList' | 'orderedList' | 'taskList';
 
 export interface ListOption {

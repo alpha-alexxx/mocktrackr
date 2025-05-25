@@ -1,5 +1,4 @@
 import { PrismaClient } from '@/prisma';
-import { createClient } from '@libsql/client/web';
 import { PrismaLibSQL } from '@prisma/adapter-libsql';
 
 /**
@@ -7,17 +6,6 @@ import { PrismaLibSQL } from '@prisma/adapter-libsql';
  * This allows Prisma to be cached in development mode, improving performance.
  */
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-
-/**
- * Creates a LibSQL client using the provided database URL and authentication token.
- * This client is used to connect to the database.
- *
- * @returns {Client} A LibSQL client instance.
- */
-const libsql = createClient({
-    url: process.env.TURSO_DATABASE_URL!, // Database URL (required)
-    authToken: process.env.TURSO_AUTH_TOKEN // Authentication token (required)
-});
 
 /**
  * Configuration object for Prisma adapter, explicitly passing the database URL and client.

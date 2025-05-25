@@ -6,7 +6,7 @@ import Logo from '@/components/app-ui/logo';
 import { siteConfig } from '@/lib/site/site-config';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Github, Linkedin } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 
 export default function Footer() {
     return (

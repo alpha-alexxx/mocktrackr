@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { MotionProps, motion } from 'motion/react';
+import { type MotionProps, motion } from 'motion/react';
 
 interface TypingAnimationProps extends MotionProps {
     children: string;
@@ -37,8 +37,8 @@ export function TypingAnimation({
             const startTimeout = setTimeout(() => {
                 setStarted(true);
             }, delay);
-            
-return () => clearTimeout(startTimeout);
+
+            return () => clearTimeout(startTimeout);
         }
 
         const observer = new IntersectionObserver(

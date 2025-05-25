@@ -1,5 +1,3 @@
- 
-
 // components/TableEditor.tsx
 'use client';
 
@@ -13,6 +11,10 @@ import { cn } from '@/lib/utils';
 
 import { Textarea } from '../ui/textarea';
 import { Plus, Redo2, Trash2, Undo2 } from 'lucide-react';
+
+// components/TableEditor.tsx
+
+// components/TableEditor.tsx
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
