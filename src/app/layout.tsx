@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { Poppins } from 'next/font/google';
 
 import '@/app/globals.css';
-import { ThemeToggle } from '@/components/app-ui/theme-switch';
 // --- Tiptap Editor Styles ---
 import '@/components/tiptap-node/code-block-node/code-block-node.scss';
 import '@/components/tiptap-node/image-node/image-node.scss';
@@ -37,9 +36,6 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
                 <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
                     <QueryProvider>
                         {children}
-                        <div className='fixed right-5 bottom-5'>
-                            <ThemeToggle />
-                        </div>
                         <Toaster richColors closeButton />
                     </QueryProvider>
                 </ThemeProvider>

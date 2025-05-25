@@ -18,6 +18,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { authClient } from '@/lib/authentication/auth-client';
 
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
+import { ThemeToggle } from '../theme-switch';
 
 export function NavUser({
     user
@@ -93,6 +94,11 @@ export function NavUser({
                                     <BadgeCheck />
                                     Profile
                                 </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <span className='text-xs font-semibold'>Choose Theme:</span>
+                            <DropdownMenuItem asChild>
+                                <ThemeToggle />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />

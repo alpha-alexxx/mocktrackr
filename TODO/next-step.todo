@@ -6,3 +6,6 @@
 
 // UI changes:
 1. In the calendar show dots when the data exists.
+
+// Page requirement: 
+1. Create the page /test having filter: exam name, date range, tiers [if there is not mts], sort by: old to new , new to old, mark [low to high, high to low], having a search bar to search the record report. Pagination support. Each list has three button [View, pdf, edit] having select option for delete, so that selected can be deleted. 

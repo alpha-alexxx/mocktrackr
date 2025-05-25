@@ -42,7 +42,7 @@ export function AppBreadcrumb(): React.ReactElement {
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                        <BreadcrumbPage className="text-sm">Dashboard</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
@@ -55,7 +55,7 @@ export function AppBreadcrumb(): React.ReactElement {
                 {/* Dashboard is always shown */}
                 <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                        <Link href='/dashboard'>Dashboard</Link>
+                        <Link className="text-sm" href='/dashboard'>Dashboard</Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
 
@@ -74,7 +74,7 @@ export function AppBreadcrumb(): React.ReactElement {
                                 <React.Fragment key={segment.href}>
                                     <BreadcrumbItem>
                                         {isLast ? (
-                                            <BreadcrumbPage>{segment.name}</BreadcrumbPage>
+                                            <BreadcrumbPage className="text-sm">{segment.name}</BreadcrumbPage>
                                         ) : (
                                             <BreadcrumbLink asChild>
                                                 <Link href={href}>{segment.name}</Link>

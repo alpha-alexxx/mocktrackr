@@ -12,7 +12,12 @@ import useDatePicker from '@/stores/date_picker';
 
 import { toast } from 'sonner';
 
-export default function CalendarDropDown({ children }: { children: React.ReactNode }) {
+type DayWithDot = {
+    date: Date;
+    hasData: boolean;
+};
+
+export default function CalendarDropDown({ children, daysWithData = [] }: { children: React.ReactNode; daysWithData?: DayWithDot[] }) {
     const { date, setDate } = useDatePicker();
 
     const handleSelect = (selectedDate: Date | undefined) => {
@@ -33,13 +38,40 @@ export default function CalendarDropDown({ children }: { children: React.ReactNo
         setDate(selectedDate);
     };
 
+    const modifiers = {
+        withData: daysWithData.map(day => day.date)
+    };
+
+    const modifiersStyles = {
+        withData: {
+            color: 'inherit',
+            '&::after': {
+                content: '"•"',
+                display: 'block',
+                position: 'absolute',
+                bottom: '2px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                fontSize: '12px',
+                color: 'var(--primary)'
+            }
+        }
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent side='right'>
                 <DropdownMenuLabel>Choose Date to Jump on</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <Calendar selected={date} showWeekNumber showOutsideDays onSelect={handleSelect} mode='single' />
+                <Calendar
+                    selected={date}
+                    showOutsideDays
+                    onSelect={handleSelect}
+                    mode='single'
+                    modifiers={modifiers}
+                    modifiersStyles={modifiersStyles}
+                />
             </DropdownMenuContent>
         </DropdownMenu>
     );

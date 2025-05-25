@@ -4,11 +4,36 @@ import { NextRequest, NextResponse } from 'next/server';
 import { uploadFileToCloudinary } from '@/lib/cloudinary';
 
 import fs from 'fs/promises';
+import os from 'os';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 // Ensure this runs in a Node environment
 export const runtime = 'nodejs';
+
+/**
+ * Get appropriate temp directory based on the operating system
+ */
+function getTempDirectory(): string {
+    // Try different temp directory options based on environment
+    const tempDirs = [
+        process.env.TMPDIR,
+        process.env.TMP,
+        process.env.TEMP,
+        '/tmp',
+        os.tmpdir(),
+        path.join(process.cwd(), 'temp')
+    ];
+
+    for (const dir of tempDirs) {
+        if (dir) {
+            return path.join(dir, 'uploads');
+        }
+    }
+
+    // Fallback to current working directory
+    return path.join(process.cwd(), 'temp', 'uploads');
+}
 
 export async function POST(req: NextRequest) {
     try {
@@ -28,7 +53,7 @@ export async function POST(req: NextRequest) {
         const buffer = Buffer.from(arrayBuffer);
 
         // 4️⃣ Write to /tmp (Vercel allows writing here)
-        const tempDir = '/tmp/uploads';
+        const tempDir = getTempDirectory();
         await fs.mkdir(tempDir, { recursive: true });
         const tempFilename = `${uuidv4()}_${fileField.name}`;
         const tempFilePath = path.join(tempDir, tempFilename);
