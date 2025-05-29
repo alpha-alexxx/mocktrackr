@@ -75,3 +75,14 @@ export const updateRecord = async ({ recordId, formData }: { recordId: string; f
 
     return res.data;
 };
+
+export const fetchMarkedDates = async (): Promise<string[]> => {
+    try {
+        const res = await axios.get<{ dates: string[] }>('/api/record/only-date');
+
+        return res.data.dates || [];
+    } catch (error) {
+        console.error('Axios fetch failed:', error);
+        throw new Error('Failed to fetch available records');
+    }
+};

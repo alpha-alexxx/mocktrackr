@@ -200,7 +200,7 @@ const parseDataToTypeSafe = (userId: string, data: any) => {
         testDate: new Date(data.testDate),
         examName: data.examName,
         examCode: data.examCode,
-        examTier: data.examTier === 'tier1' ? 'TIER_1' : data.examTier === 'tier2' ? 'TIER_2' : undefined,
+        examTier: data.examTier || undefined,
         testPlatform: data.testPlatform,
         testLink: data.testLink || null,
         totalQuestions: data.totalQuestions || 0,

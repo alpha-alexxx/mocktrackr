@@ -124,24 +124,20 @@ export default function Dashboard({ user }: { user: User }) {
 
             {/* Daily Stats & View Controls */}
             <div className='mb-6 flex w-full items-center justify-center gap-4'>
-                {dailyStats ? (
-                    <div className='flex w-full space-x-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40'>
-                        <div>
-                            <p className='mb-1 text-sm text-gray-500'>Tests Today</p>
-                            <div className='flex items-center'>
-                                <span className='text-2xl font-semibold'>{dailyStats.totalTests}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <p className='mb-1 text-sm text-gray-500'>Average Score</p>
-                            <div className='flex items-center'>
-                                <span className='text-2xl font-semibold'>{dailyStats.avgScore}%</span>
-                            </div>
+                <div className='flex w-full space-x-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40'>
+                    <div>
+                        <p className='mb-1 text-xs text-gray-500'>Tests today</p>
+                        <div className='flex items-center'>
+                            <span className='text-base font-semibold'>{dailyStats?.totalTests || 0}</span>
                         </div>
                     </div>
-                ) : (
-                    <div className='md:col-span-9'>{/* Empty space when no stats */}</div>
-                )}
+                    <div>
+                        <p className='mb-1 text-xs text-gray-500'>Average Score</p>
+                        <div className='flex items-center'>
+                            <span className='text-base font-semibold'>{dailyStats?.avgScore || 0}%</span>
+                        </div>
+                    </div>
+                </div>
                 <Label htmlFor='show-drafts' className='ml-auto'>
                     <Switch id='show-drafts' checked={showDrafts} onCheckedChange={setShowDrafts} />
                     {showDrafts ? 'Hide' : 'Show'} Drafts

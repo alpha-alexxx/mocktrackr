@@ -48,7 +48,6 @@ export function ViewDashboard({ user, recordId }: { user: ExtendedUser; recordId
                 type: 'error'
             });
         }
-        console.log(record);
         setSections((record && purifySections(record.sectionWise)) || []);
     }, [record, isError]);
     if (isLoading) {

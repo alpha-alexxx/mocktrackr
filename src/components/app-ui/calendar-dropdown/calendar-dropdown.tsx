@@ -11,18 +11,14 @@ import {
 import useDatePicker from '@/stores/date_picker';
 
 import { toast } from 'sonner';
-
-type DayWithDot = {
-    date: Date;
-    hasData: boolean;
-};
+import { formatDate } from 'date-fns';
 
 export default function CalendarDropDown({
     children,
-    daysWithData = []
+    markedDates = []
 }: {
     children: React.ReactNode;
-    daysWithData?: DayWithDot[];
+    markedDates?: string[];
 }) {
     const { date, setDate } = useDatePicker();
 
@@ -32,7 +28,7 @@ export default function CalendarDropDown({
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         if (selectedDate < minDate) {
-            toast.error('You cannot select a date before 1-1-2020');
+            toast.error('You cannot select a date before January 1, 2020');
 
             return;
         }
@@ -44,39 +40,26 @@ export default function CalendarDropDown({
         setDate(selectedDate);
     };
 
-    const modifiers = {
-        withData: daysWithData.map((day) => day.date)
-    };
-
-    const modifiersStyles = {
-        withData: {
-            color: 'inherit',
-            '&::after': {
-                content: '"•"',
-                display: 'block',
-                position: 'absolute',
-                bottom: '2px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                fontSize: '12px',
-                color: 'var(--primary)'
-            }
-        }
-    };
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-            <DropdownMenuContent side='right'>
+            <DropdownMenuContent side='bottom'>
                 <DropdownMenuLabel>Choose Date to Jump on</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <Calendar
                     selected={date}
                     showOutsideDays
                     onSelect={handleSelect}
+                    modifiers={{
+                        marked: (day) => markedDates.includes(formatDate(day, 'MMMM do, yyyy'))
+                    }}
+                    modifiersClassNames={{
+                        marked:
+                            'relative after:content-[""] after:absolute after:top-0.5 after:right-0.5 after:size-2 after:rounded-full after:bg-primary'
+
+                    }}
                     mode='single'
-                    modifiers={modifiers}
-                    modifiersStyles={modifiersStyles}
                 />
             </DropdownMenuContent>
         </DropdownMenu>
