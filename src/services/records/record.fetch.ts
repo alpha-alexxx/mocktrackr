@@ -3,7 +3,7 @@ import { Record } from '@/prisma';
 import { FormData } from '@/stores/form-store';
 
 import axios from 'axios';
-import { formatInTimeZone } from 'date-fns-tz';
+import { formatISO } from 'date-fns';
 
 export interface RecordItem extends Record {
     user: {
@@ -12,11 +12,7 @@ export interface RecordItem extends Record {
 }
 
 export const fetchRecords = async (userId: string, date: Date, recordId?: string): Promise<RecordItem[]> => {
-    const isoDate = formatInTimeZone(
-        new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())),
-        'UTC',
-        'yyyy-MM-dd'
-    );
+    const isoDate = formatISO(date, { representation: 'complete' });
     try {
         const response = await axiosClient.get<{ success: boolean; records: RecordItem[]; message: string }>(
             '/api/record',
@@ -42,11 +38,7 @@ export const fetchRecords = async (userId: string, date: Date, recordId?: string
 };
 
 export const fetchRecord = async (userId: string, date: Date, recordId: string): Promise<RecordItem | null> => {
-    const isoDate = formatInTimeZone(
-        new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())),
-        'UTC',
-        'yyyy-MM-dd'
-    );
+    const isoDate = formatISO(date, { representation: 'complete' });
 
     try {
         const response = await axiosClient.get<{ success: boolean; records: RecordItem; message: string }>(
