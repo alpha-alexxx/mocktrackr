@@ -11,7 +11,7 @@ import {
 import useDatePicker from '@/stores/date_picker';
 
 import { toast } from 'sonner';
-import { formatDate, formatISO } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 
 export default function CalendarDropDown({
     children,
@@ -53,13 +53,15 @@ export default function CalendarDropDown({
                     onSelect={handleSelect}
                     modifiers={{
                         marked: (day) => {
-                            const isoDate = formatISO(day, { representation: 'complete' })
-                            const status = markedDates.includes(formatDate(day, 'yyyy-MM-dd'))
-                            console.log({ status, isoDate })
+                            const utcMidnight = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()));
+                            const dayUTC = formatInTimeZone(utcMidnight, 'UTC', 'yyyy-MM-dd');
 
-                            return status
+                            const isMarked = markedDates.includes(dayUTC);
+
+                            return isMarked;
                         }
                     }}
+
                     modifiersClassNames={{
                         marked:
                             'relative after:content-[""] after:absolute after:top-0.5 after:right-0.5 after:size-2 after:rounded-full after:bg-primary'
