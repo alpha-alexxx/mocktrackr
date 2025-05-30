@@ -11,7 +11,7 @@ import {
 import useDatePicker from '@/stores/date_picker';
 
 import { toast } from 'sonner';
-import { formatDate } from 'date-fns';
+import { formatDate, formatISO } from 'date-fns';
 
 export default function CalendarDropDown({
     children,
@@ -52,7 +52,13 @@ export default function CalendarDropDown({
                     showOutsideDays
                     onSelect={handleSelect}
                     modifiers={{
-                        marked: (day) => markedDates.includes(formatDate(day, 'MMMM do, yyyy'))
+                        marked: (day) => {
+                            const isoDate = formatISO(day, { representation: 'complete' })
+                            const status = markedDates.includes(formatDate(day, 'yyyy-MM-dd'))
+                            console.log({ status, isoDate })
+
+                            return status
+                        }
                     }}
                     modifiersClassNames={{
                         marked:

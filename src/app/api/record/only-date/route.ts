@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { prismaEdge as db } from '@/lib/databases/edge';
 
-import { formatISO } from 'date-fns';
+import { format, formatISO } from 'date-fns';
 
 // adjust path to your prisma client
 
@@ -14,9 +14,7 @@ export async function GET() {
             }
         });
 
-        const uniqueDates = Array.from(
-            new Set(records.map((record) => formatISO(record.testDate, { representation: 'complete' })))
-        );
+        const uniqueDates = Array.from(new Set(records.map((record) => format(record.testDate, 'yyyy-MM-dd'))));
 
         return NextResponse.json({ dates: uniqueDates });
     } catch (error) {

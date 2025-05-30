@@ -16,7 +16,7 @@ import { Skeleton } from '../ui/skeleton';
 export default function DashboardHeader() {
     const { date } = useDatePicker();
 
-    const { data: markedDates = [], isLoading, isError } = useQuery({
+    const { data: markedDates = [], isLoading } = useQuery({
         queryKey: ['available-records'],
         queryFn: fetchMarkedDates,
         staleTime: 1000 * 60 * 5, // cache for 5 mins
