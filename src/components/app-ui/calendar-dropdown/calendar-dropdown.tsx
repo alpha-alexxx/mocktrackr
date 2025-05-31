@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useMemo } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import {
     DropdownMenu,
@@ -9,9 +8,8 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import useDatePicker from '@/stores/date_picker';
-
 import { toast } from 'sonner';
-import { formatInTimeZone } from 'date-fns-tz';
+import { format } from 'date-fns';
 
 export default function CalendarDropDown({
     children,
@@ -22,24 +20,44 @@ export default function CalendarDropDown({
 }) {
     const { date, setDate } = useDatePicker();
 
+    // ✅ Normalize and deduplicate marked dates (strip time, keep only date string)
+
+    const normalizedMarkedDates = useMemo(() => {
+        return Array.from(
+            new Set(
+                markedDates
+                    .map(dateStr => new Date(dateStr))
+                    .filter(d => !isNaN(d.getTime()))
+                    .map(validDate => format(validDate, 'yyyy-MM-dd')) // ✅ LOCAL format
+
+            )
+        );
+    }, [markedDates]);
+
+
+
+    // ✅ Handler for selecting a date from the calendar
     const handleSelect = (selectedDate: Date | undefined) => {
         if (!selectedDate) return;
+
         const minDate = new Date('2020-01-01');
         const today = new Date();
         today.setHours(0, 0, 0, 0);
+
         if (selectedDate < minDate) {
             toast.error('You cannot select a date before January 1, 2020');
 
             return;
         }
+
         if (selectedDate > today) {
             toast.error('You cannot select a date in the future');
 
             return;
         }
+
         setDate(selectedDate);
     };
-
 
     return (
         <DropdownMenu>
@@ -51,23 +69,18 @@ export default function CalendarDropDown({
                     selected={date}
                     showOutsideDays
                     onSelect={handleSelect}
+                    mode='single'
                     modifiers={{
                         marked: (day) => {
-                            const utcMidnight = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()));
-                            const dayUTC = formatInTimeZone(utcMidnight, 'UTC', 'yyyy-MM-dd');
+                            const dayKey = format(day, 'yyyy-MM-dd');
 
-                            const isMarked = markedDates.includes(dayUTC);
-
-                            return isMarked;
+                            return normalizedMarkedDates.includes(dayKey);
                         }
                     }}
-
                     modifiersClassNames={{
                         marked:
                             'relative after:content-[""] after:absolute after:top-0.5 after:right-0.5 after:size-2 after:rounded-full after:bg-primary'
-
                     }}
-                    mode='single'
                 />
             </DropdownMenuContent>
         </DropdownMenu>

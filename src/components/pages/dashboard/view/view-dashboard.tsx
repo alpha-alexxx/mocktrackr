@@ -94,33 +94,14 @@ export function ViewDashboard({ user, recordId }: { user: ExtendedUser; recordId
                     <ArrowLeft className='h-5 w-5' />
                     <span className='sr-only'>Back</span>
                 </Button>
-                <h1 className='text-xl md:text-2xl font-bold'>MockTrackr Test Report</h1>
+                <h1 className='text-xl font-bold md:text-2xl'>MockTrackr Test Report</h1>
             </header>
             <div className='gap-6'>
                 {/* Left Column */}
                 <div className='space-y-6'>
                     {/* Test Summary */}
                     <TestSummary
-                        recordId={record.id}
-                        examName={record.examName}
-                        examTier={record.examTier || undefined}
-                        percentile={record.percentile!}
-                        rank={record.rank as string}
-                        testDate={record.testDate}
-                        testName={record.testName}
-                        testPlatform={record.testPlatform}
-                        obtainedMarks={record.obtainedMarks}
-                        totalMarks={record.totalMarks}
-                        totalQuestions={record.totalQuestions}
-                        attemptedQuestions={record.attemptedQuestions}
-                        testLink={record.testLink || ''}
-                        totalCorrectMarks={record.totalCorrectMarks}
-                        totalWrongMarks={record.totalWrongMarks}
-                        totalCorrectQuestions={record.totalCorrectQuestions}
-                        totalWrongQuestions={record.totalWrongQuestions}
-                        totalSkippedQuestions={record.totalSkippedQuestions}
-                        totalTime={record.totalTime}
-                        totalTimeTaken={record.totalTimeTaken}
+                        record={record}
                     />
 
                     {/* Performance Overview */}

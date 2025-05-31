@@ -1,8 +1,16 @@
 import Link from 'next/link';
 
 import DownloadPdfIcon from '@/assets/icon/download-pdf';
+import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { cn, formatTime } from '@/lib/utils';
 import { RecordItem } from '@/services/records/record.fetch';
 
@@ -27,28 +35,22 @@ import {
     XCircle
 } from 'lucide-react';
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Badge } from '@/components/ui/badge';
-
 export const ListCard = ({ record }: { record: RecordItem }) => {
     const accuracyPercentage = (record.totalCorrectQuestions / record.totalQuestions) * 100;
-    console.log({ record })
 
     return (
         <Card className='gap-4 border-2 p-3 shadow-xs transition-shadow select-none hover:shadow-sm dark:border-gray-700'>
             {/* Header Section */}
-            <CardHeader className='flex w-full flex-col p-0 sm:flex-row sm:justify-between items-center'>
+            <CardHeader className='flex w-full flex-col items-center p-0 sm:flex-row sm:justify-between'>
                 <div className='flex flex-row items-center justify-center gap-2'>
                     <h3 className='flex items-center text-lg font-bold text-gray-900 dark:text-gray-100'>
                         {record.testName}
                     </h3>
-                    {record.examTier && <Badge variant={'secondary'} className='text-xs'>Tier {record.examTier.split('_')[1]}</Badge>}
+                    {record.examTier && (
+                        <Badge variant={'secondary'} className='text-xs'>
+                            Tier {record.examTier.split('_')[1]}
+                        </Badge>
+                    )}
                 </div>
                 <div className='mt-2 flex gap-2 sm:mt-0'>
                     {record.testLink && (
@@ -75,35 +77,45 @@ export const ListCard = ({ record }: { record: RecordItem }) => {
                                 <MoreVertical className='size-4 text-gray-500' />
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className='flex flex-col mr-4'>
+                        <DropdownMenuContent className='mr-4 flex flex-col'>
                             <DropdownMenuItem asChild>
                                 <PDFDialog record={record}>
-                                    <span title='Download PDF Report' className={cn('flex flex-row items-center gap-2 text-sm', buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                                    <span
+                                        title='Download PDF Report'
+                                        className={cn(
+                                            'flex flex-row items-center gap-2 text-sm',
+                                            buttonVariants({ variant: 'ghost', size: 'sm' })
+                                        )}>
                                         <DownloadPdfIcon className='h-4 w-4 text-red-500' /> Export as PDF
                                     </span>
                                 </PDFDialog>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/edit/${record.id}?from=/dashboard`} title='Edit the record' className={cn('flex flex-row items-center gap-2 text-sm', buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                                <Link
+                                    href={`/dashboard/edit/${record.id}?from=/dashboard`}
+                                    title='Edit the record'
+                                    className={cn(
+                                        'flex flex-row items-center gap-2 text-sm',
+                                        buttonVariants({ variant: 'ghost', size: 'sm' })
+                                    )}>
                                     <Pencil className='size-4' /> Edit Record
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
                                 <DeleteRecordDialog recordId={record.id}>
-                                    <span title='Delete Record' className={cn('flex flex-row items-center gap-2 text-sm border border-rose-500 bg-rose-500/20', buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                                    <span
+                                        title='Delete Record'
+                                        className={cn(
+                                            'flex flex-row items-center gap-2 border border-rose-500 bg-rose-500/20 text-sm',
+                                            buttonVariants({ variant: 'ghost', size: 'sm' })
+                                        )}>
                                         <Trash2 className='size-4' /> Delete Record
                                     </span>
                                 </DeleteRecordDialog>
                             </DropdownMenuItem>
-
                         </DropdownMenuContent>
                     </DropdownMenu>
-
-
-
-
-
                 </div>
             </CardHeader>
 

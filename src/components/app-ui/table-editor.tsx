@@ -16,6 +16,8 @@ import { Plus, Redo2, Trash2, Undo2 } from 'lucide-react';
 
 // components/TableEditor.tsx
 
+// components/TableEditor.tsx
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // components/TableEditor.tsx

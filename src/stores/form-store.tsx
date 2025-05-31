@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { ExamTier } from '@/prisma';
 
+import { format, isValid, parseISO } from 'date-fns';
 import Dexie from 'dexie';
 import type { Table } from 'dexie';
 import { v4 } from 'uuid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { isValid, parseISO, format } from 'date-fns';
 
 /**
  * Represents a toast notification message.
@@ -328,9 +328,7 @@ export const useFormStore = create<FormState>()(
                             ? format(date as Date, 'yyyy-MM-dd')
                             : format(parseISO(String(date)), 'yyyy-MM-dd');
 
-                        allDrafts = allDrafts.filter((d) =>
-                            format(new Date(d.savedAt), 'yyyy-MM-dd') === targetDate
-                        );
+                        allDrafts = allDrafts.filter((d) => format(new Date(d.savedAt), 'yyyy-MM-dd') === targetDate);
                     }
 
                     return allDrafts;

@@ -30,6 +30,8 @@ import { type Editor, isNodeSelection } from '@tiptap/react';
 
 /* eslint-disable import/named */
 
+/* eslint-disable import/named */
+
 export interface HeadingDropdownMenuProps extends Omit<ButtonProps, 'type'> {
     editor?: Editor | null;
     levels?: Level[];

@@ -25,6 +25,9 @@ import { type Editor, isNodeSelection } from '@tiptap/react';
 /* eslint-disable import/named */
 /* eslint-disable no-unused-vars */
 
+/* eslint-disable import/named */
+/* eslint-disable no-unused-vars */
+
 export interface LinkHandlerProps {
     editor: Editor | null;
     onSetLink?: () => void;

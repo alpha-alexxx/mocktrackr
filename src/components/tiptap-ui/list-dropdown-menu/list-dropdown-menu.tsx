@@ -30,6 +30,8 @@ import { useTiptapEditor } from '@/hooks/use-tiptap-editor';
 import { isNodeInSchema } from '@/lib/tiptap-utils';
 import { type Editor, isNodeSelection } from '@tiptap/react';
 
+/* eslint-disable import/named */
+/* eslint-disable no-unused-vars */
 
 export interface ListDropdownMenuProps extends Omit<ButtonProps, 'type'> {
     /**

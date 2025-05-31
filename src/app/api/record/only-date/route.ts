@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 
 import { prismaEdge as db } from '@/lib/databases/edge';
 
-import { formatInTimeZone } from 'date-fns-tz';
-
 // adjust path to your prisma client
 
 export async function GET() {
@@ -14,11 +12,7 @@ export async function GET() {
             }
         });
 
-        const utcDateStrings = records.map((r) => formatInTimeZone(r.testDate, 'UTC', 'yyyy-MM-dd'));
-
-        const uniqueDates = Array.from(new Set(utcDateStrings));
-
-        return NextResponse.json({ dates: uniqueDates });
+        return NextResponse.json({ dates: records.map((r) => r.testDate) });
     } catch (error) {
         console.error('Failed to fetch available records:', error);
 

@@ -27,33 +27,16 @@ import {
     Timer,
     XCircle
 } from 'lucide-react';
+import PDFDialog from '../pdf/pdf-dialog';
+import { RecordItem } from '@/services/records/record.fetch';
 
 interface TestSummaryProps {
-    recordId: string;
-    testName: string;
-    testDate: Date;
-    examTier?: string;
-    examName: string;
-    testPlatform: string;
-    percentile: number;
-    obtainedMarks: number;
-    totalMarks: number;
-    totalQuestions: number;
-    rank: string;
-    testLink: string;
-    totalTimeTaken: string;
-    totalTime: string;
-    attemptedQuestions: number;
-    totalSkippedQuestions: number;
-    totalCorrectQuestions: number;
-    totalWrongQuestions: number;
-    totalCorrectMarks: number;
-    totalWrongMarks: number;
+    record: RecordItem
 }
 
-export function TestSummary(record: TestSummaryProps) {
+export function TestSummary({ record }: TestSummaryProps) {
     const {
-        recordId,
+        id: recordId,
         examTier,
         attemptedQuestions,
         examName,
@@ -86,7 +69,16 @@ export function TestSummary(record: TestSummaryProps) {
             ? ((totalCorrectQuestions / (totalCorrectQuestions + totalWrongQuestions)) * 100).toFixed(2)
             : 0;
     // Extract rank numbers
-    const [rankPosition, totalParticipants] = rank.split('/').map((num) => Number.parseInt(num.replace(/,/g, '')));
+    let rankPosition: number | null = null;
+    let totalParticipants: number | null = null;
+
+    if (typeof rank === 'string' && rank.includes('/')) {
+        const [pos, total] = rank.split('/').map(part => parseInt(part.replace(/[^\d]/g, ''), 10));
+        if (!isNaN(pos) && !isNaN(total)) {
+            rankPosition = pos;
+            totalParticipants = total;
+        }
+    }
 
     // Format time efficiency
     const timeEfficiency =
@@ -101,7 +93,6 @@ export function TestSummary(record: TestSummaryProps) {
                     <div className='bg-primary/10 dark:bg-primary/20 flex items-center justify-between border-b p-2 md:p-4'>
                         <div className='flex flex-col space-y-1'>
                             <div className='flex flex-row items-center justify-start gap-2'>
-
                                 <h2 className='text-xl font-semibold'>{testName}</h2>
                                 {examTier && (
                                     <Badge variant='default' className='text-white'>
@@ -109,17 +100,15 @@ export function TestSummary(record: TestSummaryProps) {
                                     </Badge>
                                 )}
                             </div>
-                            <div className='text-muted-foreground flex items-start md:items-center text-xs gap-2 flex-col sm:flex-row'>
-                                <div className="flex flex-row items-center justify-center gap-2">
+                            <div className='text-muted-foreground flex flex-col items-start gap-2 text-xs sm:flex-row md:items-center'>
+                                <div className='flex flex-row items-center justify-center gap-2'>
                                     <Calendar className='size-4' />
                                     <span>{formattedDate}</span>
                                 </div>
-                                <div className='flex items-center flex-row justify-center gap-2'>
+                                <div className='flex flex-row items-center justify-center gap-2'>
                                     <School className='size-4' />
                                     <span className='font-medium'>{examName}</span>
                                 </div>
-
-
                             </div>
                         </div>
                         <Button variant='outline' className='border-2 dark:border-white/50' asChild>
@@ -167,29 +156,34 @@ export function TestSummary(record: TestSummaryProps) {
                                         </TooltipProvider>
                                     </div>
                                 </div>
+
                                 {/* Percentile */}
-                                <div className='flex items-center justify-between'>
-                                    <div className='flex items-center'>
-                                        <ChartNoAxesCombined className='text-primary mr-2 h-5 w-5' />
-                                        <span className='font-medium'>Percentile</span>
+                                {
+                                    percentile &&
+                                    <div className='flex items-center justify-between'>
+                                        <div className='flex items-center'>
+                                            <ChartNoAxesCombined className='text-primary mr-2 h-5 w-5' />
+                                            <span className='font-medium'>Percentile</span>
+                                        </div>
+                                        <div className='flex items-center'>
+                                            <span className='text-lg font-bold'>{percentile.toFixed(2)}%</span>
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Info className='text-muted-foreground ml-1 h-4 w-4 cursor-help' />
+                                                    </TooltipTrigger>
+                                                    <TooltipContent className='text-white'>
+                                                        <p>
+                                                            You performed better than {percentile.toFixed(2)}% of test
+                                                            takers
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                        </div>
                                     </div>
-                                    <div className='flex items-center'>
-                                        <span className='text-lg font-bold'>{percentile.toFixed(2)}%</span>
-                                        <TooltipProvider>
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <Info className='text-muted-foreground ml-1 h-4 w-4 cursor-help' />
-                                                </TooltipTrigger>
-                                                <TooltipContent className='text-white'>
-                                                    <p>
-                                                        You performed better than {percentile.toFixed(2)}% of test
-                                                        takers
-                                                    </p>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
-                                    </div>
-                                </div>
+                                }
+
                                 {/* Rank */}
                                 <div className='flex items-center justify-between'>
                                     <div className='flex items-center'>
@@ -240,17 +234,19 @@ export function TestSummary(record: TestSummaryProps) {
                                     <div className='flex w-full flex-col items-center justify-between gap-2'>
                                         {testLink && (
                                             <Button variant='secondary' className='w-full' size='default' asChild>
-                                                <Link href={testLink} target='_blank' rel='noopener noreferrer'>
+                                                <a href={testLink} target='_blank' rel='noopener noreferrer'>
                                                     <ExternalLink className='h-3.5 w-3.5' />
                                                     <span>View Test</span>
-                                                </Link>
+                                                </a>
                                             </Button>
                                         )}
                                         <Button variant='outline' className='w-full' asChild>
-                                            <a href={testLink} target='_blank' rel='noopener noreferrer'>
-                                                <DownloadPdfIcon className='size-5 text-rose-500' />
-                                                <span>Download Report</span>
-                                            </a>
+                                            <PDFDialog record={record}>
+                                                <Button className='w-full' variant={'outline'}>
+                                                    <DownloadPdfIcon className='size-5 text-rose-500' />
+                                                    <span>Download Report</span>
+                                                </Button>
+                                            </PDFDialog>
                                         </Button>
                                     </div>
                                 </div>

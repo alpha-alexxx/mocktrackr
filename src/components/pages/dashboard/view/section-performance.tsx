@@ -47,7 +47,7 @@ export function SectionPerformance({ sections }: { sections: Section[] }) {
                                             <div className='text-muted-foreground flex items-center gap-2 text-sm'>
                                                 <Badge
                                                     variant='default'
-                                                    className='hidden md:flex bg-primary/20 border-primary text-foreground ml-2 border'>
+                                                    className='bg-primary/20 border-primary text-foreground ml-2 hidden border md:flex'>
                                                     {section.obtainedMarks}/{section.totalMarks}
                                                 </Badge>
                                                 <span className='flex items-center'>
@@ -232,7 +232,7 @@ export function SectionPerformance({ sections }: { sections: Section[] }) {
                                                     <div className='border-t pt-2 text-sm'>
                                                         {section.keyPoints && (
                                                             <div className='mb-1 flex flex-col items-start gap-1'>
-                                                                <div className='flex flex-row gap-2 items-center justify-center'>
+                                                                <div className='flex flex-row items-center justify-center gap-2'>
                                                                     <AlertCircle className='h-4 w-4 shrink-0 text-amber-500' />
                                                                     What Went Wrong:
                                                                 </div>

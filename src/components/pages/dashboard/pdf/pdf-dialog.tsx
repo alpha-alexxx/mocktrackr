@@ -1,14 +1,17 @@
 'use client';
-import { pdf, Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+
+import { useCallback } from 'react';
+
+import DownloadPdfIcon from '@/assets/icon/download-pdf';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { formatTime } from '@/lib/utils';
 import { purifySections } from '@/services/records/purify-sections';
 import { RecordItem } from '@/services/records/record.fetch';
 import { Section } from '@/stores/form-store';
-import { Button } from '@/components/ui/button';
-import { useCallback } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import DownloadPdfIcon from '@/assets/icon/download-pdf';
+import { Document, PDFViewer, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer';
+
 import { formatDate } from 'date-fns';
 
 // Types
@@ -28,11 +31,9 @@ type PDFTableProps = {
 };
 
 export default function PDFDialog({ record, children }: { children: React.ReactNode; record: RecordItem }) {
-
     const handleDownload = useCallback(async () => {
         const blob = await pdf(<PDFContent record={record} />).toBlob();
         const url = URL.createObjectURL(blob);
-
 
         const a = document.createElement('a');
         a.href = url;
@@ -41,23 +42,23 @@ export default function PDFDialog({ record, children }: { children: React.ReactN
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
-    }, [record])
+    }, [record]);
 
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className='h-full min-w-screen'>
                 <DialogTitle className='sr-only'>Test Report</DialogTitle>
-                <Card className='p-2 md:p-4 shadow-none border-none'>
-                    <CardHeader className='flex flex-row h-fit w-full items-center justify-between'>
+                <Card className='border-none p-2 shadow-none md:p-4'>
+                    <CardHeader className='flex h-fit w-full flex-row items-center justify-between'>
                         <span className='text-xl font-bold md:text-2xl'>{record.testName}</span>
                         <Button onClick={handleDownload} variant={'destructive'}>
-                            <DownloadPdfIcon className='size-5 mr-2' />
+                            <DownloadPdfIcon className='mr-2 size-5' />
                             Download PDF
                         </Button>
                     </CardHeader>
-                    <CardContent className='w-full h-screen'>
-                        <PDFViewer className='w-full h-full' >
+                    <CardContent className='h-screen w-full'>
+                        <PDFViewer className='h-full w-full'>
                             <PDFContent record={record} />
                         </PDFViewer>
                     </CardContent>
@@ -72,44 +73,44 @@ function PDFContent({ record }: { record: RecordItem }) {
         page: {
             padding: 10,
             fontSize: 12,
-            fontFamily: 'Helvetica',
+            fontFamily: 'Helvetica'
         },
         headerTxt: {
             fontSize: 18,
             fontWeight: 'bold',
             textAlign: 'center',
-            marginBottom: 10,
+            marginBottom: 10
         },
         headerSection: {
             borderWidth: 1,
             borderColor: '#ccc',
             borderStyle: 'solid',
             borderRadius: 5,
-            padding: 10,
+            padding: 10
         },
         tableRow: {
             flexDirection: 'row',
             justifyContent: 'space-between',
             paddingVertical: 5,
-            alignItems: 'center',
+            alignItems: 'center'
         },
         tableCell: {
             flexDirection: 'row',
-            gap: 4,
+            gap: 4
         },
         tableCellLabel: {
             paddingRight: 5,
-            fontWeight: '600',
+            fontWeight: '600'
         },
         tableCellValue: {
-            textDecoration: 'underline',
+            textDecoration: 'underline'
         },
         label: {
             fontWeight: '600',
-            color: '#444',
+            color: '#444'
         },
         value: {
-            color: '#000',
+            color: '#000'
         },
         sectionContainer: {
             borderWidth: 1,
@@ -117,32 +118,32 @@ function PDFContent({ record }: { record: RecordItem }) {
             borderStyle: 'solid',
             borderRadius: 5,
             padding: 10,
-            marginVertical: 10,
+            marginVertical: 10
         },
         sectionTitle: {
             fontSize: 14,
             fontWeight: 'bold',
             marginBottom: 8,
-            color: '#222',
+            color: '#222'
         },
         sectionTable: {
-            flexDirection: 'column',
+            flexDirection: 'column'
         },
         sectionTableRow: {
             flexDirection: 'row',
             borderBottomWidth: 1,
             borderBottomColor: '#ccc',
             paddingVertical: 5,
-            alignItems: 'center',
+            alignItems: 'center'
         },
         sectionTableCell: {
             flex: 1,
-            alignItems: 'center',
+            alignItems: 'center'
         },
         sectionTableCellValue: {
             fontWeight: '600',
-            fontSize: 14,
-        },
+            fontSize: 14
+        }
     });
 
     const {
@@ -153,14 +154,14 @@ function PDFContent({ record }: { record: RecordItem }) {
         rank,
         totalMarks,
         obtainedMarks,
-        sectionWise,
+        sectionWise
     } = record;
 
     const sections = purifySections(sectionWise);
 
     return (
         <Document>
-            <Page size="A4" style={styles.page}>
+            <Page size='A4' style={styles.page}>
                 <Text style={styles.headerTxt}>MockTrackr Report</Text>
 
                 <View style={styles.headerSection}>
@@ -192,7 +193,9 @@ function PDFContent({ record }: { record: RecordItem }) {
                         </View>
                         <View style={styles.tableCell}>
                             <Text style={styles.label}>Total Marks:</Text>
-                            <Text style={styles.value}>{obtainedMarks} / {totalMarks}</Text>
+                            <Text style={styles.value}>
+                                {obtainedMarks} / {totalMarks}
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -238,21 +241,25 @@ function PDFContent({ record }: { record: RecordItem }) {
                                     </View>
                                     <View style={styles.sectionTableCell}>
                                         <Text>Time Taken</Text>
-                                        <Text style={styles.sectionTableCellValue}>{formatTime(section.timeTaken)}</Text>
+                                        <Text style={styles.sectionTableCellValue}>
+                                            {formatTime(section.timeTaken)}
+                                        </Text>
                                     </View>
                                     <View style={styles.sectionTableCell}>
                                         <Text>My Marks</Text>
-                                        <Text style={styles.sectionTableCellValue}>{section.obtainedMarks} / {section.totalMarks}</Text>
+                                        <Text style={styles.sectionTableCellValue}>
+                                            {section.obtainedMarks} / {section.totalMarks}
+                                        </Text>
                                     </View>
                                 </View>
                             </View>
 
-                            {keyPoints &&
+                            {keyPoints && (
                                 <View>
                                     <Text>What Went Wrong:</Text>
                                     <PDFTable data={keyPoints} />
                                 </View>
-                            }
+                            )}
                         </View>
                     );
                 })}
@@ -267,13 +274,13 @@ function PDFTable({ data }: { data?: PDFTableProps }) {
             marginVertical: 10,
             borderWidth: 1,
             borderColor: '#ccc',
-            borderStyle: 'solid',
+            borderStyle: 'solid'
         },
         row: {
             flexDirection: 'row',
             alignItems: 'center',
             borderBottomWidth: 1,
-            borderBottomColor: '#ccc',
+            borderBottomColor: '#ccc'
         },
         headerCell: {
             flex: 1,
@@ -283,7 +290,7 @@ function PDFTable({ data }: { data?: PDFTableProps }) {
             fontWeight: 'bold',
             textAlign: 'center',
             borderRightWidth: 1,
-            borderRightColor: '#ccc',
+            borderRightColor: '#ccc'
         },
         cell: {
             flex: 1,
@@ -291,25 +298,25 @@ function PDFTable({ data }: { data?: PDFTableProps }) {
             fontSize: 10,
             textAlign: 'center',
             borderRightWidth: 1,
-            borderRightColor: '#ccc',
+            borderRightColor: '#ccc'
         },
         lastCell: {
-            borderRightWidth: 0,
+            borderRightWidth: 0
         },
         correct: {
             color: 'green',
-            fontWeight: 'bold',
+            fontWeight: 'bold'
         },
         wrong: {
             color: 'red',
-            fontWeight: 'bold',
+            fontWeight: 'bold'
         },
         defaultText: {
-            color: '#333',
+            color: '#333'
         },
         italic: {
-            fontStyle: 'italic',
-        },
+            fontStyle: 'italic'
+        }
     });
 
     const renderCell = (cell: TableCellData) => {
@@ -334,12 +341,7 @@ function PDFTable({ data }: { data?: PDFTableProps }) {
                 {data.headers.map((header, idx) => (
                     <Text
                         key={idx}
-                        style={
-
-                            styles.headerCell && idx === data.headers.length - 1 ? styles.lastCell : undefined
-
-                        }
-                    >
+                        style={[styles.headerCell, ...(idx === data.headers.length - 1 ? [styles.lastCell] : [])]}>
                         {header}
                     </Text>
                 ))}
@@ -350,7 +352,7 @@ function PDFTable({ data }: { data?: PDFTableProps }) {
                     {row.cells.map((cell, idx) => (
                         <View
                             key={idx}
-                            style={styles.cell && idx === row.cells.length - 1 ? styles.lastCell : undefined}
+                            style={[styles.cell, ...(idx === row.cells.length - 1 ? [styles.lastCell] : [])]}
                         >
                             {renderCell(cell)}
                         </View>
