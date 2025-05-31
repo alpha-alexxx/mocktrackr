@@ -87,14 +87,14 @@ export function ViewDashboard({ user, recordId }: { user: ExtendedUser; recordId
     }
 
     return (
-        <div className='container mx-auto max-w-7xl px-4 py-6 transition-all duration-500 select-none'>
+        <div className='container mx-auto max-w-7xl transition-all duration-500 select-none'>
             {/* Header */}
             <header className='mb-6 flex items-center'>
                 <Button variant='ghost' size='icon' className='mr-2' onClick={() => router.back()}>
                     <ArrowLeft className='h-5 w-5' />
                     <span className='sr-only'>Back</span>
                 </Button>
-                <h1 className='text-2xl font-bold'>MockTrackr Test Report</h1>
+                <h1 className='text-xl md:text-2xl font-bold'>MockTrackr Test Report</h1>
             </header>
             <div className='gap-6'>
                 {/* Left Column */}
@@ -124,8 +124,8 @@ export function ViewDashboard({ user, recordId }: { user: ExtendedUser; recordId
                     />
 
                     {/* Performance Overview */}
-                    <Card>
-                        <CardContent className='p-6'>
+                    <Card className='p-2 md:p-4'>
+                        <CardContent className='p-0'>
                             <h2 className='mb-4 text-xl font-semibold'>Performance Overview</h2>
                             <PerformanceOverview
                                 obtainedMarks={record.obtainedMarks}

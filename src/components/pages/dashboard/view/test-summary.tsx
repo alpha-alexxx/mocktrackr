@@ -98,22 +98,28 @@ export function TestSummary(record: TestSummaryProps) {
         <div className='relative'>
             <Card className='relative gap-2 overflow-hidden p-0'>
                 <CardHeader className='p-0'>
-                    <div className='bg-primary/10 dark:bg-primary/20 flex items-center justify-between border-b p-4'>
+                    <div className='bg-primary/10 dark:bg-primary/20 flex items-center justify-between border-b p-2 md:p-4'>
                         <div className='flex flex-col space-y-1'>
-                            <h2 className='text-xl font-semibold'>{testName}</h2>
-                            <div className='text-muted-foreground flex items-center text-sm'>
-                                <Calendar className='mr-1.5 h-4 w-4' />
-                                <span>{formattedDate}</span>
-                                <Separator orientation='vertical' className='mx-2 h-4' />
-                                <School className='mr-1.5 h-4 w-4' />
-                                <div className='flex items-center gap-2'>
-                                    <span className='font-medium'>{examName}</span>
-                                    {examTier && (
-                                        <Badge variant='default' className='text-white'>
-                                            Tier {examTier.split('_')[1]}
-                                        </Badge>
-                                    )}
+                            <div className='flex flex-row items-center justify-start gap-2'>
+
+                                <h2 className='text-xl font-semibold'>{testName}</h2>
+                                {examTier && (
+                                    <Badge variant='default' className='text-white'>
+                                        Tier {examTier.split('_')[1]}
+                                    </Badge>
+                                )}
+                            </div>
+                            <div className='text-muted-foreground flex items-start md:items-center text-xs gap-2 flex-col sm:flex-row'>
+                                <div className="flex flex-row items-center justify-center gap-2">
+                                    <Calendar className='size-4' />
+                                    <span>{formattedDate}</span>
                                 </div>
+                                <div className='flex items-center flex-row justify-center gap-2'>
+                                    <School className='size-4' />
+                                    <span className='font-medium'>{examName}</span>
+                                </div>
+
+
                             </div>
                         </div>
                         <Button variant='outline' className='border-2 dark:border-white/50' asChild>
@@ -121,14 +127,14 @@ export function TestSummary(record: TestSummaryProps) {
                                 href={`/dashboard/edit/${recordId}?from=/dashboard/view/${recordId}`}
                                 rel='noopener noreferrer'>
                                 <Edit className='size-5 text-emerald-500' />
-                                <span className='font-medium'>Edit Record</span>
+                                <span className='font-medium'>Edit</span>
                             </Link>
                         </Button>
                     </div>
                 </CardHeader>
                 <CardContent className='p-2'>
                     {/* Main Content */}
-                    <div className='p-4'>
+                    <div className='p-2 md:p-4'>
                         <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
                             {/* Left Column - Performance Metrics */}
                             <div className='space-y-4'>

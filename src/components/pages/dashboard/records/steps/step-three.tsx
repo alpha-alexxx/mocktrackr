@@ -331,21 +331,23 @@ export default function StepThree() {
         },
         [form]
     );
-
+    const debouncedSetKeyPoints = useMemo(
+        () =>
+            debounce((index: number, newValue: string) => {
+                form.setValue(`sections.${index}.keyPoints`, newValue, { shouldDirty: true });
+            }, 1000),
+        [form]
+    );
     const handleTableChange = useCallback(
         (index: number, value: TableData) => {
-            // Prevent unnecessary re-renders by comparing the current value with the new value
-            const currentValue = form.getValues(`sections.${index}.keyPoints`);
             const newValue = JSON.stringify(value);
+            const currentValue = form.getValues(`sections.${index}.keyPoints`);
 
-            debounce(() => {
-                // Only update if the value has actually changed
-                if (currentValue !== newValue) {
-                    form.setValue(`sections.${index}.keyPoints`, newValue, { shouldDirty: true });
-                }
-            }, 1000);
+            if (currentValue !== newValue) {
+                debouncedSetKeyPoints(index, newValue);
+            }
         },
-        [form]
+        [form, debouncedSetKeyPoints]
     );
 
     if (!subjects.length) {

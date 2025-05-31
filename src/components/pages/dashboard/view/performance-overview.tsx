@@ -46,6 +46,13 @@ export interface PerformanceOverviewProps {
     }[];
 }
 
+const tabListData = [
+    { value: 'radar', label: 'Performance Radar' },
+    { value: 'distribution', label: 'Question Distribution' },
+    { value: 'subjects', label: 'Subject Breakdown' },
+    { value: 'marks', label: 'Marks Analysis' },
+
+]
 export function PerformanceOverview(record: PerformanceOverviewProps) {
     // Prepare data for stacked bar chart
     const stackedBarData = record.sectionWise.map((section) => {
@@ -144,11 +151,12 @@ export function PerformanceOverview(record: PerformanceOverviewProps) {
         <div className='space-y-6'>
             {/* Chart Visualizations */}
             <Tabs defaultValue='radar' className='w-full'>
-                <TabsList className='mb-4 grid grid-cols-4 md:w-auto'>
-                    <TabsTrigger value='radar'>Performance Radar</TabsTrigger>
-                    <TabsTrigger value='distribution'>Question Distribution</TabsTrigger>
-                    <TabsTrigger value='subjects'>Subject Breakdown</TabsTrigger>
-                    <TabsTrigger value='marks'>Marks Analysis</TabsTrigger>
+                <TabsList className='mb-4 grid grid-rows-2 grid-cols-2 md:grid-rows-none md:grid-cols-4 gap-x-2 md:gap-x-0 size-auto'>
+                    {
+                        tabListData.map((tab) => (
+                            <TabsTrigger className='text-xs' value={tab.value} key={tab.label}>{tab.label}</TabsTrigger>
+                        ))
+                    }
                 </TabsList>
 
                 {/* Radar Chart */}

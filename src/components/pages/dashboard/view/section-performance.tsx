@@ -15,7 +15,7 @@ import { AlertCircle, AlignJustify, Check, Clock, LayoutGrid, Lightbulb, X } fro
 
 export function SectionPerformance({ sections }: { sections: Section[] }) {
     return (
-        <Card className='p-4'>
+        <Card className='p-2 md:p-4'>
             <Tabs defaultValue='accordion' className='w-full'>
                 <CardHeader className='p-0'>
                     <div className='flex items-center justify-between'>
@@ -47,7 +47,7 @@ export function SectionPerformance({ sections }: { sections: Section[] }) {
                                             <div className='text-muted-foreground flex items-center gap-2 text-sm'>
                                                 <Badge
                                                     variant='default'
-                                                    className='bg-primary/20 border-primary text-foreground ml-2 border'>
+                                                    className='hidden md:flex bg-primary/20 border-primary text-foreground ml-2 border'>
                                                     {section.obtainedMarks}/{section.totalMarks}
                                                 </Badge>
                                                 <span className='flex items-center'>
@@ -231,13 +231,12 @@ export function SectionPerformance({ sections }: { sections: Section[] }) {
                                                 {(section.keyPoints || section.sectionLearnings) && (
                                                     <div className='border-t pt-2 text-sm'>
                                                         {section.keyPoints && (
-                                                            <div className='mb-1 flex items-start gap-1'>
-                                                                <AlertCircle className='mt-0.5 h-4 w-4 shrink-0 text-amber-500' />
-                                                                <div
-                                                                    dangerouslySetInnerHTML={{
-                                                                        __html: section.keyPoints
-                                                                    }}
-                                                                />
+                                                            <div className='mb-1 flex flex-col items-start gap-1'>
+                                                                <div className='flex flex-row gap-2 items-center justify-center'>
+                                                                    <AlertCircle className='h-4 w-4 shrink-0 text-amber-500' />
+                                                                    What Went Wrong:
+                                                                </div>
+                                                                <TableViewer data={JSON.parse(section.keyPoints)} />
                                                             </div>
                                                         )}
                                                     </div>
