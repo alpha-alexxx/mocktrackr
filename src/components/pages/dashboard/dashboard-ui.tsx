@@ -219,7 +219,7 @@ export default function Dashboard({ user }: { user: User }) {
                             )}>
                             <span className='sticky font-semibold'>Total Drafts: {drafts.length}</span>
                             <ScrollArea className='max-h-[300px] overflow-y-auto'>
-                                <div className='flex flex-col items-center justify-center gap-2 px-4'>
+                                <div className='flex flex-col items-center justify-center gap-2'>
                                     {(drafts ?? []).map((draft) => (
                                         <DraftCard key={draft.id} draft={draft} />
                                     ))}

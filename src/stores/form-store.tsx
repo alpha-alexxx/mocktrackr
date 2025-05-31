@@ -6,6 +6,7 @@ import type { Table } from 'dexie';
 import { v4 } from 'uuid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { isValid, parseISO, format } from 'date-fns';
 
 /**
  * Represents a toast notification message.
@@ -323,8 +324,13 @@ export const useFormStore = create<FormState>()(
                 try {
                     let allDrafts = await db.drafts.orderBy('savedAt').reverse().toArray();
                     if (date) {
-                        const targetDate = (date as Date).toDateString();
-                        allDrafts = allDrafts.filter((d) => new Date(d.savedAt).toDateString() === targetDate);
+                        const targetDate = isValid(date)
+                            ? format(date as Date, 'yyyy-MM-dd')
+                            : format(parseISO(String(date)), 'yyyy-MM-dd');
+
+                        allDrafts = allDrafts.filter((d) =>
+                            format(new Date(d.savedAt), 'yyyy-MM-dd') === targetDate
+                        );
                     }
 
                     return allDrafts;
