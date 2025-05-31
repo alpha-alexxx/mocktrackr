@@ -1,159 +1,150 @@
 'use client';
-
-import { forwardRef, useRef, useState } from 'react';
-
-import DownloadPdfIcon from '@/assets/icon/download-pdf';
-import { Button } from '@/components/ui/button';
+import { pdf, Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/renderer';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
 import { formatTime } from '@/lib/utils';
 import { purifySections } from '@/services/records/purify-sections';
 import { RecordItem } from '@/services/records/record.fetch';
+import { Section } from '@/stores/form-store';
+import { Button } from '@/components/ui/button';
+import { useCallback } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import DownloadPdfIcon from '@/assets/icon/download-pdf';
+import { formatDate } from 'date-fns';
 
-import TableViewer from '../table-viewer';
-import InsightDisplay from '../view/insight-display';
-import { format } from 'date-fns';
-import { BookOpen, Loader2 } from 'lucide-react';
+// Types
+type TableCellData = {
+    type: 'input' | 'select' | 'textarea';
+    value: string;
+};
+
+type Row = {
+    id: string;
+    cells: TableCellData[];
+};
+
+type PDFTableProps = {
+    headers: string[];
+    rows: Row[];
+};
 
 export default function PDFDialog({ record, children }: { children: React.ReactNode; record: RecordItem }) {
-    const [loading, setLoading] = useState(false);
-    const reportRef = useRef<HTMLDivElement>(null);
 
-    /**
-     * Opens a new window with the report content, invokes the browser's print dialog,
-     * and only closes that window once printing is confirmed or canceled.
-     *
-     * @async
-     * @function handleDownloadPDF
-     * @returns {Promise<void>} Resolves once the print window has closed.
-     */
-    const handleDownloadPDF = async (): Promise<void> => {
-        if (!reportRef.current) {
-            console.warn('No report content found to print.');
+    const handleDownload = useCallback(async () => {
+        const blob = await pdf(<PDFContent record={record} />).toBlob();
+        const url = URL.createObjectURL(blob);
 
-            return;
-        }
 
-        setLoading(true);
-
-        try {
-            // Clone the original content to manipulate without affecting the original DOM
-            const originalContent = reportRef.current.cloneNode(true) as HTMLDivElement;
-
-            // Open a new print window
-            const printWindow = window.open('', '_blank', 'width=900,height=700');
-            if (!printWindow) throw new Error('Unable to open print window.');
-
-            // Prepare print content
-            printWindow.document.open();
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                ${document.head.innerHTML}
-                 <style>
-            body {
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                margin: 0;
-                padding: 0.75rem;
-            }
-
-            /* Prevent page breaks inside critical sections */
-            #pdf-content,
-            #pdf-page-1,
-            #pdf-page-two,
-            .section-container {
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-
-            /* Ensure full-width content */
-            #pdf-content {
-                width: 100%;
-                max-width: 210mm;
-                margin: 0 auto;
-            }
-
-            /* Responsive image handling */
-            img {
-                max-width: 100%;
-                height: auto;
-            }
-
-            /* Ensure clean section breaks */
-            section {
-                break-after: avoid;
-            }
-
-            /* Print-specific adjustments */
-            @media print {
-                body {
-                    -webkit-print-color-adjust: exact;
-                    color-adjust: exact;
-                }
-
-                /* Hide unnecessary elements */
-                .print-hide {
-                    display: none !important;
-                }
-            }
-        </style>
-                </head>
-                    <body>
-                        ${originalContent.outerHTML}
-                    </body>
-                </html>
-            `);
-            printWindow.document.close();
-
-            // Wait for content to load
-            await new Promise<void>((resolve) => {
-                printWindow.onload = () => resolve();
-            });
-
-            // Add print and cleanup handlers
-            const cleanup = () => {
-                printWindow.removeEventListener('afterprint', cleanup);
-                printWindow.close();
-            };
-            printWindow.addEventListener('afterprint', cleanup);
-
-            // Trigger print dialog
-            printWindow.print();
-        } catch (err) {
-            console.error('Enhanced PDF Print Error:', err);
-            // Optionally show user-friendly error notification
-        } finally {
-            setLoading(false);
-        }
-    };
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${record.testName || 'MockTest'}_Report(${formatDate(record.testDate, 'dd-MM-yyyy')}).pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    }, [record])
 
     return (
-        <>
-            <Dialog>
-                <DialogTrigger asChild>{children}</DialogTrigger>
-                <DialogContent className='h-full min-w-screen overflow-y-auto'>
-                    <DialogHeader className='flex w-full flex-row items-center justify-between px-6'>
-                        <DialogTitle className='text-center'>{record.testName}</DialogTitle>
-
-                        <Button size={'sm'} variant={'destructive'} disabled={loading} onClick={handleDownloadPDF}>
-                            {!loading ? <DownloadPdfIcon /> : <Loader2 className='size-4 animate-spin' />}
+        <Dialog>
+            <DialogTrigger asChild>{children}</DialogTrigger>
+            <DialogContent className='h-full min-w-screen'>
+                <DialogTitle className='sr-only'>Test Report</DialogTitle>
+                <Card className='p-2 md:p-4 shadow-none border-none'>
+                    <CardHeader className='flex flex-row h-fit w-full items-center justify-between'>
+                        <span className='text-xl font-bold md:text-2xl'>{record.testName}</span>
+                        <Button onClick={handleDownload} variant={'destructive'}>
+                            <DownloadPdfIcon className='size-5 mr-2' />
                             Download PDF
                         </Button>
-                    </DialogHeader>
-                    <div id='pdf-container'>
-                        <div className='rounded-xl border-2 border-black/30'>
-                            <PDFContent ref={reportRef} record={record} />
-                        </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
-        </>
+                    </CardHeader>
+                    <CardContent className='w-full h-screen'>
+                        <PDFViewer className='w-full h-full' >
+                            <PDFContent record={record} />
+                        </PDFViewer>
+                    </CardContent>
+                </Card>
+            </DialogContent>
+        </Dialog>
     );
 }
 
-const PDFContent = forwardRef<HTMLDivElement, { record: RecordItem }>(({ record }, ref) => {
+function PDFContent({ record }: { record: RecordItem }) {
+    const styles = StyleSheet.create({
+        page: {
+            padding: 10,
+            fontSize: 12,
+            fontFamily: 'Helvetica',
+        },
+        headerTxt: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginBottom: 10,
+        },
+        headerSection: {
+            borderWidth: 1,
+            borderColor: '#ccc',
+            borderStyle: 'solid',
+            borderRadius: 5,
+            padding: 10,
+        },
+        tableRow: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingVertical: 5,
+            alignItems: 'center',
+        },
+        tableCell: {
+            flexDirection: 'row',
+            gap: 4,
+        },
+        tableCellLabel: {
+            paddingRight: 5,
+            fontWeight: '600',
+        },
+        tableCellValue: {
+            textDecoration: 'underline',
+        },
+        label: {
+            fontWeight: '600',
+            color: '#444',
+        },
+        value: {
+            color: '#000',
+        },
+        sectionContainer: {
+            borderWidth: 1,
+            borderColor: '#ccc',
+            borderStyle: 'solid',
+            borderRadius: 5,
+            padding: 10,
+            marginVertical: 10,
+        },
+        sectionTitle: {
+            fontSize: 14,
+            fontWeight: 'bold',
+            marginBottom: 8,
+            color: '#222',
+        },
+        sectionTable: {
+            flexDirection: 'column',
+        },
+        sectionTableRow: {
+            flexDirection: 'row',
+            borderBottomWidth: 1,
+            borderBottomColor: '#ccc',
+            paddingVertical: 5,
+            alignItems: 'center',
+        },
+        sectionTableCell: {
+            flex: 1,
+            alignItems: 'center',
+        },
+        sectionTableCellValue: {
+            fontWeight: '600',
+            fontSize: 14,
+        },
+    });
+
     const {
         user: { name },
         testName,
@@ -162,128 +153,210 @@ const PDFContent = forwardRef<HTMLDivElement, { record: RecordItem }>(({ record 
         rank,
         totalMarks,
         obtainedMarks,
-        sectionWise
+        sectionWise,
     } = record;
+
     const sections = purifySections(sectionWise);
 
     return (
-        <div ref={ref} id='pdf-content' className='h-full w-full space-y-4 px-4 py-2 print:m-0 print:p-0'>
-            {/* PAGE 1 */}
-            <section id='pdf-page-1' className='relative w-full items-center justify-center p-2 print:mb-0'>
-                <img
-                    src='/images/logo_main.png'
-                    alt='Logo'
-                    className='pointer-events-none absolute top-1/2 left-1/2 z-0 max-w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-5'
-                />
-                <header>
-                    <h1 className='flex flex-row items-center justify-center gap-2 text-center text-5xl font-bold uppercase'>
-                        <div className='flex flex-row items-center justify-center gap-2'>
-                            <BookOpen className='size-9' strokeWidth={4} />
-                            MockTrackr Test Report
-                            <BookOpen className='size-9' strokeWidth={4} />
-                        </div>
-                    </h1>
-                    <div className='flex flex-row items-center justify-between'>
-                        <p>Test Platform: {record.testPlatform}</p>
-                        <p>Test Date: {format(record.testDate, 'MMMM do, yyyy')}</p>
-                    </div>
-                </header>
-                <Separator className='h-2' />
-                <main className='mt-4 flex flex-col items-center justify-center gap-4'>
-                    <div id='top-header-info' className='grid w-full grid-cols-3 gap-2 rounded-lg border-2 p-4'>
-                        <InfoRow label="Student's Name" value={name} />
-                        <InfoRow label='Mock Name' value={testName} />
-                        <InfoRow label='Exam Name' value={examName} />
-                        <InfoRow label='Obtained Marks' value={obtainedMarks + '/' + totalMarks} />
-                        <InfoRow label='Rank' value={rank || '          '} />
-                        <InfoRow label='Percentile' value={percentile + '%' || '          '} />
-                    </div>
-                    {sections.map((section, index) => (
-                        <section
-                            key={section.name + index}
-                            id={section.name + '-1'}
-                            className='relative my-3 flex w-full flex-col items-center justify-center rounded-lg border-2 p-4 pt-0'>
-                            <header className='absolute -top-5 rounded bg-black p-1 text-white'>
-                                <h4 className='flex h-8 flex-row items-center justify-center gap-2 text-center text-2xl font-bold uppercase'>
-                                    {section.name}
-                                </h4>
-                            </header>
-                            <div className='mt-6 grid w-full grid-cols-7 space-x-2 divide-x-2'>
-                                <Stat label='Total Questions' value={section.totalQuestions} />
-                                <Stat label='Attempted' value={section.attemptedQuestions} />
-                                <Stat label='Skipped' value={section.skippedQuestions} />
-                                <Stat label='Correct' value={section.correctAnswers} />
-                                <Stat label='Wrong' value={section.wrongAnswers} />
-                                <Stat label='Attempt Duration' value={formatTime(section.timeTaken)} />
-                                <Stat label='Obtained Marks' value={`${section.obtainedMarks}/${section.totalMarks}`} />
-                            </div>
-                            {section.keyPoints && (
-                                <div className='mt-2 flex w-full flex-col items-start justify-center gap-2'>
-                                    <h4 className='text-lg font-semibold'>What Went Wrong: </h4>
-                                    <TableViewer data={JSON.parse(section.keyPoints)} />
-                                </div>
-                            )}
-                        </section>
-                    ))}
-                </main>
-            </section>
+        <Document>
+            <Page size="A4" style={styles.page}>
+                <Text style={styles.headerTxt}>MockTrackr Report</Text>
 
-            {sections.some((section) => section.sectionLearnings) && (
-                <section
-                    id='pdf-page-two'
-                    className='relative my-4 flex w-full flex-col items-center justify-center gap-4 space-y-4 font-[Poppins] print:mt-0'>
-                    <img
-                        src='/images/logo_main.png'
-                        alt='Logo'
-                        className='pointer-events-none absolute top-1/2 left-1/2 z-0 max-w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10'
-                    />
+                <View style={styles.headerSection}>
+                    {/* Row 1 */}
+                    <View style={styles.tableRow}>
+                        <View style={styles.tableCell}>
+                            <Text style={styles.label}>Name:</Text>
+                            <Text style={styles.value}>{name}</Text>
+                        </View>
+                        <View style={styles.tableCell}>
+                            <Text style={styles.label}>Exam:</Text>
+                            <Text style={styles.value}>{examName}</Text>
+                        </View>
+                        <View style={styles.tableCell}>
+                            <Text style={styles.label}>Test:</Text>
+                            <Text style={styles.value}>{testName}</Text>
+                        </View>
+                    </View>
 
-                    <div className='w-full'>
-                        <h2 className='text-center text-4xl font-bold'>Rules To Remember</h2>
-                        <Separator />
-                    </div>
+                    {/* Row 2 */}
+                    <View style={styles.tableRow}>
+                        <View style={styles.tableCell}>
+                            <Text style={styles.label}>Percentile:</Text>
+                            <Text style={styles.value}>{percentile}</Text>
+                        </View>
+                        <View style={styles.tableCell}>
+                            <Text style={styles.label}>Rank:</Text>
+                            <Text style={styles.value}>{rank}</Text>
+                        </View>
+                        <View style={styles.tableCell}>
+                            <Text style={styles.label}>Total Marks:</Text>
+                            <Text style={styles.value}>{obtainedMarks} / {totalMarks}</Text>
+                        </View>
+                    </View>
+                </View>
 
-                    {sections.map(
-                        (section, index) =>
-                            section.sectionLearnings && (
-                                <section
-                                    key={section.name + index}
-                                    id={section.name}
-                                    className='relative my-3 flex w-full flex-col items-center justify-center'>
-                                    <header className='absolute -top-5 rounded bg-black p-1 text-white'>
-                                        <h4 className='flex h-8 flex-row items-center justify-center gap-2 text-center font-[poppins] text-2xl font-bold uppercase'>
-                                            {section.name}
-                                        </h4>
-                                    </header>
-                                    <main className='w-full'>
-                                        {section.sectionLearnings && (
-                                            <div className='mt-2 flex w-full flex-col items-start justify-center gap-2'>
-                                                <InsightDisplay
-                                                    className='overflow-y-none max-h-full min-h-[200px]'
-                                                    content={section.sectionLearnings}
-                                                />
-                                            </div>
-                                        )}
-                                    </main>
-                                </section>
-                            )
-                    )}
-                </section>
-            )}
-        </div>
+                {sections.map((section: Section) => {
+                    let keyPoints: PDFTableProps | undefined;
+
+                    try {
+                        const parsed = JSON.parse(section.keyPoints || '{}');
+                        if (parsed.headers && parsed.rows) {
+                            keyPoints = parsed;
+                        }
+                    } catch (error) {
+                        console.error(`Invalid JSON in section.keyPoints (${section.name}):`, error);
+                    }
+
+                    return (
+                        <View key={section.name} style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>
+                                {section.name} — Total Questions: {section.totalQuestions}
+                            </Text>
+
+                            <View style={styles.sectionTable}>
+                                <View style={styles.sectionTableRow}>
+                                    <View style={styles.sectionTableCell}>
+                                        <Text>Attempted</Text>
+                                        <Text style={styles.sectionTableCellValue}>{section.attemptedQuestions}</Text>
+                                    </View>
+                                    <View style={styles.sectionTableCell}>
+                                        <Text>Correct</Text>
+                                        <Text style={styles.sectionTableCellValue}>{section.correctAnswers}</Text>
+                                    </View>
+                                    <View style={styles.sectionTableCell}>
+                                        <Text>Wrong</Text>
+                                        <Text style={styles.sectionTableCellValue}>{section.wrongAnswers}</Text>
+                                    </View>
+                                </View>
+
+                                <View style={styles.sectionTableRow}>
+                                    <View style={styles.sectionTableCell}>
+                                        <Text>Skipped</Text>
+                                        <Text style={styles.sectionTableCellValue}>{section.skippedQuestions}</Text>
+                                    </View>
+                                    <View style={styles.sectionTableCell}>
+                                        <Text>Time Taken</Text>
+                                        <Text style={styles.sectionTableCellValue}>{formatTime(section.timeTaken)}</Text>
+                                    </View>
+                                    <View style={styles.sectionTableCell}>
+                                        <Text>My Marks</Text>
+                                        <Text style={styles.sectionTableCellValue}>{section.obtainedMarks} / {section.totalMarks}</Text>
+                                    </View>
+                                </View>
+                            </View>
+
+                            {keyPoints &&
+                                <View>
+                                    <Text>What Went Wrong:</Text>
+                                    <PDFTable data={keyPoints} />
+                                </View>
+                            }
+                        </View>
+                    );
+                })}
+            </Page>
+        </Document>
     );
-});
+}
 
-const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
-    <div className='flex flex-row items-center justify-start gap-2 text-center'>
-        <span>{label}:</span>
-        <span className='font-semibold underline'>{value}</span>
-    </div>
-);
+function PDFTable({ data }: { data?: PDFTableProps }) {
+    const styles = StyleSheet.create({
+        tableContainer: {
+            marginVertical: 10,
+            borderWidth: 1,
+            borderColor: '#ccc',
+            borderStyle: 'solid',
+        },
+        row: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: '#ccc',
+        },
+        headerCell: {
+            flex: 1,
+            padding: 6,
+            backgroundColor: '#eee',
+            fontSize: 10,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            borderRightWidth: 1,
+            borderRightColor: '#ccc',
+        },
+        cell: {
+            flex: 1,
+            padding: 6,
+            fontSize: 10,
+            textAlign: 'center',
+            borderRightWidth: 1,
+            borderRightColor: '#ccc',
+        },
+        lastCell: {
+            borderRightWidth: 0,
+        },
+        correct: {
+            color: 'green',
+            fontWeight: 'bold',
+        },
+        wrong: {
+            color: 'red',
+            fontWeight: 'bold',
+        },
+        defaultText: {
+            color: '#333',
+        },
+        italic: {
+            fontStyle: 'italic',
+        },
+    });
 
-const Stat = ({ label, value }: { label: string; value: string | number }) => (
-    <div className='flex flex-col items-center justify-center'>
-        <span className='font-medium'>{label}</span>
-        <span className='font-semibold'>{value}</span>
-    </div>
-);
+    const renderCell = (cell: TableCellData) => {
+        switch (cell.type) {
+            case 'select':
+                if (cell.value === 'correct') return <Text style={styles.correct}>✔ Correct</Text>;
+                if (cell.value === 'wrong') return <Text style={styles.wrong}>✘ Wrong</Text>;
+
+                return <Text style={styles.defaultText}>{cell.value}</Text>;
+            case 'textarea':
+                return <Text style={styles.italic}>{cell.value}</Text>;
+            default:
+                return <Text style={styles.defaultText}>{cell.value}</Text>;
+        }
+    };
+
+    if (!data || !data.headers || !data.rows) return null;
+
+    return (
+        <View style={styles.tableContainer}>
+            <View style={styles.row}>
+                {data.headers.map((header, idx) => (
+                    <Text
+                        key={idx}
+                        style={
+
+                            styles.headerCell && idx === data.headers.length - 1 ? styles.lastCell : undefined
+
+                        }
+                    >
+                        {header}
+                    </Text>
+                ))}
+            </View>
+
+            {data.rows.map((row) => (
+                <View key={row.id} style={styles.row}>
+                    {row.cells.map((cell, idx) => (
+                        <View
+                            key={idx}
+                            style={styles.cell && idx === row.cells.length - 1 ? styles.lastCell : undefined}
+                        >
+                            {renderCell(cell)}
+                        </View>
+                    ))}
+                </View>
+            ))}
+        </View>
+    );
+}

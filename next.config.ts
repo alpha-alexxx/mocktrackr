@@ -10,7 +10,7 @@ const withBundleAnalyzer = initializeBundleAnalyzer({
 // https://nextjs.org/docs/pages/api-reference/next-config-js
 const nextConfig: NextConfig = {
     output: 'standalone',
-    serverExternalPackages: ['@prisma/adapter-libsql']
+    serverExternalPackages: ['@prisma/adapter-libsql', '@react-pdf/renderer']
 };
 
 export default withBundleAnalyzer(nextConfig);

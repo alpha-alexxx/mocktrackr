@@ -47,8 +47,6 @@ const getAttemptTypeIcon = (value: string) => {
 };
 
 export default function TableViewer({ data }: TableViewerProps) {
-    console.log({ data })
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
