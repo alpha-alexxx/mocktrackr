@@ -47,7 +47,7 @@ export default function PDFDialog({ record, children }: { children: React.ReactN
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className='h-full min-w-screen'>
+            <DialogContent className='h-full w-auto'>
                 <DialogTitle className='sr-only'>Test Report</DialogTitle>
                 <Card className='border-none p-2 shadow-none md:p-4'>
                     <CardHeader className='flex h-fit w-full flex-row items-center justify-between'>

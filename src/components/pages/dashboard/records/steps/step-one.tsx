@@ -40,7 +40,9 @@ export default function StepOne() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             testName: formData.testName || '',
-            testDate: formData.testDate ? new Date(formData.testDate) : new Date(),
+            testDate: formData.testDate
+                ? new Date(formData.testDate)
+                : new Date(new Date().setHours(0, 0, 0, 0)),
             examCode: formData.examCode || '',
             examTier: (formData.examTier as 'TIER_1' | 'TIER_2') || undefined,
             testPlatform: formData.testPlatform || '',
