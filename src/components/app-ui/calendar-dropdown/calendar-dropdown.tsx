@@ -10,6 +10,7 @@ import {
 import useDatePicker from '@/stores/date_picker';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { enIN } from 'date-fns/locale';
 
 export default function CalendarDropDown({
     children,
@@ -28,8 +29,7 @@ export default function CalendarDropDown({
                 markedDates
                     .map(dateStr => new Date(dateStr))
                     .filter(d => !isNaN(d.getTime()))
-                    .map(validDate => format(validDate, 'yyyy-MM-dd')) // ✅ LOCAL format
-
+                    .map(validDate => format(validDate, 'yyyy-MM-dd', { locale: enIN })) // ✅ LOCAL format
             )
         );
     }, [markedDates]);
@@ -72,7 +72,7 @@ export default function CalendarDropDown({
                     mode='single'
                     modifiers={{
                         marked: (day) => {
-                            const dayKey = format(day, 'yyyy-MM-dd');
+                            const dayKey = format(day, 'yyyy-MM-dd', { locale: enIN });
 
                             return normalizedMarkedDates.includes(dayKey);
                         }
