@@ -13,6 +13,7 @@ import { Section } from '@/stores/form-store';
 import { Document, PDFViewer, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer';
 
 import { formatDate } from 'date-fns';
+import { useMobile } from '@/hooks/use-mobile';
 
 // Types
 type TableCellData = {
@@ -31,6 +32,7 @@ type PDFTableProps = {
 };
 
 export default function PDFDialog({ record, children }: { children: React.ReactNode; record: RecordItem }) {
+    const isMobile = useMobile()
     const handleDownload = useCallback(async () => {
         const blob = await pdf(<PDFContent record={record} />).toBlob();
         const url = URL.createObjectURL(blob);
@@ -46,7 +48,10 @@ export default function PDFDialog({ record, children }: { children: React.ReactN
 
     return (
         <Dialog>
-            <DialogTrigger asChild>{children}</DialogTrigger>
+            {
+                isMobile ? <div onClick={handleDownload} className='size-auto'>${children}</div> :
+                    <DialogTrigger asChild>{children}</DialogTrigger>
+            }
             <DialogContent className='h-full w-auto'>
                 <DialogTitle className='sr-only'>Test Report</DialogTitle>
                 <Card className='border-none p-2 shadow-none md:p-4'>
