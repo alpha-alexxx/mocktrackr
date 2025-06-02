@@ -62,7 +62,7 @@ export default function PDFDialog({ record, children }: { children: React.ReactN
                             Download PDF
                         </Button>
                     </CardHeader>
-                    <CardContent className='h-screen w-full'>
+                    <CardContent className='h-[90%] w-[90%]'>
                         <PDFViewer className='h-full w-full'>
                             <PDFContent record={record} />
                         </PDFViewer>
@@ -154,14 +154,27 @@ function PDFContent({ record }: { record: RecordItem }) {
     const {
         user: { name },
         testName,
-        examName,
+        examCode,
         percentile,
         rank,
         totalMarks,
         obtainedMarks,
         sectionWise
     } = record;
-
+    const getExamName = (examCode: string) => {
+        switch (examCode) {
+            case 'ssc_cgl':
+                return 'SSC CGL';
+            case 'ssc_chsl':
+                return 'SSC CHSL';
+            case 'ssc_cpo':
+                return 'SSC CPO';
+            case 'ssc_mts':
+                return 'SSC MTS';
+            default:
+                break;
+        }
+    };
     const sections = purifySections(sectionWise);
 
     return (
@@ -178,7 +191,7 @@ function PDFContent({ record }: { record: RecordItem }) {
                         </View>
                         <View style={styles.tableCell}>
                             <Text style={styles.label}>Exam:</Text>
-                            <Text style={styles.value}>{examName}</Text>
+                            <Text style={styles.value}>{getExamName(examCode)}</Text>
                         </View>
                         <View style={styles.tableCell}>
                             <Text style={styles.label}>Test:</Text>
