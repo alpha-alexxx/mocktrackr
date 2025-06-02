@@ -52,7 +52,7 @@ export default function PDFDialog({ record, children }: { children: React.ReactN
                 isMobile ? <div onClick={handleDownload} className='size-auto'>${children}</div> :
                     <DialogTrigger asChild>{children}</DialogTrigger>
             }
-            <DialogContent className='h-full w-auto'>
+            <DialogContent className='h-[90%] w-[90%]'>
                 <DialogTitle className='sr-only'>Test Report</DialogTitle>
                 <Card className='border-none p-2 shadow-none md:p-4'>
                     <CardHeader className='flex h-fit w-full flex-row items-center justify-between'>
@@ -62,7 +62,7 @@ export default function PDFDialog({ record, children }: { children: React.ReactN
                             Download PDF
                         </Button>
                     </CardHeader>
-                    <CardContent className='h-[90%] w-[90%]'>
+                    <CardContent className='size-full'>
                         <PDFViewer className='h-full w-full'>
                             <PDFContent record={record} />
                         </PDFViewer>
