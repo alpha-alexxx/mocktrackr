@@ -37,14 +37,12 @@ export const fetchRecords = async (userId: string, date: Date, recordId?: string
     }
 };
 
-export const fetchRecord = async (userId: string, date: Date, recordId: string): Promise<RecordItem | null> => {
-    const isoDate = formatISO(date, { representation: 'complete' });
-
+export const fetchRecord = async (userId: string, recordId: string): Promise<RecordItem | null> => {
     try {
-        const response = await axiosClient.get<{ success: boolean; records: RecordItem; message: string }>(
-            '/api/record',
+        const response = await axiosClient.get<{ success: boolean; record: RecordItem; message: string }>(
+            `/api/record/${recordId}`,
             {
-                params: { userId, date: isoDate, recordId }
+                params: { userId }
             }
         );
 
@@ -52,7 +50,7 @@ export const fetchRecord = async (userId: string, date: Date, recordId: string):
             throw new Error(response.data.message || 'Failed to fetch records');
         }
 
-        return response.data.records;
+        return response.data.record;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error('Axios error:', error.message, error.response?.data);

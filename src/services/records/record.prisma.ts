@@ -26,6 +26,20 @@ export async function fetchRecordsFromDB(userId: string, date: string) {
 }
 
 /**
+ * Fetch a specific record by record ID and user ID.
+ * @param recordId - The ID of the record to fetch.
+ * @param userId - The ID of the user who owns the record.
+ */
+
+export async function fetchRecordFromDB(recordId: string, userId: string) {
+    return db.record.findUnique({
+        where: { id: recordId, userId },
+        include: {
+            user: { select: { name: true } }
+        }
+    });
+}
+/**
  * Create a new test record.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
